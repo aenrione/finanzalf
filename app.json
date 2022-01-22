@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "budget-tracker-react",
+    "slug": "budget-tracker-react",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "budget-tracker-react"
+}
