@@ -1,8 +1,8 @@
 const INITIAL_STATE = {
-    email: '',
-    password: '',
-    authentication_token: '',
-    username: '',
+    user: {},
+    auth_token: '',
+    uid: '',
+    client: '',
     errorFlag: false,
     spinner: false
   };
@@ -16,7 +16,9 @@ const INITIAL_STATE = {
       case 'LOGIN_FAILED':
         return { ...state, errorFlag: true, password: '', spinner: false };
       case 'LOGIN_USER_SUCCESS':
-        return { ...state, ...action.payload, ...INITIAL_STATE };
+        return { ...state, ...action.payload, ...INITIAL_STATE,
+          user: action.payload.data, auth_token: action.payload["access-token"],
+          uid: action.payload.uid, client: action.payload.client };
       case 'LOAD_SPINNER':
         return { ...state, spinner: true };
       default:

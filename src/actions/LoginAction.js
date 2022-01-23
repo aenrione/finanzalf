@@ -1,11 +1,14 @@
 /*global fetch:false*/
+import axios from 'axios'
+
+
 export const emailChanged = (email) => {
     return {
       type: 'EMAIL_CHANGED',
       payload: email
     };
   };
-  
+ 
   export const passwordChanged = (password) => {
     return {
       type: 'PASSWORD_CHANGED',
@@ -14,39 +17,32 @@ export const emailChanged = (email) => {
   };
   
   export const loginUser = ({ email, password }) => {
+    console.log("LOGIN USER")
     return (dispatch) => {
       dispatch({
         type: 'LOAD_SPINNER'
       });
-      fetch('http://localhost:3000/token', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            user: {
-              email,
-              password,
-            }
-          })
-        }).then((response) => {
-          console.log(response);
+
+      axios
+      .post('http://localhost:3001/api/v1/auth/sign_in', { email, password })
+      .then((response) => {
           if (response.status === 401) {
             console.log('AUTHENTICATION ERROR!!');
             dispatch({
               type: 'LOGIN_FAILED'
             });
           } else {
+            let data = response.data
+            data.client = response.headers.client
+            data.uid = response.headers.uid
+            data['access-token'] = response.headers['access-token']
             console.log('SUCCESS!!');
-            response.json().then(data => {
-              console.log(data);
-              dispatch({
-                type: 'LOGIN_USER_SUCCESS',
-                payload: data
-              });
+            dispatch({
+              type: 'LOGIN_USER_SUCCESS',
+              payload: data
             });
+            }
           }
-        });
-    };
-  };
+      );
+  }
+};

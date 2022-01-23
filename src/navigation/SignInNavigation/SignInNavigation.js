@@ -2,6 +2,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MainNavigation from "../MainNavigation"
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,9 @@ export default function SignInNavigation(){
               headerShown: false,
             }}/>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{
+              headerShown: false,
+            }}/>
+        <Stack.Screen name="MainNavigation" component={MainNavigation} options={{
               headerShown: false,
             }}/>
       </Stack.Navigator>

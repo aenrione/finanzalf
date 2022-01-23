@@ -56,10 +56,10 @@ function HomeTabNavigation() {
 }
 export default function Navitagion(){
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeTabNavigation} />
       </Drawer.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   )
 }

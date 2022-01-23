@@ -1,19 +1,24 @@
 import React, {useState} from 'react';
-import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import Logo from "../../../assets/images/react-logo.png"
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
-import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../../actions/LoginAction';
+import store from '../../store'
+
 
 
 export default function SignInScreen({navigation}) {
   const {height} = useWindowDimensions();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSignInPressed = () => {
+
+  const onSignInPressed = async () => {
     console.warn("Sign in Pressed")
+    store.dispatch(loginUser({email, password})
+    )
+    navigation.navigate("MainNavigation")
   };
 
   const onForgotPasswordPressed = () => {
@@ -40,8 +45,8 @@ export default function SignInScreen({navigation}) {
     <ScrollView>
       <View style={styles.root}>
         <Image source={Logo} style={[styles.logo, {height: height*0.3}]} resizeMode="contain"/>
-
-        <CustomInput placeholder="Username" value={username} setValue={setUsername} />
+        <Text></Text>
+        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
         <CustomButton text="Sign In" onPress={onSignInPressed} />
         <CustomButton text="Forgot password?" onPress={onForgotPasswordPressed} type="tertiary"/>
