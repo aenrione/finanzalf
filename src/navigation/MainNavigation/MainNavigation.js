@@ -9,9 +9,9 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 // const Stack = createNativeStackNavigator();
 
-import HomeScreen from '../screens/Home/index'
-import DetailsScreen from '../screens/Details/index'
-import AccountScreen from '../screens/Accounts/index'
+import HomeScreen from '../../screens/Home'
+import DetailsScreen from '../../screens/Details'
+import AccountScreen from '../../screens/Accounts'
 
 function HomeTabNavigation() {
   return (
@@ -36,17 +36,17 @@ function HomeTabNavigation() {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
         })}>
-      <Tab.Screen name="Details" component={DetailsScreen} 
+      <Tab.Screen name="Details" component={DetailsScreen}
         options={{
               headerShown: false,
             }}
         />
-      <Tab.Screen name="Dashboard" component={HomeScreen} 
+      <Tab.Screen name="Dashboard" component={HomeScreen}
         options={{
               headerShown: false,
             }}
         />
-      <Tab.Screen name="Accounts" component={AccountScreen} 
+      <Tab.Screen name="Accounts" component={AccountScreen}
         options={{
               headerShown: false,
             }}
