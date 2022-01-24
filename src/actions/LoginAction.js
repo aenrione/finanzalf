@@ -1,21 +1,10 @@
 /*global fetch:false*/
 import axios from 'axios'
+import * as NavigationService from '../navigation/navigationService';
+import { BASE_URL } from "@env"
 
+const baseUrl = BASE_URL || 'http://localhost:3001/api/v1/auth/sign_in'
 
-export const emailChanged = (email) => {
-    return {
-      type: 'EMAIL_CHANGED',
-      payload: email
-    };
-  };
- 
-  export const passwordChanged = (password) => {
-    return {
-      type: 'PASSWORD_CHANGED',
-      payload: password
-    };
-  };
-  
   export const loginUser = ({ email, password }) => {
     console.log("LOGIN USER")
     return (dispatch) => {
@@ -24,7 +13,7 @@ export const emailChanged = (email) => {
       });
 
       axios
-      .post('http://localhost:3001/api/v1/auth/sign_in', { email, password })
+      .post(baseUrl, { email, password })
       .then((response) => {
           if (response.status === 401) {
             console.log('AUTHENTICATION ERROR!!');
@@ -41,6 +30,7 @@ export const emailChanged = (email) => {
               type: 'LOGIN_USER_SUCCESS',
               payload: data
             });
+            NavigationService.navigate("MainNavigation")
             }
           }
       );

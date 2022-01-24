@@ -3,6 +3,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNavigation from "../MainNavigation"
+// import {navigationRef} from "../navigationService"
+import * as NavigationService from '../navigationService';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +15,7 @@ import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 
 export default function SignInNavigation(){
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={NavigationService.navigationRef}>
       <Stack.Navigator initialRouteName="SignIn">
         <Stack.Screen name="SignIn" component={SignInScreen} options={{
               headerShown: false,

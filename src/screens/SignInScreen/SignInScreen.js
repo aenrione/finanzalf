@@ -3,7 +3,7 @@ import { Text, View, Image, StyleSheet, ScrollView, useWindowDimensions } from '
 import Logo from "../../../assets/images/react-logo.png"
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
-import { emailChanged, passwordChanged, loginUser } from '../../actions/LoginAction';
+import { loginUser } from '../../actions/LoginAction';
 import store from '../../store'
 
 
@@ -18,7 +18,6 @@ export default function SignInScreen({navigation}) {
     console.warn("Sign in Pressed")
     store.dispatch(loginUser({email, password})
     )
-    navigation.navigate("MainNavigation")
   };
 
   const onForgotPasswordPressed = () => {
