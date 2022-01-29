@@ -3,7 +3,7 @@ import axios from 'axios'
 import * as NavigationService from '../navigation/navigationService';
 import { BASE_URL } from "@env"
 
-const baseUrl = BASE_URL || 'http://localhost:3001/api/v1/auth/sign_in'
+const baseUrl = BASE_URL || 'http://localhost:3000/api/v1/auth/sign_in'
 
   export const loginUser = ({ email, password }) => {
     console.log("LOGIN USER")

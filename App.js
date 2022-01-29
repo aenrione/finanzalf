@@ -6,10 +6,8 @@ import store from './src/store'
 
 export default function App() {
   return (
-    // <Navigation/>
     <Provider store={store}>
       <SafeAreaView style={styles.root}>
-      {/* <SignInScreen /> */}
       <SignInNavigation/>
       </SafeAreaView>
   </Provider>
