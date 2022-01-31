@@ -15,7 +15,6 @@ export default function SignInScreen({navigation}) {
 
 
   const onSignInPressed = async () => {
-    console.warn("Sign in Pressed")
     store.dispatch(loginUser({email, password})
     )
   };
