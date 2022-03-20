@@ -2,17 +2,20 @@
 import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton/CustomButton"
+import { registerUser } from '../../actions/LoginAction';
+import store from '../../store'
 
 
 export default function SignUpScreen({navigation}) {
   const {height} = useWindowDimensions();
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const onSignUpPressed = () => {
     console.warn("Sign Up")
+    store.dispatch(registerUser({name, email, password, confirmPassword}))
   };
 
   const onForgotPasswordPressed = () => {
@@ -39,10 +42,10 @@ export default function SignUpScreen({navigation}) {
     <ScrollView>
       <View style={styles.root}>
         <Text style={styles.title}>Create an account</Text>
-        <CustomInput placeholder="Username" value={username} setValue={setUsername} />
-        <CustomInput placeholder="Email" value={username} setValue={setUsername} />
+        <CustomInput placeholder="Name" value={name} setValue={setName} />
+        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
-        <CustomInput placeholder="Confirm Password" secureTextEntry value={password} setValue={setPassword} />
+        <CustomInput placeholder="Confirm Password" secureTextEntry value={confirmPassword} setValue={setConfirmPassword} />
         <CustomButton text="Register" onPress={onSignUpPressed} />
 
         <CustomButton

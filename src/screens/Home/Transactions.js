@@ -1,35 +1,59 @@
 import React from 'react';
-import { StyleSheet, ActivityIndicator, Text, View, Button, Image, ScrollView} from 'react-native';
-import { Card, Icon } from 'react-native-elements';
+import { ActivityIndicator, View, FlatList } from 'react-native';
+import { Card, Divider} from 'react-native-elements';
+import CustomAmountItem from '../../components/CustomAmountItem';
 import CustomButton from "../../components/CustomButton"
 
-const TransactionsLoop = function({transactions}) {
+
+
+const Footer = function ({onLoadMore, loading}) {
+  return (
+    <View>
+    { !loading ?
+      <CustomButton text="Load More" onPress={onLoadMore} type="tertiary"/>
+      : <ActivityIndicator/>
+    }
+    </View>
+  );
+}
+
+const TransactionSection = function ({transaction}) {
   return(
     <View>
-      {transactions.map(item => (
-        <Text key={item.id} style={styles.transactions}>{item.attributes.description}: {item.attributes.amount}</Text>
-      ))}
+      <CustomAmountItem 
+        text={transaction.attributes.description}
+        value={transaction.attributes.amount}
+    />
+      <Divider />
+    </View>
+  );
+}
+
+const TransactionsLoop = function({transactions, onLoadMore, loading}) {
+  return(
+    <View>
+      <FlatList
+      data={transactions}
+      renderItem={({ item: transaction }) => <TransactionSection transaction={transaction}/> }
+      keyExtractor={(item) => item.id}
+      ListFooterComponent={<Footer onLoadMore={onLoadMore} loading={loading}/>}
+      />
     </View>
   )
 }
 
-export default function Transactions({ transactions }){
+export default function Transactions({ transactions, onLoadMore, loading }){
   return (
+    <View>
     <Card>
       <Card.Title>Transactions</Card.Title>
-      <Card.Divider />
-      { transactions !== null ? <TransactionsLoop transactions={transactions}/> : <ActivityIndicator/> }
+      <Divider />
+      { transactions !== null ? <TransactionsLoop transactions={transactions}
+        onLoadMore={onLoadMore}
+        loading={loading}
+        /> : <ActivityIndicator/> }
     </Card>
+    </View>
   );
 };
-
-
-const styles = StyleSheet.create({
-  transactions: {
-    marginVertical: 10,
-    fontSize: 16,
-    borderWidth: 1,
-    padding: 15
-  }
-});
 

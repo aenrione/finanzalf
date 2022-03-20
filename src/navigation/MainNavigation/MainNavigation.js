@@ -1,17 +1,15 @@
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
-// const Stack = createNativeStackNavigator();
 
 import HomeScreen from '../../screens/Home'
 import DetailsScreen from '../../screens/Details'
 import AccountScreen from '../../screens/Accounts'
+import CategoryScreen from '../../screens/Category'
 
 function HomeTabNavigation() {
   return (
@@ -56,10 +54,9 @@ function HomeTabNavigation() {
 }
 export default function Navitagion(){
   return (
-    // <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeTabNavigation} />
+        <Drawer.Screen name="Categories" component={CategoryScreen} />
       </Drawer.Navigator>
-    // </NavigationContainer>
   )
 }

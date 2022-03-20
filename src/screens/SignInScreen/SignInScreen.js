@@ -10,8 +10,8 @@ import store from '../../store'
 
 export default function SignInScreen({navigation}) {
   const {height} = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('***REMOVED***');
+  const [password, setPassword] = useState('***REMOVED***');
 
 
   const onSignInPressed = async () => {
@@ -43,7 +43,6 @@ export default function SignInScreen({navigation}) {
     <ScrollView>
       <View style={styles.root}>
         <Image source={Logo} style={[styles.logo, {height: height*0.3}]} resizeMode="contain"/>
-        <Text></Text>
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
         <CustomButton text="Sign In" onPress={onSignInPressed} />

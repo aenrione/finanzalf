@@ -1,20 +1,27 @@
 import React from 'react';
-import { StyleSheet, ActivityIndicator, Text, View, Button, Image, ScrollView} from 'react-native';
-import { Card, Icon } from 'react-native-elements';
-import CustomButton from "../../components/CustomButton"
+import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import CustomAmountItem from '../../components/CustomAmountItem';
+import { Card, Divider } from 'react-native-elements';
 
 const SummaryCard = function({attributes}){
   return (
     <Card>
       <Card.Title>Summary</Card.Title>
-      <Card.Divider />
-        <Text>Balance   {attributes.balances.total}</Text>
-        <Text>Fintoc   {attributes.balances.fintoc}</Text>
-        <Text>Buda   {attributes.balances.buda}</Text>
-        <Text>Fintual   {attributes.balances.fintual}</Text>
-        <Text>Income  {attributes.income}</Text>
-        <Text>Expense  {attributes.expense}</Text>
-        <Text>Investments  {attributes.investments_return}</Text>
+      <Divider/>
+        <CustomAmountItem text={"Net Worth"} value={attributes.balances.total}/>
+        <Divider/>
+        <CustomAmountItem text={"Fintoc"} value={attributes.balances.fintoc}/>
+        <Divider/>
+        <CustomAmountItem text={"Buda"} value={attributes.balances.buda}/>
+        <Divider/>
+        <CustomAmountItem text={"Fintual"} value={attributes.balances.fintual}/>
+        <Divider/>
+        <CustomAmountItem text={"Income"} value={attributes.income}/>
+        <Divider/>
+        <CustomAmountItem text={"Expense"} value={attributes.expense}/>
+        <Divider/>
+        <CustomAmountItem text={"Investments"} value={attributes.investments_return}/>
+        <Divider/>
     </Card>
   );  
 }
@@ -36,5 +43,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 10,
     textAlign: 'center'
+  },
+  listSection: {
+    fontSize: 14,
+    padding: 10
   }
 });
