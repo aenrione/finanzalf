@@ -1,4 +1,4 @@
-        import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton/CustomButton"
@@ -6,16 +6,15 @@ import { registerUser } from '../../actions/LoginAction';
 import store from '../../store'
 
 
-export default function SignUpScreen({navigation}) {
-  const {height} = useWindowDimensions();
+export default function SignUpScreen({ navigation }) {
+  const { height } = useWindowDimensions();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const onSignUpPressed = () => {
-    console.warn("Sign Up")
-    store.dispatch(registerUser({name, email, password, confirmPassword}))
+    store.dispatch(registerUser({ name, email, password, confirmPassword }))
   };
 
   const onForgotPasswordPressed = () => {
@@ -69,7 +68,7 @@ export default function SignUpScreen({navigation}) {
           fgColor="#363636"
         />
 
-        <CustomButton text="Already have an account? Sign in!" onPress={onSignInPressed} type="tertiary"/>
+        <CustomButton text="Already have an account? Sign in!" onPress={onSignInPressed} type="tertiary" />
       </View>
     </ScrollView>
   );

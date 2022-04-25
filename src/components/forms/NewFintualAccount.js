@@ -1,38 +1,51 @@
-import React, {useState} from 'react';
-import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
+import { getCapabilities, setLoading } from '../../actions/LoginAction';
+import { useMutation } from "react-query";
+import store from '../../store'
 import axios from 'axios'
 
 
-export default function NewFintualAccount({onLoading}) {
+export default function NewFintualAccount() {
   const [email, setEmail] = useState('');
   const [passowrd, setPassword] = useState('');
 
-  const create = () => {
-    onLoading(true)
-    axios
+  const postEntity = async function() {
+    const { data: response } = await axios
       .post('/api/v1/fintual_accounts',
-      {
+        {
           email: email,
           encrypted_password: passowrd,
-    }).then((response) => {
-      console.log("SUCCESS")
-    });
-    onLoading(false)
+        })
+    return response.data
+
+  }
+  const mutation = useMutation(postEntity);
+  const { isLoading, isSuccess } = mutation;
+
+  const onSubmit = async () => {
+    mutation.mutate();
   };
+
+  if (isSuccess) {
+    store.dispatch(getCapabilities())
+  }
 
   return (
     <ScrollView>
-      <View style={styles.root}>
+      {isLoading ? <ActivityIndicator /> :
+        <View style={styles.root}>
 
-        <Text style={styles.title}>Create Fintual Account</Text>
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-        <CustomInput placeholder="Password" secureTextEntry value={passowrd} setValue={setPassword} />
-        <CustomButton text="Submit" onPress={create} />
-        <CustomButton text="Help" type="tertiary"/>
+          <Text style={styles.title}>Create Fintual Account</Text>
+          <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+          <CustomInput placeholder="Password" secureTextEntry value={passowrd} setValue={setPassword} />
+          <CustomButton text="Submit" onPress={onSubmit} />
+          <CustomButton text="Help" type="tertiary" />
 
-      </View>
+        </View>
+      }
     </ScrollView>
   );
 }

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Text, View, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import Logo from "../../../assets/images/react-logo.png"
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
@@ -8,14 +8,14 @@ import store from '../../store'
 
 
 
-export default function SignInScreen({navigation}) {
-  const {height} = useWindowDimensions();
+export default function SignInScreen({ navigation }) {
+  const { height } = useWindowDimensions();
   const [email, setEmail] = useState('***REMOVED***');
   const [password, setPassword] = useState('***REMOVED***');
 
 
   const onSignInPressed = async () => {
-    store.dispatch(loginUser({email, password})
+    store.dispatch(loginUser({ email, password })
     )
   };
 
@@ -42,11 +42,11 @@ export default function SignInScreen({navigation}) {
   return (
     <ScrollView>
       <View style={styles.root}>
-        <Image source={Logo} style={[styles.logo, {height: height*0.3}]} resizeMode="contain"/>
+        <Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
         <CustomButton text="Sign In" onPress={onSignInPressed} />
-        <CustomButton text="Forgot password?" onPress={onForgotPasswordPressed} type="tertiary"/>
+        <CustomButton text="Forgot password?" onPress={onForgotPasswordPressed} type="tertiary" />
 
         <CustomButton
           text="Sign in with Facebook"
@@ -69,7 +69,7 @@ export default function SignInScreen({navigation}) {
           fgColor="#363636"
         />
 
-        <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary"/>
+        <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
       </View>
     </ScrollView>
   );

@@ -1,38 +1,50 @@
-import React, {useState} from 'react';
-import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
+import { getCapabilities, setLoading } from '../../actions/LoginAction';
+import { useMutation } from "react-query";
+import store from '../../store'
 import axios from 'axios'
 
 
-export default function NewBudaAccount({onLoading}) {
+export default function NewBudaAccount() {
   const [api_secret, setSecret] = useState('');
   const [api_key, setKey] = useState('');
 
-  const create = () => {
-    onLoading(true)
-    axios
+  const postEntity = async function() {
+    const { data: response } = await axios
       .post('/api/v1/buda_accounts',
-      {
+        {
           api_key: api_key,
           encrypted_password: api_secret,
-    }).then((response) => {
-      console.log("SUCCESS")
-    });
-    onLoading(false)
+        })
+    return response.data
+
+  }
+  const mutation = useMutation(postEntity);
+  const { isLoading, isSuccess } = mutation;
+
+  const onSubmit = async () => {
+    mutation.mutate();
   };
+  if (isSuccess) {
+    store.dispatch(getCapabilities())
+  }
 
   return (
     <ScrollView>
-      <View style={styles.root}>
+      {isLoading ? <ActivityIndicator /> :
+        <View style={styles.root}>
 
-        <Text style={styles.title}>Create Buda Account</Text>
-        <CustomInput placeholder="Api key" secureTextEntry value={api_key} setValue={setKey} />
-        <CustomInput placeholder="Api secret" secureTextEntry value={api_secret} setValue={setSecret} />
-        <CustomButton text="Submit" onPress={create} />
-        <CustomButton text="Help" type="tertiary"/>
+          <Text style={styles.title}>Create Buda Account</Text>
+          <CustomInput placeholder="Api key" secureTextEntry value={api_key} setValue={setKey} />
+          <CustomInput placeholder="Api secret" secureTextEntry value={api_secret} setValue={setSecret} />
+          <CustomButton text="Submit" onPress={onSubmit} />
+          <CustomButton text="Help" type="tertiary" />
 
-      </View>
+        </View>
+      }
     </ScrollView>
   );
 }

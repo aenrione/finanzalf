@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { FlatList, ScrollView, Text, Modal, View, Pressable, StyleSheet, Button } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import NewCategoryForm from './NewCategoryForm'
@@ -15,19 +15,19 @@ export default function HomeScreen() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
 
-  const getCategories = function(){
+  const getCategories = function() {
     axios
       .get('/api/v1/categories',
-      {
-        params: {
-          sort_by: sort_by,
-          sort_desc: sort_desc,
-          limit: limit,
-          page: page
-        }
-    }).then((response) => {
-      setCategories(response.data.data);
-    });
+        {
+          params: {
+            sort_by: sort_by,
+            sort_desc: sort_desc,
+            limit: limit,
+            page: page
+          }
+        }).then((response) => {
+          setCategories(response.data.data);
+        });
 
   }
 
@@ -35,25 +35,25 @@ export default function HomeScreen() {
     getCategories();
   }, []);
   return (
-    <ScrollView style={{ flex: 1}}>
-      <CustomCard 
+    <View style={{ flex: 1 }}>
+      <CustomCard
         title="Add a category"
         description="Create a category for your transactions"
         onPress={() => setModalVisible(!modalVisible)}
       />
-    <Collapsible collapsed={!modalVisible}>
-      <NewCategoryForm/>
-    </Collapsible>
+      <Collapsible collapsed={!modalVisible}>
+        <NewCategoryForm />
+      </Collapsible>
       <FlatList
-      data={categories}
-      renderItem={({ item: transaction }) => <CustomCard
+        data={categories}
+        renderItem={({ item: transaction }) => <CustomCard
           title={transaction.attributes.name}
           description={transaction.attributes.description}
           arrow
-        /> }
-      keyExtractor={(item) => item.attributes.id}
+        />}
+        keyExtractor={(item) => item.attributes.id}
       />
-    </ScrollView>
+    </View>
   );
 }
 
