@@ -1,39 +1,90 @@
 import React, { useState } from 'react';
-import { FlatList, ScrollView, Text, Modal, View, Pressable, StyleSheet, Button } from 'react-native';
+import { ActivityIndicator, FlatList, RefreshControl, Text, Modal, View, Pressable, StyleSheet, Button } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import NewCategoryForm from './NewCategoryForm'
 import Collapsible from 'react-native-collapsible';
+import CustomButton from "../../components/CustomButton"
 import axios from 'axios'
-
+import { useInfiniteQuery } from "react-query"
 
 
 export default function HomeScreen() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [sort_by, setSortBy] = useState("created_at");
-  const [sort_desc, setSortDesc] = useState(true);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
+  const sort_by = "created_at"
+  const sort_desc = true
+  const limit = 5
 
-  const getCategories = function() {
-    axios
+  const getCategories = async function() {
+    const response = await axios
       .get('/api/v1/categories',
         {
           params: {
             sort_by: sort_by,
             sort_desc: sort_desc,
             limit: limit,
-            page: page
+            page: 1
           }
-        }).then((response) => {
-          setCategories(response.data.data);
-        });
+        })
+    return response.data
 
   }
 
-  React.useEffect(() => {
-    getCategories();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const { data: categories, status, fetchNextPage, isFetchingNextPage: loading } = useInfiniteQuery("categories", getCategories, {
+    getNextPageParam: (lastPage) => {
+      const { current_page: page, total_pages: totalPages } = lastPage.meta;
+
+      return (page < totalPages) ? page + 1 : page;
+    },
+  });
+  const mapCategories = function() {
+    let all = categories.pages.map(elem => (
+      elem.data
+    ))
+    let arr = [].concat.apply([], all)
+      .filter((v, i, a) => a.findIndex(v2 => (v2.id === v.id)) === i)
+    return arr
+  }
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchNextPage()
+    setRefreshing(false)
   }, []);
+  return (
+    <View>
+      {status === 'success' ?
+        <FlatList
+          data={mapCategories()}
+          ListHeaderComponent={<Header refetch={fetchNextPage} />}
+          ListFooterComponent={<Footer onLoadMore={fetchNextPage} loading={loading} />}
+          renderItem={({ item: category }) =>
+            <CustomCard
+              title={category.attributes.name}
+              description={category.attributes.description}
+              lastIcon={false}
+            />}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          keyExtractor={(item) => item.id}
+        />
+        : <ActivityIndicator />}
+    </View>
+  );
+}
+
+const Header = function({ refetch }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const onRefetch = function() {
+    refetch()
+    setModalVisible(!modalVisible)
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <CustomCard
@@ -42,18 +93,19 @@ export default function HomeScreen() {
         onPress={() => setModalVisible(!modalVisible)}
       />
       <Collapsible collapsed={!modalVisible}>
-        <NewCategoryForm />
+        <NewCategoryForm refetch={onRefetch} />
       </Collapsible>
-      <FlatList
-        data={categories}
-        renderItem={({ item: transaction }) => <CustomCard
-          title={transaction.attributes.name}
-          description={transaction.attributes.description}
-          arrow
-        />}
-        keyExtractor={(item) => item.attributes.id}
-      />
     </View>
   );
 }
 
+const Footer = function({ onLoadMore, loading }) {
+  return (
+    <View>
+      {!loading ?
+        <CustomButton text="Load More" onPress={onLoadMore} type="tertiary" />
+        : <ActivityIndicator />
+      }
+    </View>
+  );
+}

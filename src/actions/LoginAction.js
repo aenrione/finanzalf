@@ -1,6 +1,38 @@
 /*global fetch:false*/
 import axios from 'axios'
 import * as NavigationService from '../navigation/navigationService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storeUser = async (user) => {
+  try {
+    const jsonValue = JSON.stringify(user)
+    await AsyncStorage.setItem('userData', jsonValue)
+  } catch (e) {
+    console.warn(e)
+  }
+}
+export const loginRememberedUser = ({ userData }) => {
+  return (dispatch) => {
+
+    dispatch({
+      type: 'LOGIN_USER_SUCCESS',
+      payload: userData
+    });
+
+    axios
+      .get('/api/v1/user/capabilities')
+      .then((response) => {
+        if (response.status !== 401) {
+          dispatch({
+            type: 'CHANGE_CAPABILITIES',
+            payload: response.data
+          });
+        }
+      }
+      );
+    NavigationService.navigate("MainNavigation")
+  }
+};
 
 export const loginUser = ({ email, password }) => {
   return (dispatch) => {
@@ -24,6 +56,7 @@ export const loginUser = ({ email, password }) => {
             type: 'LOGIN_USER_SUCCESS',
             payload: data
           });
+          storeUser(data)
           axios
             .get('/api/v1/user/capabilities')
             .then((response) => {
@@ -113,6 +146,7 @@ export const logoutUser = () => {
             type: 'LOGOUT_USER_SUCCESS',
             payload: data
           });
+          storeUser(null)
           NavigationService.navigate("SignIn")
         }
       }

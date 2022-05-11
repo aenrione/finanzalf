@@ -3,7 +3,7 @@ import store from '../store'
 import { BASE_URL } from "@env"
 
 const setAxiosDefaults = function() {
-  const baseUrl = BASE_URL || 'http://localhost:3000'
+  const baseUrl = 'http://192.168.159.232:3000'
   axios.defaults.baseURL = baseUrl
   axios.interceptors.request.use(function(config) {
     const state = store.getState()

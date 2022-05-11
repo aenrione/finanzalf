@@ -1,25 +1,51 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
+import { useMutation } from "react-query";
 import axios from 'axios'
+import { showMessage } from "react-native-flash-message";
 
 
-export default function NewCategoryForm({}) {
+export default function NewCategoryForm({ refetch }) {
   const [title, setTitle] = useState('');
   const [description, setDesc] = useState('');
 
-  const createCategory = () => {
-    console.warn("Creating Category")
-    axios
+
+  const createCategory = async function() {
+    const { data: response } = await axios
       .post('/api/v1/categories',
-      {
+        {
           name: title,
           description: description
-    }).then((response) => {
-      console.log("SUCCESS")
-    });
+        })
+    return response.data
   };
+  const mutation = useMutation(createCategory);
+  const { error, isSuccess, isError } = mutation;
+
+  const onSubmit = async () => {
+    mutation.mutate();
+  };
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (isSuccess) {
+      setTitle('')
+      setDesc('')
+      refetch()
+      mutation.reset()
+    }
+    if (isError) {
+      setTitle('')
+      setDesc('')
+      showMessage({
+        message: error.response.data.message,
+        type: "danger",
+      }); console.log("ERROR", error.response.data.errors)
+      mutation.reset()
+    }
+  });
 
   return (
     <ScrollView>
@@ -33,9 +59,9 @@ export default function NewCategoryForm({}) {
           value={description} setValue={setDesc} />
 
         <CustomButton
-        text="Submit"
-        bgColor="green"
-        onPress={createCategory} />
+          text="Submit"
+          bgColor="green"
+          onPress={onSubmit} />
 
       </View>
     </ScrollView>

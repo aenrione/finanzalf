@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './src/store'
 import { setAxiosDefaults } from './src/api/AxiosDefault'
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import FlashMessage from "react-native-flash-message";
 
 
 export default function App() {
@@ -15,9 +15,9 @@ export default function App() {
       <Provider store={store}>
         <SafeAreaView style={styles.root}>
           <SignInNavigation />
+          <FlashMessage position="top" />
         </SafeAreaView>
       </Provider>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

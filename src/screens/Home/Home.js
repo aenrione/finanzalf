@@ -1,6 +1,5 @@
 import React from 'react';
-import { ScrollView, ActivityIndicator } from 'react-native';
-import CustomButton from "../../components/CustomButton"
+import { View, ActivityIndicator } from 'react-native';
 import Summary from "./Summary"
 import Transactions from "./Transactions"
 import { useQuery } from "react-query";
@@ -10,7 +9,6 @@ import axios from 'axios'
 
 export default function HomeScreen() {
   const state = store.getState()
-  const capabilities = state.userCapabilities
   const email = state.user.email
   const user = state.user
 
@@ -29,13 +27,11 @@ export default function HomeScreen() {
   const { data: userInfo, status, refetch } = useQuery("user-data", getInfo);
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <CustomButton text="Update" onPress={refetch} />
+    <View style={{ flex: 1 }}>
       {status === 'loading' && <ActivityIndicator />}
       {status === 'success' &&
-        <Summary user={user} attributes={userInfo} />
+        <Transactions header={<Summary user={user} attributes={userInfo} refetch={refetch} />} />
       }
-      {capabilities.hasFintocAccount && <Transactions />}
-    </ScrollView>
+    </View>
   );
 }

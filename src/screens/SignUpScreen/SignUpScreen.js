@@ -47,26 +47,26 @@ export default function SignUpScreen({ navigation }) {
         <CustomInput placeholder="Confirm Password" secureTextEntry value={confirmPassword} setValue={setConfirmPassword} />
         <CustomButton text="Register" onPress={onSignUpPressed} />
 
-        <CustomButton
-          text="Sign in with Facebook"
-          onPress={onSignInFacebook}
-          bgColor="#E7EAF4"
-          fgColor="#4765A9"
-        />
+        {/* <CustomButton */}
+        {/*   text="Sign in with Facebook" */}
+        {/*   onPress={onSignInFacebook} */}
+        {/*   bgColor="#E7EAF4" */}
+        {/*   fgColor="#4765A9" */}
+        {/* /> */}
 
-        <CustomButton
-          text="Sign in with Google"
-          onPress={onSignInGoogle}
-          bgColor="#FAE9EA"
-          fgColor="#DD4D44"
-        />
+        {/* <CustomButton */}
+        {/*   text="Sign in with Google" */}
+        {/*   onPress={onSignInGoogle} */}
+        {/*   bgColor="#FAE9EA" */}
+        {/*   fgColor="#DD4D44" */}
+        {/* /> */}
 
-        <CustomButton
-          text="Sign in with Apple"
-          onPress={onSignInApple}
-          bgColor="#e3e3e3"
-          fgColor="#363636"
-        />
+        {/* <CustomButton */}
+        {/*   text="Sign in with Apple" */}
+        {/*   onPress={onSignInApple} */}
+        {/*   bgColor="#e3e3e3" */}
+        {/*   fgColor="#363636" */}
+        {/* /> */}
 
         <CustomButton text="Already have an account? Sign in!" onPress={onSignInPressed} type="tertiary" />
       </View>

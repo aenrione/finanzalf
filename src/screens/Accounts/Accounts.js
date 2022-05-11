@@ -6,6 +6,10 @@ import NewFintocAccount from '../../components/forms/NewFintocAccount';
 import NewBudaAccount from '../../components/forms/NewBudaAccount';
 import NewFintualAccount from '../../components/forms/NewFintualAccount';
 import { connect } from 'react-redux';
+import FintocLogo from "../../../assets/images/fintoc-logo.png"
+import BudaLogo from "../../../assets/images/buda-logo.png"
+import FintualLogo from "../../../assets/images/fintual-logo.png"
+import EtoroLogo from "../../../assets/images/etoro-logo.jpeg"
 
 
 
@@ -24,6 +28,8 @@ export function AccountsScreen({ capabilities }) {
             description="Fintoc Account"
             onPress={() => setFintocForm(!showFintocForm)}
             arrow={capabilities.hasFintocAccount}
+            pressed={showFintocForm}
+            logo={FintocLogo}
           />
           <Collapsible collapsed={!showFintocForm}>
             {capabilities.hasFintocAccount ?
@@ -42,6 +48,8 @@ export function AccountsScreen({ capabilities }) {
         description="Buda Account"
         onPress={() => setBudaForm(!showBudaForm)}
         arrow={capabilities.hasBudaAccount}
+        pressed={showBudaForm}
+        logo={BudaLogo}
       />
       <Collapsible collapsed={!showBudaForm}>
         {capabilities.hasBudaAccount ?
@@ -55,6 +63,8 @@ export function AccountsScreen({ capabilities }) {
         description="Fintual Account"
         onPress={() => setFintualForm(!showFintualForm)}
         arrow={capabilities.hasFintualAccount}
+        pressed={showFintualForm}
+        logo={FintualLogo}
       />
       <Collapsible collapsed={!showFintualForm}>
         {capabilities.hasFintualAccount ?
@@ -66,6 +76,7 @@ export function AccountsScreen({ capabilities }) {
       <CustomCard
         title="eToro"
         description="eToro Account to be added"
+        logo={EtoroLogo}
       />
     </ScrollView>
   );

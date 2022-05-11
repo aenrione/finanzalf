@@ -3,6 +3,7 @@
     "name": "budget-tracker-react",
     "slug": "budget-tracker-react",
     "version": "1.0.0",
+    "icon": "./assets/images/wallet.png",
     "assetBundlePatterns": [
       "**/*"
     ],
