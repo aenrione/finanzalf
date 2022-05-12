@@ -3,6 +3,9 @@
     "production": {
       "env": {
         "API_URL": "https://budget-tracker-alf-production.herokuapp.com/"
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
   },
