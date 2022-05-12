@@ -2,6 +2,7 @@
 import axios from 'axios'
 import * as NavigationService from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from "react-native-flash-message";
 
 const storeUser = async (user) => {
   try {
@@ -71,7 +72,14 @@ export const loginUser = ({ email, password }) => {
           NavigationService.navigate("MainNavigation")
         }
       }
-      );
+      ).catch(function(error) {
+        console.log(error)
+
+        showMessage({
+          message: "Credenciales Invalidas",
+          type: "danger",
+        });
+      });
   }
 };
 
@@ -106,7 +114,14 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
           NavigationService.navigate("MainNavigation")
         }
       }
-      );
+      ).catch(function(error) {
+        console.log(error)
+
+        showMessage({
+          message: "Credenciales Invalidas",
+          type: "danger",
+        });
+      });
   }
 };
 export const setLoading = ({ loading = true }) => {
