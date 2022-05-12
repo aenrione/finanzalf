@@ -1,0 +1,12 @@
+{
+  "build": {
+    "production": {
+      "env": {
+        "API_URL": "https://budget-tracker-alf-production.herokuapp.com/"
+      }
+    }
+  },
+  "cli": {
+    "version": ">= 0.52.0"
+  }
+}
