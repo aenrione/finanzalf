@@ -6,16 +6,21 @@ import CustomButton from "../../components/CustomButton"
 import { useInfiniteQuery } from "react-query"
 import axios from 'axios'
 import store from '../../store'
+import { changeTransaction } from '../../actions/ObjectActions';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+const changeTransactionId = (id) => {
+  store.dispatch(changeTransaction({ transaction_id: id }))
 }
 
 export default function Transactions({ header }) {
   const sort_by = "transaction_date"
   const sort_desc = true
   const limit = 5
-  const email = store.getState().user.email
+  const email = store.getState().auth_reducer.user.email
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -74,7 +79,7 @@ export default function Transactions({ header }) {
             />
           }
         />
-        : <ActivityIndicator />}
+        : <ActivityIndicator size="large" color="#0000ff" />}
     </View>
   );
 };
@@ -108,6 +113,7 @@ const TransactionSection = function({ transaction }) {
       <CustomAmountItem
         text={transaction.attributes.description}
         value={transaction.attributes.amount}
+        onPress={() => changeTransactionId(transaction.id)}
       />
     </View>
   );

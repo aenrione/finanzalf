@@ -2,7 +2,6 @@
 import axios from 'axios'
 import * as NavigationService from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { showMessage } from "react-native-flash-message";
 
 const storeUser = async (user) => {
   try {
@@ -72,14 +71,13 @@ export const loginUser = ({ email, password }) => {
           NavigationService.navigate("MainNavigation")
         }
       }
-      ).catch(function(error) {
-        console.log(error)
-
-        showMessage({
-          message: "Credenciales Invalidas",
-          type: "danger",
+      ).catch(function(_error) {
+        dispatch({
+          type: 'LOGIN_FAILED'
         });
+
       });
+
   }
 };
 
@@ -99,9 +97,6 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
       })
       .then((response) => {
         if (response.status === 401) {
-          dispatch({
-            type: 'LOGIN_FAILED'
-          });
         } else {
           let data = response.data
           data.client = response.headers.client
@@ -114,13 +109,11 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
           NavigationService.navigate("MainNavigation")
         }
       }
-      ).catch(function(error) {
-        console.log(error)
-
-        showMessage({
-          message: "Credenciales Invalidas",
-          type: "danger",
+      ).catch(function(_error) {
+        dispatch({
+          type: 'LOGIN_FAILED'
         });
+
       });
   }
 };
@@ -145,6 +138,7 @@ export const logoutUser = () => {
       type: 'LOAD_SPINNER'
     });
 
+    storeUser(null)
     axios
       .delete('/api/v1/auth/sign_out')
       .then((response) => {
@@ -161,7 +155,6 @@ export const logoutUser = () => {
             type: 'LOGOUT_USER_SUCCESS',
             payload: data
           });
-          storeUser(null)
           NavigationService.navigate("SignIn")
         }
       }

@@ -7,6 +7,7 @@ import axios from 'axios'
 import store from '../../store'
 import { getCapabilities } from '../../actions/LoginAction';
 import { useMutation } from "react-query";
+import { showMessage } from "react-native-flash-message";
 
 
 export default function NewFintocAccount({ success }) {
@@ -31,6 +32,10 @@ export default function NewFintocAccount({ success }) {
   };
 
   if (isSuccess) {
+    showMessage({
+      message: "Exito!",
+      type: "success",
+    });
     store.dispatch(getCapabilities())
   }
 

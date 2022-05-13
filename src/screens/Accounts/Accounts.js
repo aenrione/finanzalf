@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ScrollView, ActivityIndicator } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import Collapsible from 'react-native-collapsible';
 import NewFintocAccount from '../../components/forms/NewFintocAccount';
@@ -10,6 +10,9 @@ import FintocLogo from "../../../assets/images/fintoc-logo.png"
 import BudaLogo from "../../../assets/images/buda-logo.png"
 import FintualLogo from "../../../assets/images/fintual-logo.png"
 import EtoroLogo from "../../../assets/images/etoro-logo.jpeg"
+import { FintocAccount } from "./FintocAccount"
+import { BudaAccount } from "./BudaAccount"
+import { FintualAccount } from "./FintualAccount"
 
 
 
@@ -33,7 +36,7 @@ export function AccountsScreen({ capabilities }) {
           />
           <Collapsible collapsed={!showFintocForm}>
             {capabilities.hasFintocAccount ?
-              <Text>has Account!</Text> :
+              <FintocAccount /> :
               <NewFintocAccount
                 onSubmit={() => setFintocForm(!showFintocForm)}
                 onLoading={() => setFintocLoading(!fintocLoading)}
@@ -53,7 +56,7 @@ export function AccountsScreen({ capabilities }) {
       />
       <Collapsible collapsed={!showBudaForm}>
         {capabilities.hasBudaAccount ?
-          <Text>has Account!</Text> :
+          <BudaAccount /> :
           <NewBudaAccount />
         }
       </Collapsible>
@@ -68,7 +71,7 @@ export function AccountsScreen({ capabilities }) {
       />
       <Collapsible collapsed={!showFintualForm}>
         {capabilities.hasFintualAccount ?
-          <Text>has Account!</Text> :
+          <FintualAccount /> :
           <NewFintualAccount />
         }
       </Collapsible>
@@ -81,5 +84,5 @@ export function AccountsScreen({ capabilities }) {
     </ScrollView>
   );
 }
-const mapStateToProps = state => ({ capabilities: state.userCapabilities })
+const mapStateToProps = state => ({ capabilities: state.auth_reducer.userCapabilities })
 export default connect(mapStateToProps)(AccountsScreen);

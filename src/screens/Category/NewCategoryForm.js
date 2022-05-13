@@ -22,7 +22,7 @@ export default function NewCategoryForm({ refetch }) {
     return response.data
   };
   const mutation = useMutation(createCategory);
-  const { error, isSuccess, isError } = mutation;
+  const { isSuccess, isError } = mutation;
 
   const onSubmit = async () => {
     mutation.mutate();
@@ -34,15 +34,15 @@ export default function NewCategoryForm({ refetch }) {
       setTitle('')
       setDesc('')
       refetch()
+      showMessage({
+        message: "Exito!",
+        type: "success",
+      });
       mutation.reset()
     }
     if (isError) {
       setTitle('')
       setDesc('')
-      showMessage({
-        message: error.response.data.message,
-        type: "danger",
-      }); console.log("ERROR", error.response.data.errors)
       mutation.reset()
     }
   });

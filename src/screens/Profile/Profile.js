@@ -8,7 +8,7 @@ export default function HomeScreen() {
 
 
   const state = store.getState()
-  const user = state.user
+  const user = state.auth_reducer.user
   const onSignOutPressed = async () => {
     store.dispatch(logoutUser()
     )

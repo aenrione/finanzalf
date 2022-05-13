@@ -8,7 +8,7 @@ import axios from 'axios'
 
 
 export default function HomeScreen() {
-  const state = store.getState()
+  const state = store.getState().auth_reducer
   const email = state.user.email
   const user = state.user
 

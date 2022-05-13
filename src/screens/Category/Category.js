@@ -73,7 +73,7 @@ export default function HomeScreen() {
           }
           keyExtractor={(item) => item.id}
         />
-        : <ActivityIndicator />}
+        : <ActivityIndicator size="large" color="#0000ff" />}
     </View>
   );
 }
@@ -104,7 +104,7 @@ const Footer = function({ onLoadMore, loading }) {
     <View>
       {!loading ?
         <CustomButton text="Load More" onPress={onLoadMore} type="tertiary" />
-        : <ActivityIndicator />
+        : <ActivityIndicator size="large" color="#0000ff" />
       }
     </View>
   );

@@ -1,17 +1,24 @@
-import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
-export default function CustomInput({ text = "", value = "", onPress }) {
+export default function CustomAmount({ text = "", value = "", onPress, number = true }) {
+  const pressItem = () => {
+    if (onPress) {
+      onPress()
+    }
+  }
   return (
     <Pressable
-      onPress={onPress}
+      onPress={pressItem}
       style={[styles.listSection, { flex: 1 }]}>
       <Text style={[styles.text]}>{text}:</Text>
-      <Text style={[styles.value,
-      value.includes('-') ? { color: "red" } : { color: "green" }
-      ]}>
-        {value}
-      </Text>
+      {number ?
+        <Text style={[styles.value,
+        value.includes('-') ? { color: "red" } : { color: "green" }
+        ]}>
+          {value}
+        </Text> :
+        <Text style={[styles.value]}>{value}</Text>}
     </Pressable >
   );
 };

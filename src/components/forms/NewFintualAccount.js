@@ -6,6 +6,7 @@ import { getCapabilities, setLoading } from '../../actions/LoginAction';
 import { useMutation } from "react-query";
 import store from '../../store'
 import axios from 'axios'
+import { showMessage } from "react-native-flash-message";
 
 
 export default function NewFintualAccount() {
@@ -30,6 +31,10 @@ export default function NewFintualAccount() {
   };
 
   if (isSuccess) {
+    showMessage({
+      message: "Exito!",
+      type: "success",
+    });
     store.dispatch(getCapabilities())
   }
 

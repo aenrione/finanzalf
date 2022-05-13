@@ -43,8 +43,4 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: 'center'
   },
-  listSection: {
-    fontSize: 14,
-    padding: 10
-  }
 });
