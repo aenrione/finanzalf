@@ -8,15 +8,12 @@ import axios from 'axios'
 import store from '../../store'
 import { changeTransaction } from '../../actions/ObjectActions';
 
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 const changeTransactionId = (id) => {
   store.dispatch(changeTransaction({ transaction_id: id }))
 }
 
-export default function Transactions({ header }) {
+export default function Transactions({ header, refetch }) {
   const sort_by = "transaction_date"
   const sort_desc = true
   const limit = 5
@@ -24,11 +21,11 @@ export default function Transactions({ header }) {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = async function() {
     setRefreshing(true);
-    wait(1000).then(() => setRefreshing(false));
-  }, []);
-
+    await refetch()
+    setRefreshing(false)
+  }
 
   const getTransactions = async function({ pageParam = 1 }) {
     const response = await axios
@@ -55,13 +52,16 @@ export default function Transactions({ header }) {
 
   const mapTransactionPages = function() {
     let all = transactions.pages.map(elem => (
-      elem.data
+      elem.transactions
     ))
     let arr = [].concat.apply([], all)
       .filter((v, i, a) => a.findIndex(v2 => (v2.id === v.id)) === i)
     return arr
   }
 
+  if (status === "error") {
+    return <Error header={header} />
+  }
 
   return (
     <View>
@@ -69,8 +69,8 @@ export default function Transactions({ header }) {
         <FlatList
           data={mapTransactionPages()}
           ListHeaderComponent={<Header header={header} status={status} />}
-          renderItem={({ item: transaction }) => <TransactionSection transaction={transaction} />}
           keyExtractor={(item) => item.id}
+          renderItem={({ item: transaction }) => <TransactionSection transaction={transaction} />}
           ListFooterComponent={<Footer onLoadMore={fetchNextPage} loading={loading} />}
           refreshControl={
             <RefreshControl
@@ -83,6 +83,19 @@ export default function Transactions({ header }) {
     </View>
   );
 };
+const Error = function({ header }) {
+
+  return (
+    <View>
+      <Header header={header} />
+      <Card>
+        <Card.Title>Add a Fintoc Account in "Accounts" to view this section</Card.Title>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </Card>
+    </View>
+  );
+}
+
 const Header = function({ header }) {
 
   return (
@@ -111,8 +124,8 @@ const TransactionSection = function({ transaction }) {
   return (
     <View style={styles.item}>
       <CustomAmountItem
-        text={transaction.attributes.description}
-        value={transaction.attributes.amount}
+        text={transaction.description}
+        value={transaction.amount}
         onPress={() => changeTransactionId(transaction.id)}
       />
     </View>

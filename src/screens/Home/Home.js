@@ -10,7 +10,6 @@ import axios from 'axios'
 export default function HomeScreen() {
   const state = store.getState().auth_reducer
   const email = state.user.email
-  const user = state.user
 
 
   const getInfo = async function() {
@@ -21,7 +20,7 @@ export default function HomeScreen() {
             email: email
           }
         })
-    return response.data.attributes
+    return response.user
 
   }
   const { data: userInfo, status, refetch } = useQuery("user-data", getInfo);
@@ -30,7 +29,7 @@ export default function HomeScreen() {
     <View style={{ flex: 1 }}>
       {status === 'loading' && <ActivityIndicator />}
       {status === 'success' &&
-        <Transactions header={<Summary user={user} attributes={userInfo} refetch={refetch} />} />
+        <Transactions refetch={refetch} header={<Summary user={userInfo} refetch={refetch} />} />
       }
     </View>
   );

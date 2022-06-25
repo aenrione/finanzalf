@@ -3,34 +3,38 @@ import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
 import CustomAmountItem from '../../components/CustomAmountItem';
 import { Card, Divider } from 'react-native-elements';
 
-const SummaryCard = function({ attributes }) {
+const SummaryCard = function({ user }) {
   return (
     <Card>
       <Card.Title>Summary</Card.Title>
       <Divider />
-      <CustomAmountItem text={"Net Worth"} value={attributes.balances.total} />
+      <CustomAmountItem text={"Net Worth"} value={user.balances.total} />
       <Divider />
-      <CustomAmountItem text={"Fintoc"} value={attributes.balances.fintoc} />
+      <CustomAmountItem text={"Fintoc"} value={user.balances.fintoc} />
       <Divider />
-      <CustomAmountItem text={"Buda"} value={attributes.balances.buda} />
+      <CustomAmountItem text={"Buda"} value={user.balances.buda} />
       <Divider />
-      <CustomAmountItem text={"Fintual"} value={attributes.balances.fintual} />
+      <CustomAmountItem text={"Fintual"} value={user.balances.fintual} />
       <Divider />
-      <CustomAmountItem text={"Income"} value={attributes.income} />
+      <CustomAmountItem text={"Income"} value={user.income} />
       <Divider />
-      <CustomAmountItem text={"Expense"} value={attributes.expense} />
+      <CustomAmountItem text={"Expense"} value={user.expense} />
       <Divider />
-      <CustomAmountItem text={"Investments"} value={attributes.investments_return} />
+      <CustomAmountItem text={"Investments"} value={user.investments_return} />
+      <Divider />
+      <CustomAmountItem text={"Quota"} value={user.quota} />
+      <Divider />
+      <CustomAmountItem text={"Quota remaining"} value={user.remaining} />
     </Card>
   );
 }
 
-export default function Summary({ user, attributes }) {
+export default function Summary({ user }) {
   return (
     <View>
       <Text style={styles.title}>{user.name}</Text>
       <Text style={{ textAlign: 'center' }}>{user.email}</Text>
-      {attributes !== null ? <SummaryCard attributes={attributes} /> : <ActivityIndicator />}
+      {user !== null ? <SummaryCard user={user} /> : <ActivityIndicator />}
     </View>
   );
 };

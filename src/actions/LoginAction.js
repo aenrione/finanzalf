@@ -176,3 +176,13 @@ export const getCapabilities = () => {
       );
   }
 };
+
+export const removeSession = () => {
+  return (dispatch) => {
+    storeUser(null)
+    dispatch({
+      type: 'REMOVE_SESSION'
+    });
+    NavigationService.navigate("SignIn")
+  }
+};

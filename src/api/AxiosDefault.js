@@ -32,8 +32,14 @@ const setAxiosDefaults = function() {
             type: "danger",
           });
         } else {
+          if (err.response.status === 502) {
+            var msg = "Servidor parece estar caido"
+            store.dispatch(removeSession())
+          } else {
+            var msg = (err.response.data.errors.full_messages || err.response.data.errors)
+          }
           showMessage({
-            message: `${err.response.data.message}: ${err.response.data.detail}`,
+            message: msg,
             type: "danger",
           });
         }

@@ -12,6 +12,7 @@ import HomeScreen from '../../screens/Home'
 import TransactionScreen from '../../screens/Transaction'
 import DetailsScreen from '../../screens/Details'
 import AccountScreen from '../../screens/Accounts'
+import ToBuyScreen from '../../screens/ToBuy'
 import CategoryScreen from '../../screens/Category'
 import ProfileScreen from '../../screens/Profile'
 
@@ -38,19 +39,22 @@ function HomeTabNavigation() {
     <Tab.Navigator initialRouteName="Dashboard"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === 'Dashboard') {
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
-          } else if (route.name === 'Details') {
-            iconName = 'ios-list';
-          } else if (route.name === 'Accounts') {
-            iconName = 'ios-people';
+          var iconName = 'ios-people'
+          switch (route.name) {
+            case 'To Buy':
+              iconName = 'cart-outline'
+              break;
+            case 'Accounts':
+              iconName = 'ios-people';
+              break;
+            case 'Details':
+              iconName = 'ios-list';
+              break
+            default:
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
           }
-
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'tomato',
@@ -67,6 +71,11 @@ function HomeTabNavigation() {
         }}
       />
       <Tab.Screen name="Accounts" component={AccountScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name="To Buy" component={ToBuyScreen}
         options={{
           headerShown: false,
         }}

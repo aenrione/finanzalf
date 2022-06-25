@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import CustomInput from "../../components/CustomInput/CustomInput"
-import CustomButton from "../../components/CustomButton"
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import CustomButton from "../../../components/CustomButton"
 import { useMutation } from "react-query";
 import axios from 'axios'
 import { showMessage } from "react-native-flash-message";
 
 
-export default function NewCategoryForm({ refetch }) {
-  const [title, setTitle] = useState('');
-  const [description, setDesc] = useState('');
+export default function CreateForm({ refetch }) {
 
-
-  const createCategory = async function() {
+  const createList = async function() {
     const { data: response } = await axios
-      .post('/api/v1/categories',
+      .post('/api/v1/to_buy_lists',
         {
-          name: title,
-          description: description
+          title: "To Buy List",
         })
     return response.data
   };
-  const mutation = useMutation(createCategory);
+  const mutation = useMutation(createList);
   const { isSuccess, isError } = mutation;
 
   const onSubmit = async () => {
@@ -30,8 +25,6 @@ export default function NewCategoryForm({ refetch }) {
 
   useEffect(() => {
     if (isSuccess) {
-      setTitle('')
-      setDesc('')
       refetch()
       showMessage({
         message: "Exito!",
@@ -40,8 +33,6 @@ export default function NewCategoryForm({ refetch }) {
       mutation.reset()
     }
     if (isError) {
-      setTitle('')
-      setDesc('')
       mutation.reset()
     }
   });
@@ -50,15 +41,8 @@ export default function NewCategoryForm({ refetch }) {
     <ScrollView>
       <View style={styles.root}>
 
-        <Text style={styles.title}>Create a category</Text>
-        <CustomInput placeholder="Title"
-          value={title} setValue={setTitle} />
-        <CustomInput
-          placeholder="Description"
-          value={description} setValue={setDesc} />
-
         <CustomButton
-          text="Submit"
+          text="Create To Buy List!"
           bgColor="green"
           onPress={onSubmit} />
 
@@ -80,4 +64,5 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
 

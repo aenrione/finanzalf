@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, Text, Modal, View, Pressable, StyleSheet, Button } from 'react-native';
+import { ActivityIndicator, FlatList, RefreshControl, View, } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import NewCategoryForm from './NewCategoryForm'
 import Collapsible from 'react-native-collapsible';
@@ -39,11 +39,12 @@ export default function HomeScreen() {
   });
   const mapCategories = function() {
     let all = categories.pages.map(elem => (
-      elem.data
+      elem.transaction_categories
     ))
     let arr = [].concat.apply([], all)
       .filter((v, i, a) => a.findIndex(v2 => (v2.id === v.id)) === i)
     return arr
+
   }
 
 
@@ -61,9 +62,10 @@ export default function HomeScreen() {
           ListFooterComponent={<Footer onLoadMore={fetchNextPage} loading={loading} />}
           renderItem={({ item: category }) =>
             <CustomCard
-              title={category.attributes.name}
-              description={category.attributes.description}
+              title={category.name}
+              description={category.description}
               lastIcon={false}
+              logo={false}
             />}
           refreshControl={
             <RefreshControl

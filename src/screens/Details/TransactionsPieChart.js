@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { PieChart } from "react-native-chart-kit";
 import { Dimensions, View, Text, StyleSheet } from 'react-native';
+import Legend from './PieChartLegend'
+
 const screenWidth = Dimensions.get("window").width;
 function random_rgba() {
   var o = Math.round, r = Math.random, s = 255;
-  return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
+  return 'rgba(' + o((r()) * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
 }
 
 export function TransactionsPieChart({ total, chartData, chartConfig, title = "Expenses by Categories" }) {
@@ -37,9 +39,14 @@ export function TransactionsPieChart({ total, chartData, chartConfig, title = "E
             center={[0, 0]}
             backgroundColor="transparent"
             absolute
-          // hasLegend={false}
+            hasLegend={false}
 
           />
+        </View>
+        <View style={styles.legendContainer}>
+          {getData().map(({ name, color }) => {
+            return <Legend key={name} name={name} color={color} />;
+          })}
         </View>
       </View>
     </View >
@@ -49,6 +56,7 @@ export function TransactionsPieChart({ total, chartData, chartConfig, title = "E
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
+    width: '100%'
   },
   titleContainer: {
     flex: 1,

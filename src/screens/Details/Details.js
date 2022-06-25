@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
+import { ScrollView, View, Text, ActivityIndicator, RefreshControl, StyleSheet } from 'react-native';
 import { Divider } from 'react-native-elements';
 import moment from 'moment';
 import axios from 'axios'
@@ -13,8 +13,7 @@ import CustomButton from "../../components/CustomButton"
 const chartConfig = {
   backgroundGradientFrom: "#ffffff",
   backgroundGradientFromOpacity: 1,
-  backgroundGradientTo: "#000000",
-  backgroundGradientToOpacity: 0.2,
+  backgroundGradientTo: "#ffffff",
   color: (opacity = 1) => `rgba(24, 113, 199, ${opacity})`,
   decimalPlaces: 0,
 
@@ -61,7 +60,6 @@ export default function DetailsScreen() {
   const { data: balance, status, refetch } = useQuery("balances", getBalances);
   const { data: transactions, transactionStatus, refetch: refetchTransactions } = useQuery("transaction_chart", getTransactions);
   const { data: income_data, income_status, refetch: refetch_income } = useQuery("income_pie_chart", getIncomeChart);
-  console.log(date)
 
   const onRefresh = async function() {
     setRefreshing(true);
@@ -73,6 +71,7 @@ export default function DetailsScreen() {
 
   return (
     <ScrollView
+      style={styles.container}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -108,6 +107,7 @@ export default function DetailsScreen() {
           }
         </View>
       }
+      <Divider />
       {transactionStatus === 'loading' || !transactions ?
         <ActivityIndicator size="large" color="#0000ff" />
         :
@@ -117,6 +117,7 @@ export default function DetailsScreen() {
           total={transactions.total}
         />
       }
+      <Divider />
       {income_status === 'loading' || !income_data ?
         <ActivityIndicator size="large" color="#0000ff" />
         :
@@ -136,3 +137,11 @@ export default function DetailsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white'
+  },
+});
+
+

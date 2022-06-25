@@ -13,6 +13,9 @@ import EtoroLogo from "../../../assets/images/etoro-logo.jpeg"
 import { FintocAccount } from "./FintocAccount"
 import { BudaAccount } from "./BudaAccount"
 import { FintualAccount } from "./FintualAccount"
+import CustomIndicator from '../../components/CustomIndicator'
+import { useQuery } from "react-query";
+import axios from 'axios'
 
 
 
@@ -22,65 +25,75 @@ export function AccountsScreen({ capabilities }) {
   const [showBudaForm, setBudaForm] = React.useState(false)
   const [showFintualForm, setFintualForm] = React.useState(false)
 
+  const getInfo = async function() {
+    const { data: response } = await axios
+      .get('/api/v1/user/capabilities')
+    return response
+
+  }
+  const { data: accountData, status, refetch } = useQuery("account-data", getInfo);
   return (
     <ScrollView style={{ flex: 1 }}>
-      {fintocLoading ? <ActivityIndicator /> :
+      {status === "loading" ? <CustomIndicator /> :
         <View>
-          <CustomCard
-            title="Fintoc"
-            description="Fintoc Account"
-            onPress={() => setFintocForm(!showFintocForm)}
-            arrow={capabilities.hasFintocAccount}
-            pressed={showFintocForm}
-            logo={FintocLogo}
-          />
-          <Collapsible collapsed={!showFintocForm}>
-            {capabilities.hasFintocAccount ?
-              <FintocAccount /> :
-              <NewFintocAccount
-                onSubmit={() => setFintocForm(!showFintocForm)}
-                onLoading={() => setFintocLoading(!fintocLoading)}
+          {fintocLoading ? <ActivityIndicator /> :
+            <View>
+              <CustomCard
+                title="Fintoc"
+                description="Fintoc Account"
+                onPress={() => setFintocForm(!showFintocForm)}
+                arrow={capabilities.hasFintocAccount}
+                pressed={showFintocForm}
+                logo={FintocLogo}
               />
+              <Collapsible collapsed={!showFintocForm}>
+                {capabilities.hasFintocAccount ?
+                  <FintocAccount account={accountData.fintoc} /> :
+                  <NewFintocAccount
+                    onSubmit={() => setFintocForm(!showFintocForm)}
+                    onLoading={() => setFintocLoading(!fintocLoading)}
+                  />
+                }
+              </Collapsible>
+            </View>
+          }
+
+          <CustomCard
+            title="Buda"
+            description="Buda Account"
+            onPress={() => setBudaForm(!showBudaForm)}
+            arrow={capabilities.hasBudaAccount}
+            pressed={showBudaForm}
+            logo={BudaLogo}
+          />
+          <Collapsible collapsed={!showBudaForm}>
+            {capabilities.hasBudaAccount ?
+              <BudaAccount account={accountData.buda} /> :
+              <NewBudaAccount />
             }
           </Collapsible>
-        </View>
-      }
 
-      <CustomCard
-        title="Buda"
-        description="Buda Account"
-        onPress={() => setBudaForm(!showBudaForm)}
-        arrow={capabilities.hasBudaAccount}
-        pressed={showBudaForm}
-        logo={BudaLogo}
-      />
-      <Collapsible collapsed={!showBudaForm}>
-        {capabilities.hasBudaAccount ?
-          <BudaAccount /> :
-          <NewBudaAccount />
-        }
-      </Collapsible>
+          <CustomCard
+            title="Fintual"
+            description="Fintual Account"
+            onPress={() => setFintualForm(!showFintualForm)}
+            arrow={capabilities.hasFintualAccount}
+            pressed={showFintualForm}
+            logo={FintualLogo}
+          />
+          <Collapsible collapsed={!showFintualForm}>
+            {capabilities.hasFintualAccount ?
+              <FintualAccount account={accountData.fintual} /> :
+              <NewFintualAccount />
+            }
+          </Collapsible>
 
-      <CustomCard
-        title="Fintual"
-        description="Fintual Account"
-        onPress={() => setFintualForm(!showFintualForm)}
-        arrow={capabilities.hasFintualAccount}
-        pressed={showFintualForm}
-        logo={FintualLogo}
-      />
-      <Collapsible collapsed={!showFintualForm}>
-        {capabilities.hasFintualAccount ?
-          <FintualAccount /> :
-          <NewFintualAccount />
-        }
-      </Collapsible>
-
-      <CustomCard
-        title="eToro"
-        description="eToro Account to be added"
-        logo={EtoroLogo}
-      />
+          <CustomCard
+            title="eToro"
+            description="eToro Account to be added"
+            logo={EtoroLogo}
+          />
+        </View>}
     </ScrollView>
   );
 }

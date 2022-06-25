@@ -15,7 +15,7 @@ export default function Transaction() {
   const getInfo = async function() {
     const { data: response } = await axios
       .get(`/api/v1/transactions/${currentTransaction}`)
-    return response.data
+    return response.transaction
   }
   const { data: info, status, refetch } = useQuery("transaction-show", getInfo);
 
@@ -26,21 +26,21 @@ export default function Transaction() {
         <View>
           <Text style={styles.title}>Transaction</Text>
           <Divider />
-          <Section text={"Amount"} value={info.attributes.amount} />
+          <Section text={"Amount"} value={info.amount} />
           <Divider />
-          <Section styles={[styles.title]} text={"Description"} value={info.attributes.description} number={false} />
+          <Section styles={[styles.title]} text={"Description"} value={info.description} number={false} />
           <Divider />
-          <Section text={"Currency"} value={info.attributes.currency} number={false} />
+          <Section text={"Currency"} value={info.currency} number={false} />
           <Divider />
-          <Section text={"Holder_name"} value={info.attributes.holder_name || "Your Transaction"} number={false} />
+          <Section text={"Holder_name"} value={info.holder_name || "Your Transaction"} number={false} />
           <Divider />
-          <Section text={"Holder Institution"} value={info.attributes.holder_institution} number={false} />
+          <Section text={"Holder Institution"} value={info.holder_institution} number={false} />
           <Divider />
-          <Section text={"Holder_id"} value={info.attributes.holder_id || "Your Transaction"} number={false} />
+          <Section text={"Holder_id"} value={info.holder_id || "Your Transaction"} number={false} />
           <Divider />
-          <Section text={"Transaction Date"} value={info.attributes.transaction_date} number={false} />
+          <Section text={"Transaction Date"} value={info.transaction_date} number={false} />
           <Divider />
-          <Section text={"Category"} value={info.attributes.category || "No category"} number={false} />
+          <Section text={"Category"} value={info.category || "No category"} number={false} />
           <Divider />
           <CategoryForm transaction_id={currentTransaction} refetchTransaction={refetch} />
         </View>
@@ -64,7 +64,7 @@ export function CategoryForm({ transaction_id, refetchTransaction }) {
   const getCategories = async function() {
     const { data: response } = await axios
       .get(`/api/v1/categories`)
-    return response.data
+    return response.transaction_categories
   }
 
   const submitForm = async function() {
@@ -104,7 +104,7 @@ export function CategoryForm({ transaction_id, refetchTransaction }) {
               setCategory(itemValue)
             }>
             {categories.map(r =>
-              <Picker.Item label={r.attributes.name} value={r.id} key={r.id} />
+              <Picker.Item label={r.name} value={r.id} key={r.id} />
             )}
           </Picker>
           <CustomButton text={"Submit"} onPress={onSubmit} />
