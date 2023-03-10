@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
-import { getCapabilities, setLoading } from '../../actions/LoginAction';
 import { useMutation } from "react-query";
-import store from '../../store'
 import axios from 'axios'
 import { showMessage } from "react-native-flash-message";
 
 
-export default function NewFintualAccount() {
+export default function NewFintualAccount({refresh}) {
   const [email, setEmail] = useState('');
   const [passowrd, setPassword] = useState('');
 
@@ -35,7 +33,7 @@ export default function NewFintualAccount() {
       message: "Exito!",
       type: "success",
     });
-    store.dispatch(getCapabilities())
+    refresh()
   }
 
   return (

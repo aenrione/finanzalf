@@ -1,9 +1,9 @@
 import { Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
-export default function CustomButton({ onPress, text, type = "primary", bgColor, pressedColor = "rgb(210, 230, 255)", fgColor }) {
+export default function CustomButton({ onPress, text, type = "primary", bgColor, pressedColor = "rgb(210, 230, 255)", fgColor, disabled = false }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [
+    <Pressable onPress={onPress} disabled={disabled} style={({ pressed }) => [
       styles.container,
       type === 'primary' && {
         backgroundColor: pressed
@@ -15,6 +15,7 @@ export default function CustomButton({ onPress, text, type = "primary", bgColor,
           ? pressedColor
           : bgColor
       },
+      disabled && {backgroundColor: "#363636"}
     ]}>
       <Text style={[
         styles.text,

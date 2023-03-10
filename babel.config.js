@@ -17,6 +17,7 @@ module.exports = function(api) {
           extensions: [".tsx", ".ts", ".js", ".json"],
         },
       ],
+      '@babel/plugin-proposal-export-namespace-from',
       "react-native-reanimated/plugin",
     ],
   };

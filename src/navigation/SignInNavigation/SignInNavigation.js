@@ -9,6 +9,7 @@ const Stack = createNativeStackNavigator();
 
 import SignInScreen from '../../screens/SignInScreen'
 import SignUpScreen from '../../screens/SignUpScreen'
+import SettingScreen from '../../screens/SignInScreen/SettingScreen'
 import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 
 export default function SignInNavigation(){
@@ -19,6 +20,9 @@ export default function SignInNavigation(){
               headerShown: false,
             }}/>
         <Stack.Screen name="SignUp" component={SignUpScreen} options={{
+              headerShown: false,
+            }}/>
+        <Stack.Screen name="SignSettings" component={SettingScreen} options={{
               headerShown: false,
             }}/>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{

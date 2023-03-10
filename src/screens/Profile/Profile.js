@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import CustomButton from "../../components/CustomButton"
 import { logoutUser } from '../../actions/LoginAction';
@@ -10,6 +11,7 @@ export default function HomeScreen() {
 
   const state = store.getState()
   const user = state.auth_reducer.user
+  const [currentUrl, _setUrl] = useState(state.auth_reducer["baseUrl"]);
   const onSignOutPressed = async () => {
     store.dispatch(logoutUser()
     )
@@ -28,6 +30,12 @@ export default function HomeScreen() {
           fgColor="#DD4D44"
         />
       </View>
+      <CustomButton text="Server URL" type="tertiary" />
+      <CustomButton
+        text={currentUrl}
+        bgColor="#e3e3e3"
+        fgColor="#363636"
+      />
     </View>
   );
 }

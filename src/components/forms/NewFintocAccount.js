@@ -4,13 +4,11 @@ import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-nat
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
 import axios from 'axios'
-import store from '../../store'
-import { getCapabilities } from '../../actions/LoginAction';
 import { useMutation } from "react-query";
 import { showMessage } from "react-native-flash-message";
 
 
-export default function NewFintocAccount({ success }) {
+export default function NewFintocAccount({ refresh }) {
   const [api_key, setKey] = useState('');
   const [link, setLink] = useState('');
 
@@ -36,7 +34,7 @@ export default function NewFintocAccount({ success }) {
       message: "Exito!",
       type: "success",
     });
-    store.dispatch(getCapabilities())
+    refresh()
   }
 
   return (

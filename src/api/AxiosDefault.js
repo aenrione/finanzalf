@@ -1,16 +1,15 @@
 import axios from 'axios';
 import store from '../store'
 import { showMessage } from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const setAxiosDefaults = function() {
-  const baseUrl = process.env.API_URL || 'http://localhost:3000'
-  axios.defaults.baseURL = baseUrl
-  console.log(baseUrl)
-  axios.interceptors.request.use(function(config) {
+  axios.interceptors.request.use(async function(config) {
     const state = store.getState().auth_reducer
     const accessToken = state["access-token"]
     const uid = state.uid
     const client = state.client
+    config.baseURL = state.baseUrl
     config.headers['access-token'] = accessToken;
     config.headers['uid'] = uid;
     config.headers['client'] = client;

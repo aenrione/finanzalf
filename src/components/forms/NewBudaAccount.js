@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
-import { getCapabilities, setLoading } from '../../actions/LoginAction';
+// import { getCapabilities, setLoading } from '../../actions/LoginAction';
 import { useMutation } from "react-query";
-import store from '../../store'
+// import store from '../../store'
 import axios from 'axios'
 import { showMessage } from "react-native-flash-message";
 
 
-export default function NewBudaAccount() {
+export default function NewBudaAccount({ refresh }) {
   const [api_secret, setSecret] = useState('');
   const [api_key, setKey] = useState('');
 
@@ -34,7 +34,7 @@ export default function NewBudaAccount() {
       message: "Exito!",
       type: "success",
     });
-    store.dispatch(getCapabilities())
+    refresh()
   }
 
   return (

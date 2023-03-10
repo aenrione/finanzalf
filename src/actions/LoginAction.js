@@ -2,6 +2,7 @@
 import axios from 'axios'
 import * as NavigationService from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from "react-native-flash-message";
 
 const storeUser = async (user) => {
   try {
@@ -11,6 +12,38 @@ const storeUser = async (user) => {
     console.warn(e)
   }
 }
+const updateUrl = async (url) => {
+  try {
+    await AsyncStorage.setItem('baseUrl', url)
+  } catch (e) {
+    console.warn(e)
+  }
+}
+export const changeUrl = ({ url }) => {
+  return (dispatch) => {
+
+    dispatch({
+      type: 'CHANGE_URL',
+      payload: url
+    });
+    updateUrl(url)
+    showMessage({
+      message: `Url Updated: ${url}`,
+      type: "success",
+    });
+  }
+};
+
+export const updateCapabilities = ({ data }) => {
+  return (dispatch) => {
+
+    dispatch({
+      type: 'CHANGE_CAPABILITIES',
+      payload: data
+    });
+  }
+};
+
 export const loginRememberedUser = ({ userData }) => {
   return (dispatch) => {
 
