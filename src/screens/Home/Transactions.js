@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshControl, ActivityIndicator, View, FlatList, StyleSheet } from 'react-native';
+import { RefreshControl, View, FlatList, StyleSheet } from 'react-native';
 import { Card } from 'react-native-elements';
 import CustomAmountItem from '../../components/CustomAmountItem';
 import CustomButton from "../../components/CustomButton"
@@ -65,7 +65,7 @@ export default function Transactions({ header, refetch }) {
 
   return (
     <View>
-      {status === 'success' ?
+      {status === 'success' &&
         <FlatList
           data={mapTransactionPages()}
           ListHeaderComponent={<Header header={header} status={status} />}
@@ -79,7 +79,7 @@ export default function Transactions({ header, refetch }) {
             />
           }
         />
-        : <ActivityIndicator size="large" color="#0000ff" />}
+    }
     </View>
   );
 };

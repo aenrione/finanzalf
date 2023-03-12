@@ -1,15 +1,4 @@
 {
-  "expo": {
-    "name": "budget-tracker-react",
-    "slug": "budget-tracker-react",
-    "version": "1.0.0",
-    "icon": "./assets/images/wallet.png",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "android": {
-      "package": "aenrione.budget"
-    }
-  },
-  "name": "budget-tracker-react"
+  "name": "budgetTrackerReact",
+  "displayName": "budgetTrackerReact"
 }

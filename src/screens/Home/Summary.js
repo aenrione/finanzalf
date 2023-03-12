@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import CustomAmountItem from '../../components/CustomAmountItem';
 import { Card, Divider } from 'react-native-elements';
 
@@ -34,7 +34,7 @@ export default function Summary({ user }) {
     <View>
       <Text style={styles.title}>{user.name}</Text>
       <Text style={{ textAlign: 'center' }}>{user.email}</Text>
-      {user !== null ? <SummaryCard user={user} /> : <ActivityIndicator />}
+      {user !== null && <SummaryCard user={user} /> }
     </View>
   );
 };

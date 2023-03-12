@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, ActivityIndicator, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, ActivityIndicator, View, ScrollView, RefreshControl } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import CustomButton from "../../components/CustomButton"
@@ -7,10 +7,17 @@ import store from '../../store'
 import { useQuery, useMutation } from "react-query";
 import axios from 'axios'
 import { showMessage } from "react-native-flash-message";
+import * as Progress from 'react-native-progress';
 
 
 export default function Transaction() {
   const currentTransaction = store.getState().object_reducer.selected_transaction
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = async function() {
+    setRefreshing(true);
+    await refetch()
+    setRefreshing(false)
+  }
 
   const getInfo = async function() {
     const { data: response } = await axios
@@ -20,7 +27,15 @@ export default function Transaction() {
   const { data: info, status, refetch } = useQuery("transaction-show", getInfo);
 
   return (
-    <ScrollView style={[styles.listSection, { flex: 1 }]}>
+    <ScrollView style={[styles.listSection, { flex: 1 }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+
+    >
       {status === "loading" ?
         <ActivityIndicator size="large" color="#0000ff" /> :
         <View>
@@ -40,9 +55,8 @@ export default function Transaction() {
           <Divider />
           <Section text={"Transaction Date"} value={info.transaction_date} number={false} />
           <Divider />
-          <Section text={"Category"} value={info.category || "No category"} number={false} />
+          <CategorySection text={"Category"} currentTransaction={currentTransaction} refetch={refetch} info={info} />
           <Divider />
-          <CategoryForm transaction_id={currentTransaction} refetchTransaction={refetch} />
         </View>
 
       }
@@ -58,8 +72,25 @@ export function Section({ text, value }) {
   );
 };
 
-export function CategoryForm({ transaction_id, refetchTransaction }) {
-  const [selectedCategory, setCategory] = useState();
+export function CategorySection({ text, currentTransaction, refetch, info }) {
+  return (
+    <View>
+      <View style={[styles.textSection, { flex: 1 }]}>
+        <Text style={styles.text}>{text}</Text>
+      </View>
+      <CategoryForm1 transaction_id={currentTransaction} refetchTransaction={refetch} info={info} />
+    </View>
+  );
+};
+
+export function CategoryForm1({ transaction_id, refetchTransaction, info }) {
+  const [selectedCategory, setCategory] = useState(info.category.id);
+  const [loading, setLoading] = useState(false);
+  console.log(selectedCategory)
+
+  const getLoadingState = function(status) {
+    return loading || status === "loading";
+  }
 
   const getCategories = async function() {
     const { data: response } = await axios
@@ -68,47 +99,59 @@ export function CategoryForm({ transaction_id, refetchTransaction }) {
   }
 
   const submitForm = async function() {
+    console.log(selectedCategory)
+    if (!selectedCategory) { return }
+    if (selectedCategory !== -1 && selectedCategory !== "-1") {
+      console.log(`/api/v1/transactions/${transaction_id}/add_category/${selectedCategory}`)
+      const { data: response } = await axios
+        .post(`/api/v1/transactions/${transaction_id}/add_category/${selectedCategory}`)
+      return response.data
+    }
+    console.log(`/api/v1/transactions/${transaction_id}/remove_category`)
     const { data: response } = await axios
-      .post(`/api/v1/transactions/${transaction_id}/add_category/${selectedCategory}`)
+      .post(`/api/v1/transactions/${transaction_id}/remove_category`)
+    console.log(response)
     return response.data
-
   };
+
   const mutation = useMutation(submitForm, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       refetchTransaction()
       showMessage({
         message: "Exito!",
         type: "success",
       });
     }
-  });
+    , onMutate: async () => {
+      setLoading(true)
+      // setCategory(itemValue)
+    }
+    , onSettled: () => {
+      setLoading(false)
+    }
+  }
+  );
 
   const { data: categories, status } = useQuery("transaction-categories", getCategories, {
     onSuccess: (data) => {
-      setCategory(data[0].id)
+      setCategory(info.category.id)
     }
   })
 
-  const onSubmit = function() {
-    mutation.mutate();
-  }
   return (
-    <View style={styles.form}>
-      {status === "loading" ?
-        <ActivityIndicator size="large" color="#0000ff" /> :
-        <View>
-          <Text style={styles.title}>Set Category</Text>
-          <Picker
-            selectedValue={selectedCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setCategory(itemValue)
-            }>
-            {categories.map(r =>
-              <Picker.Item label={r.name} value={r.id} key={r.id} />
-            )}
-          </Picker>
-          <CustomButton text={"Submit"} onPress={onSubmit} />
-        </View >}
+    <View>
+      {getLoadingState(status) ?
+        <Progress.Circle indeterminate={true} size={30} /> :
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={(itemValue, itemIndex) =>setCategory(itemValue)}>
+          <Picker.Item label="No Category" value="-1" />
+          {categories.map(r =>
+            <Picker.Item label={r.name} value={r.id} key={r.id} />
+          )}
+        </Picker>
+      }
+      <CustomButton text={"Update Category"} onPress={() => mutation.mutate()} />
     </View >
   );
 };

@@ -23,15 +23,15 @@
 
 ## Dependency
 
-- Requires Node `12.x` engine
+- Requires Node `18.x` engine
+- Requires yarn
 
 ## Running local development
 
-#### With expo
+#### With React Native
 
-1. Install `yarn global add expo-cli`
-2. Install dependencies`yarn install`
-3. `expo start`
+1. Install dependencies`yarn install`
+  2. `yarn start` or `npx react-native start`
 
 <!-- ## License -->
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StatusBar, FlatList, RefreshControl, Text } from "react-native";
+import React, { useEffect } from 'react';
+import { View, StatusBar, FlatList, RefreshControl } from "react-native";
 import styled from 'styled-components/native'
 import { useMutation } from "react-query";
 import axios from 'axios'
@@ -60,7 +60,7 @@ export default function List({ list, refetch }) {
     if (isSuccessDestroy) {
       refetch()
       showMessage({
-        message: "Borrada con exito!",
+        message: "Deleted!",
         type: "success",
       });
       destroy_mutation.reset()

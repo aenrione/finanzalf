@@ -1,30 +1,31 @@
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import React from 'react';
-import { IconButton, Colors } from 'react-native-paper';
+import { IconButton  } from 'react-native-paper';
 
-export default function CustomCard({ logo, logoColor = Colors.blue600, title = '', description = '', onPress, arrow = false, pressed, lastIcon = true }) {
+export default function CustomCard({ logo ="", title = '', description = '', onPress, arrow = false, pressed, lastIcon = true, icon="plus-circle", iconPressed="minus-circle", iconColor = "#00ff18", iconPressedColor = "#Adadad" }) {
   const getIcon = function() {
     if (arrow) {
       return pressed ? 'arrow-down-circle' : 'arrow-right-circle'
     }
-    return 'plus-circle'
+    if (pressed) {
+      return iconPressed
+    }
+    return icon
+  }
+  const getColor = function() {
+    if (arrow) {
+      return "#Adadad"
+    }
+    if (pressed) {
+      return iconPressedColor
+    }
+    return iconColor
   }
   return (
     <Pressable onPress={onPress}>
       <View style={styles.mainCardView}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {!logo ?
-            <IconButton
-              icon={'account-circle'}
-              size={50}
-              color={logoColor}
-              style={{
-                borderRadius: 25,
-                height: 50,
-                width: 50,
-              }}
-            />
-            :
+          { logo &&
             <View style={styles.subCardView}>
               <Image
                 source={logo}
@@ -66,7 +67,7 @@ export default function CustomCard({ logo, logoColor = Colors.blue600, title = '
         {lastIcon &&
           <IconButton
             icon={getIcon()}
-            color={arrow ? Colors.grey500 : Colors.green500}
+            color={getColor()}
             size={25}
             onPress={onPress}
           />

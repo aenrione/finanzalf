@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import axios from 'axios'
+import { View, StyleSheet  } from 'react-native';
 import { connect } from 'react-redux';
 import List from './ToBuyList/List'
 import { useQuery } from "react-query";
 import CustomIndicator from "../../components/CustomIndicator"
-import axios from 'axios'
-
 
 
 export function AccountsScreen({ }) {
@@ -19,7 +18,7 @@ export function AccountsScreen({ }) {
 
   return (
     <View style={styles.container}>
-      {status === "loading" ? <CustomIndicator /> :
+      {status === "loading" ? <CustomIndicator size={150}/> :
         <List list={data[0]} refetch={refetch} />
       }
     </View>

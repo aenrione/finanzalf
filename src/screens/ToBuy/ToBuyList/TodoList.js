@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native'
 
 
@@ -10,14 +10,14 @@ export default function TodoList({ item, deleteItem }) {
     <ComponentContainer>
       <ListContainer>
         <CirlceContainer>
-          <Entypo name="circle" size={20} color="midnightblue" />
+          <Icon name="ellipse-outline" size={20} color="midnightblue" />
         </CirlceContainer>
         <View>
           <TextItem>{item.title}</TextItem>
           <TextDate>{item.price}</TextDate>
         </View>
         <IconContainer onPress={() => deleteItem(item.id)}>
-          <MaterialIcons name="delete" size={24} color="midnightblue" />
+          <Ionicons name="trash-sharp" size={20} color="midnightblue" />
         </IconContainer>
       </ListContainer>
     </ComponentContainer>
@@ -63,10 +63,6 @@ const IconContainer = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   margin-right: 10px;
-  margin-top: 15px;
-
-  height: 40px;
-
   border-radius: 10px;
 `;
 

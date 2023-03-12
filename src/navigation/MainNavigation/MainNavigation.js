@@ -10,11 +10,13 @@ const Stack = createNativeStackNavigator();
 
 import HomeScreen from '../../screens/Home'
 import TransactionScreen from '../../screens/Transaction'
-import DetailsScreen from '../../screens/Details'
+import BalancesScreen from '../../screens/Details/Balances'
+import PieChartScreen from '../../screens/Details/Pie'
 import AccountScreen from '../../screens/Accounts'
 import ToBuyScreen from '../../screens/ToBuy'
 import CategoryScreen from '../../screens/Category'
 import ProfileScreen from '../../screens/Profile'
+import AboutScreen from '../../screens/Profile/About'
 
 function HomeScreenNavigation() {
   return (
@@ -47,6 +49,12 @@ function HomeTabNavigation() {
             case 'Accounts':
               iconName = 'ios-people';
               break;
+            case 'Balances':
+              iconName = 'ios-bar-chart';
+              break;
+            case 'Charts':
+              iconName = 'pie-chart-outline';
+              break;
             case 'Details':
               iconName = 'ios-list';
               break
@@ -56,11 +64,16 @@ function HomeTabNavigation() {
                 : 'ios-information-circle-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
+          // return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Details" component={DetailsScreen}
+      <Tab.Screen name="Balances" component={BalancesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name="Charts" component={PieChartScreen}
         options={{
           headerShown: false,
         }}
@@ -88,6 +101,7 @@ export default function Navitagion() {
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={HomeTabNavigation} />
       <Drawer.Screen name="Categories" component={CategoryScreen} />
+      <Drawer.Screen name="About" component={AboutScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
     </Drawer.Navigator>
   )

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import store from '../store'
 import { showMessage } from "react-native-flash-message";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const setAxiosDefaults = function() {
   axios.interceptors.request.use(async function(config) {
@@ -19,6 +18,7 @@ const setAxiosDefaults = function() {
   axios.interceptors.response.use(
     res => res,
     err => {
+      if(err.response === undefined){ return Promise.reject(err.response);}
       if (err.response.data) {
         if (err.response.data.errors) {
           if (err.response.status === 400) {

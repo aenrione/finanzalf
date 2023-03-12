@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import { View, StyleSheet, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, RefreshControl } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import Collapsible from 'react-native-collapsible';
 import NewFintocAccount from '../../components/forms/NewFintocAccount';
@@ -23,13 +23,13 @@ import store from '../../store'
 import { showMessage } from "react-native-flash-message";
 
 const requestUpdate = async (refetch) => {
-    const { data: _response } = await axios
-      .get('/api/v1/user/update_info')
-    await refetch()
-    showMessage({
-      message: "Requested Succesfully",
-      type: "success",
-    });
+  const { data: _response } = await axios
+    .get('/api/v1/user/update_info')
+  await refetch()
+  showMessage({
+    message: "Requested Succesfully",
+    type: "success",
+  });
 }
 
 const createTwoButtonAlert = (refetch) =>
@@ -74,10 +74,10 @@ export function AccountsScreen({ capabilities }) {
         />
       }
     >
-      {status === "loading" ? <CustomIndicator /> :
-        <View>
-          <Text style={styles.title}>Account Summary</Text>
-          {fintocLoading ? <ActivityIndicator /> :
+      <View>
+        <Text style={styles.title}>Account Summary</Text>
+        {status === "loading" ? <CustomIndicator size={150} /> :
+          <View>
             <View>
               <CustomCard
                 title="Fintoc"
@@ -98,55 +98,56 @@ export function AccountsScreen({ capabilities }) {
                 }
               </Collapsible>
             </View>
-          }
 
-          <CustomCard
-            title="Buda"
-            description="Buda Account"
-            onPress={() => setBudaForm(!showBudaForm)}
-            arrow={capabilities.hasBudaAccount}
-            pressed={showBudaForm}
-            logo={BudaLogo}
-          />
-          <Collapsible collapsed={!showBudaForm}>
-            {capabilities.hasBudaAccount && accountData.buda ?
-              <BudaAccount account={accountData.buda} refetch={onRefresh} /> :
-              <NewBudaAccount refresh={onRefresh} />
-            }
-          </Collapsible>
+            <CustomCard
+              title="Buda"
+              description="Buda Account"
+              onPress={() => setBudaForm(!showBudaForm)}
+              arrow={capabilities.hasBudaAccount}
+              pressed={showBudaForm}
+              logo={BudaLogo}
+            />
+            <Collapsible collapsed={!showBudaForm}>
+              {capabilities.hasBudaAccount && accountData.buda ?
+                <BudaAccount account={accountData.buda} refetch={onRefresh} /> :
+                <NewBudaAccount refresh={onRefresh} />
+              }
+            </Collapsible>
 
-          <CustomCard
-            title="Fintual"
-            description="Fintual Account"
-            onPress={() => setFintualForm(!showFintualForm)}
-            arrow={capabilities.hasFintualAccount}
-            pressed={showFintualForm}
-            logo={FintualLogo}
-          />
-          <Collapsible collapsed={!showFintualForm}>
-            {capabilities.hasFintualAccount && accountData.fintual ?
-              <FintualAccount account={accountData.fintual} refetch={onRefresh} /> :
-              <NewFintualAccount refresh={onRefresh} />
-            }
-          </Collapsible>
+            <CustomCard
+              title="Fintual"
+              description="Fintual Account"
+              onPress={() => setFintualForm(!showFintualForm)}
+              arrow={capabilities.hasFintualAccount}
+              pressed={showFintualForm}
+              logo={FintualLogo}
+            />
+            <Collapsible collapsed={!showFintualForm}>
+              {capabilities.hasFintualAccount && accountData.fintual ?
+                <FintualAccount account={accountData.fintual} refetch={onRefresh} /> :
+                <NewFintualAccount refresh={onRefresh} />
+              }
+            </Collapsible>
 
-          <CustomCard
-            title="eToro"
-            description="eToro Account to be added"
-            logo={EtoroLogo}
-          />
-          <CustomButton
-            text="What data do we collect?"
-            type="tertiary"
-          />
-          <CustomButton
-            text="Request Manual Update"
-            // bgColor="#E7EAF4"
-            fgColor="green"
-            type="tertiary"
-            onPress={() => createTwoButtonAlert(onRefresh)}
-          />
-        </View>}
+            <CustomCard
+              title="eToro"
+              description="eToro Account to be added"
+              logo={EtoroLogo}
+            />
+            <CustomButton
+              text="What data do we collect?"
+              type="tertiary"
+            />
+            <CustomButton
+              text="Request Manual Update"
+              // bgColor="#E7EAF4"
+              fgColor="green"
+              type="tertiary"
+              onPress={() => createTwoButtonAlert(onRefresh)}
+            />
+          </View>
+        }
+      </View>
     </ScrollView>
   );
 }

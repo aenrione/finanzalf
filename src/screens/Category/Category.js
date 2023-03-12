@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, View, } from 'react-native';
+import { FlatList, RefreshControl, View, } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import NewCategoryForm from './NewCategoryForm'
 import Collapsible from 'react-native-collapsible';
 import CustomButton from "../../components/CustomButton"
+import CategoryItem from "./CategoryItem"
 import axios from 'axios'
-import { useInfiniteQuery } from "react-query"
-
+import CustomIndicator from "../../components/CustomIndicator"
+import { useQuery } from "react-query"
 
 export default function HomeScreen() {
   const sort_by = "created_at"
   const sort_desc = true
-  const limit = 5
+  const limit = 30
 
   const getCategories = async function() {
     const response = await axios
@@ -21,7 +22,7 @@ export default function HomeScreen() {
             sort_by: sort_by,
             sort_desc: sort_desc,
             limit: limit,
-            page: 1
+            // page: 1
           }
         })
     return response.data
@@ -30,43 +31,24 @@ export default function HomeScreen() {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const { data: categories, status, fetchNextPage, isFetchingNextPage: loading } = useInfiniteQuery("categories", getCategories, {
-    getNextPageParam: (lastPage) => {
-      const { current_page: page, total_pages: totalPages } = lastPage.meta;
-
-      return (page < totalPages) ? page + 1 : page;
-    },
-  });
-  const mapCategories = function() {
-    let all = categories.pages.map(elem => (
-      elem.transaction_categories
-    ))
-    let arr = [].concat.apply([], all)
-      .filter((v, i, a) => a.findIndex(v2 => (v2.id === v.id)) === i)
-    return arr
-
-  }
+  const { data: categories, status, refetch } = useQuery("categories", getCategories);
 
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchNextPage()
+    refetch()
     setRefreshing(false)
   }, []);
   return (
     <View>
       {status === 'success' ?
         <FlatList
-          data={mapCategories()}
-          ListHeaderComponent={<Header refetch={fetchNextPage} />}
-          ListFooterComponent={<Footer onLoadMore={fetchNextPage} loading={loading} />}
+          data={categories.transaction_categories}
+          ListHeaderComponent={<Header refetch={refetch} />}
+          /* ListFooterComponent={<Footer onLoadMore={refetch} loading={loading} />} */
           renderItem={({ item: category }) =>
-            <CustomCard
-              title={category.name}
-              description={category.description}
-              lastIcon={false}
-              logo={false}
-            />}
+            <CategoryItem category={category} refetch={onRefresh}/>
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -75,7 +57,7 @@ export default function HomeScreen() {
           }
           keyExtractor={(item) => item.id}
         />
-        : <ActivityIndicator size="large" color="#0000ff" />}
+        : <CustomIndicator size={150}/>}
     </View>
   );
 }
@@ -92,6 +74,7 @@ const Header = function({ refetch }) {
       <CustomCard
         title="Add a category"
         description="Create a category for your transactions"
+        pressed={modalVisible}
         onPress={() => setModalVisible(!modalVisible)}
       />
       <Collapsible collapsed={!modalVisible}>

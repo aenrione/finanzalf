@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl } from 'react-native';
 import Summary from "./Summary"
 import Transactions from "./Transactions"
 import { useQuery } from "react-query";
 import store from '../../store'
 import axios from 'axios'
+import CustomIndicator from "../../components/CustomIndicator"
 
 
 export default function HomeScreen() {
@@ -27,8 +28,8 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      {status === 'loading' && <ActivityIndicator />}
-      {status === 'success' &&
+      {status !== 'success' ? <CustomIndicator size={150}/>
+        :
         <Transactions refetch={refetch} header={<Summary user={userInfo} refetch={refetch} />} />
       }
     </View>
