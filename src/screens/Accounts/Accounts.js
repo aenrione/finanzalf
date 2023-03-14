@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import { View, StyleSheet, Text, ScrollView, RefreshControl } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import CustomCard from '../../components/CustomCard'
 import Collapsible from 'react-native-collapsible';
 import NewFintocAccount from '../../components/forms/NewFintocAccount';
@@ -15,6 +15,7 @@ import { FintocAccount } from "./FintocAccount"
 import { BudaAccount } from "./BudaAccount"
 import { FintualAccount } from "./FintualAccount"
 import CustomIndicator from '../../components/CustomIndicator'
+import Text from '../../components/Text'
 import CustomButton from "../../components/CustomButton"
 import { useQuery } from "react-query";
 import axios from 'axios'
@@ -75,7 +76,7 @@ export function AccountsScreen({ capabilities }) {
       }
     >
       <View>
-        <Text style={styles.title}>Account Summary</Text>
+        <Text style={styles.title} text={"Account Summary"}/>
         {status === "loading" ? <CustomIndicator size={150} /> :
           <View>
             <View>

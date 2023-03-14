@@ -4,7 +4,7 @@ import React from 'react';
 export default function CustomInput({value, setValue, placeholder, secureTextEntry, pHColor="#333"}){
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input}
+      <TextInput style={[styles.input, {color: "#333"}]}
                 value={value}
                  placeholder={placeholder}
                  placeholderTextColor={pHColor}
