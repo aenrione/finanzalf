@@ -1,12 +1,13 @@
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import React from 'react';
 
-export default function CustomInput({value, setValue, placeholder, secureTextEntry}){
+export default function CustomInput({value, setValue, placeholder, secureTextEntry, pHColor="#333"}){
   return (
     <View style={styles.container}>
       <TextInput style={styles.input}
                 value={value}
                  placeholder={placeholder}
+                 placeholderTextColor={pHColor}
                  onChangeText={setValue}
                  secureTextEntry={secureTextEntry}
         />

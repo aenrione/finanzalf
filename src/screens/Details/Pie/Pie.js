@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Text, RefreshControl, StyleSheet } from 'react-native';
+import { ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { Divider } from 'react-native-elements';
 import moment from 'moment';
 import axios from 'axios'
@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { TransactionsPieChart } from "./TransactionsPieChart"
 import MonthSelectorCalendar from 'react-native-month-selector';
 import CustomButton from "../../../components/CustomButton"
+import Text from '../../../components/Text';
 
 
 const chartConfig = {
@@ -86,7 +87,7 @@ export default function DetailsScreen() {
         title={"Income by Categories"}
         loading={income_status !== 'success'}
       />
-      <Text style={{ textAlign: "center" }}>{date.month() + 1}-{date.year()}</Text>
+      <Text style={{ textAlign: "center" }} text={`${date.month() + 1}-${date.year()}`}/>
       <CustomButton text={"Update Pie Charts"} onPress={updatePieCharts} />
       <MonthSelectorCalendar
         selectedDate={date}

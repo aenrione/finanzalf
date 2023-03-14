@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Text from '../../components/Text';
 import CustomButton from "../../components/CustomButton"
 import { logoutUser } from '../../actions/LoginAction';
 import SetQuotaForm from './SetQuotaForm'
@@ -20,8 +21,8 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1 }}>
       <View>
-        <Text style={styles.title}>{user.name}</Text>
-        <Text style={{ textAlign: 'center' }}>{user.email}</Text>
+        <Text style={styles.title} text={user.name}/>
+        <Text style={{ textAlign: 'center' }} text={user.email}/>
         <SetQuotaForm user_quota={user.quota} />
         <CustomButton
           text="Sign Out"

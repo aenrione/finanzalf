@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Text from '../../../components/Text';
 
 export default function Legend({ name, color }) {
 
@@ -7,7 +8,7 @@ export default function Legend({ name, color }) {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <View style={[styles.innerCircle, { backgroundColor: color }]} />
-        <Text>{name}</Text>
+        <Text text={name}/>
       </View>
 
     </View >

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { PieChart } from "react-native-chart-kit";
-import { Dimensions, View, Text, StyleSheet } from 'react-native';
+import { Dimensions, View, StyleSheet } from 'react-native';
 import Legend from './PieChartLegend'
 import CustomIndicator from "../../../components/CustomIndicator"
+import Text from '../../../components/Text';
 
 const screenWidth = Dimensions.get("window").width;
 function random_rgba() {
@@ -24,8 +25,8 @@ export function TransactionsPieChart({ total, chartData, chartConfig, title = "E
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{total}</Text>
+        <Text style={styles.title} text={title}/>
+        <Text style={styles.subtitle} text={total}/>
       </View>
       {loading ?
         <View style={styles.loadingContainer}>

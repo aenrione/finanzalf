@@ -1,5 +1,7 @@
 import React, { } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Text from '../../components/Text';
+
 
 
 export default function HomeScreen() {
@@ -9,7 +11,7 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1 }}>
       <View>
-        <Text style={styles.title}>About this site</Text>
+        <Text style={styles.title} text={"About this site"} />
       </View>
     </View>
   );

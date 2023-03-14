@@ -5,6 +5,7 @@ import Button from '../../../components/CustomButton'
 
 const ComponentContainer = styled.View`
   flex-direction: column;
+  color: "#333";
 `;
 
 const InputContainer = styled.View`
@@ -35,10 +36,10 @@ export default function AddInput({ submitHandler }) {
   return (
     <ComponentContainer>
       <InputContainer>
-        <Input placeholder="Item name" onChangeText={setValue} value={value} />
+        <Input placeholder="Item name" placeholderTextColor="#333" onChangeText={setValue} value={value} />
       </InputContainer>
       <InputContainer>
-        <Input placeholder="$ Price" onChangeText={setPrice} value={price} />
+        <Input placeholder="$ Price" placeholderTextColor="#333" onChangeText={setPrice} value={price} />
       </InputContainer>
       <Button text="Submit" onPress={submit} />
     </ComponentContainer>

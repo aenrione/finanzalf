@@ -1,4 +1,5 @@
-import { Text, StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
+import Text from '../Text';
 import React from 'react';
 
 export default function CustomAmount({ text = "", value = "", onPress, number = true }) {
@@ -11,14 +12,12 @@ export default function CustomAmount({ text = "", value = "", onPress, number = 
     <Pressable
       onPress={pressItem}
       style={[styles.listSection, { flex: 1 }]}>
-      <Text style={[styles.text]}>{text}:</Text>
+      <Text style={[styles.text]} text={`${text}:`}/>
       {number ?
         <Text style={[styles.value,
         value.includes('-') ? { color: "red" } : { color: "green" }
-        ]}>
-          {value}
-        </Text> :
-        <Text style={[styles.value]}>{value}</Text>}
+        ]} text={value}/> :
+        <Text style={[styles.value]} text={value}/>}
     </Pressable >
   );
 };
@@ -32,7 +31,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   text: {
-    width: '60%'
+    width: '60%',
+    color: "#333"
   },
   value: {
     fontWeight: "bold"

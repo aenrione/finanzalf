@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Text, View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import { View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton/CustomButton"
 import { registerUser } from '../../actions/LoginAction';
 import store from '../../store'
+import Text from '../../components/Text';
+
 
 
 export default function SignUpScreen({ navigation }) {
@@ -40,7 +42,7 @@ export default function SignUpScreen({ navigation }) {
   return (
     <ScrollView>
       <View style={styles.root}>
-        <Text style={styles.title}>Create an account</Text>
+        <Text style={styles.title} text={"Create an account"}/>
         <CustomInput placeholder="Name" value={name} setValue={setName} />
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />

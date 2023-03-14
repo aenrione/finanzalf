@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, ActivityIndicator, View, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, ScrollView, RefreshControl } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import CustomButton from "../../components/CustomButton"
+import Text from '../../components/Text';
 import store from '../../store'
 import { useQuery, useMutation } from "react-query";
 import axios from 'axios'
@@ -39,7 +40,7 @@ export default function Transaction() {
       {status === "loading" ?
         <ActivityIndicator size="large" color="#0000ff" /> :
         <View>
-          <Text style={styles.title}>Transaction</Text>
+          <Text style={styles.title} text={'Transaction'}/>
           <Divider />
           <Section text={"Amount"} value={info.amount} />
           <Divider />
@@ -66,8 +67,8 @@ export default function Transaction() {
 export function Section({ text, value }) {
   return (
     <View style={[styles.textSection, { flex: 1 }]}>
-      <Text style={styles.text}>{text}</Text>
-      <Text style={styles.value}>{value}</Text>
+      <Text style={styles.text} text={text}/>
+      <Text style={styles.value} text={value}/>
     </View>
   );
 };
@@ -76,7 +77,7 @@ export function CategorySection({ text, currentTransaction, refetch, info }) {
   return (
     <View>
       <View style={[styles.textSection, { flex: 1 }]}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.text}text={text}/>
       </View>
       <CategoryForm1 transaction_id={currentTransaction} refetchTransaction={refetch} info={info} />
     </View>
@@ -143,6 +144,7 @@ export function CategoryForm1({ transaction_id, refetchTransaction, info }) {
       {getLoadingState(status) ?
         <Progress.Circle indeterminate={true} size={30} /> :
         <Picker
+          style={styles.picker}
           selectedValue={selectedCategory}
           onValueChange={(itemValue, itemIndex) =>setCategory(itemValue)}>
           <Picker.Item label="No Category" value="-1" />
@@ -194,4 +196,8 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: 'center'
   },
+  picker:{
+    color: "#fff",
+    backgroundColor: "#333"
+  }
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import Text from '../../components/Text';
 import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
 import { useMutation } from "react-query";
@@ -46,7 +47,7 @@ export default function SetQuotaForm({ }) {
     <ScrollView>
       <View style={styles.root}>
 
-        <Text style={styles.title}>Set Quota</Text>
+        <Text style={styles.title} text={"Set Quota"}/>
         <CustomInput placeholder="Quota"
           value={quota} setValue={setQuota} />
 
