@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { View, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from "../../../assets/images/wallet.png"
@@ -6,6 +7,7 @@ import CustomInput from "../../components/CustomInput/CustomInput"
 import CustomButton from "../../components/CustomButton"
 import { loginUser, loginRememberedUser, changeUrl } from '../../actions/LoginAction';
 import store from '../../store'
+import CustomIndicator from "../../components/CustomIndicator"
 
 
 const getToken = async function() {
@@ -34,14 +36,21 @@ getValue = function() {
   }
   return "https://"
 }
+const mapStateToProps = function(state) {
+  return {
+    spinner: state.auth_reducer.spinner,
+    url: state.auth_reducer.baseUrl
+  }
+}
 
-export default function SignInScreen({ navigation }) {
+export function SignInScreen({ navigation, ...props }) {
   const state = store.getState().auth_reducer
   const { height } = useWindowDimensions();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [currentUrl, setUrl] = useState(getValue());
   const [buttonStatus, setButtonStatus] = useState(false);
+  console.log(props)
 
   useEffect(() => {
     getToken().then(response => {
@@ -55,21 +64,22 @@ export default function SignInScreen({ navigation }) {
       if (url !== null && url !== "") {
         setUrl(response)
         setButtonStatus(true)
-        store.dispatch(changeUrl({ url }))
+        if (props.url !== url) {
+          store.dispatch(changeUrl({ url }))
+        }
       }
     })
     const unsubscribe = navigation.addListener('focus', () => {
       let temp_url = getValue()
       setUrl(temp_url)
-      if (temp_url === "https://"){setButtonStatus(false)}else{setButtonStatus(true)}
+      if (temp_url === "https://") { setButtonStatus(false) } else { setButtonStatus(true) }
     });
     return unsubscribe;
   }, [state["baseUrl"]]);
 
 
-  const onSignInPressed = async () => {
-    store.dispatch(loginUser({ email, password })
-    )
+  const onSignInPressed = async function() {
+    await store.dispatch(loginUser({ email, password }))
   };
 
   const updateUrl = async () => {
@@ -81,55 +91,35 @@ export default function SignInScreen({ navigation }) {
   //   navigation.navigate('ForgotPassword')
   // };
 
-  // const onSignInFacebook = () => {
-  //   console.warn("Facebook pressed")
-  // };
-
-  // const onSignInGoogle = () => {
-  //   console.warn("Google pressed")
-  // };
-
-  // const onSignInApple = () => {
-  //   console.warn("Apple pressed")
-  // };
-
   const onSignUpPressed = () => {
     navigation.navigate('SignUp')
   };
 
   return (
     <ScrollView>
-      <View style={styles.root}>
-        <Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-        <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
-        <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!buttonStatus} />
-        { !buttonStatus &&
-         <CustomButton text="Server URL can't be empty" fgColor={"#DD4D44"} type="tertiary" />
-        }
-        {/* <CustomButton */}
-        {/*   text="Sign in with Facebook" */}
-        {/*   onPress={onSignInFacebook} */}
-        {/*   bgColor="#E7EAF4" */}
-        {/*   fgColor="#4765A9" */}
-        {/* /> */}
+      {props.spinner ? <CustomIndicator size={150} />
+        :
+        <View>
+          <View style={styles.root}>
+            <Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
+            <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+            <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
+            <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!buttonStatus} />
+            {!buttonStatus &&
+              <CustomButton text="Server URL can't be empty" fgColor={"#DD4D44"} type="tertiary" />
+            }
 
-        {/* <CustomButton */}
-        {/*   text="Sign in with Google" */}
-        {/*   onPress={onSignInGoogle} */}
-        {/*   bgColor="#FAE9EA" */}
-        {/*   fgColor="#DD4D44" */}
-        {/* /> */}
-
-      <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
-      </View>
-      <CustomButton text="Server URL" type="tertiary" />
-      <CustomButton
-        text={currentUrl}
-        bgColor="#e3e3e3"
-        fgColor="#363636"
-        onPress={updateUrl}
-      />
+            <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
+          </View>
+          <CustomButton text="Server URL" type="tertiary" />
+          <CustomButton
+            text={currentUrl}
+            bgColor="#e3e3e3"
+            fgColor="#363636"
+            onPress={updateUrl}
+          />
+        </View>
+      }
     </ScrollView>
   );
 }
@@ -149,3 +139,5 @@ const styles = StyleSheet.create({
     marginVertical: 30
   }
 });
+
+export default connect(mapStateToProps)(SignInScreen);

@@ -102,6 +102,14 @@ export const loginUser = ({ email, password }) => {
             }
             );
           NavigationService.navigate("MainNavigation")
+          console.log(data)
+          showMessage({
+            message: `Hello: ${data.data.name}`,
+            type: "success",
+          });
+          dispatch({
+            type: 'STOP_SPINNER'
+          });
         }
       }
       ).catch(function(_error) {
@@ -192,6 +200,9 @@ export const logoutUser = () => {
         }
       }
       );
+    dispatch({
+      type: 'STOP_SPINNER'
+    });
   }
 };
 

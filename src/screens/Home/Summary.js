@@ -6,7 +6,7 @@ import { Card, Divider } from 'react-native-elements';
 import { IconButton } from 'react-native-paper';
 
 const SummaryCard = function({ user }) {
-  const [eye, setEye] = useState(true);
+  const [eye, setEye] = useState(false);
   const hiddenText = "****";
 
   const getValue = (value) => {

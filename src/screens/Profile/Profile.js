@@ -24,12 +24,6 @@ export default function HomeScreen() {
         <Text style={styles.title} text={user.name}/>
         <Text style={{ textAlign: 'center' }} text={user.email}/>
         <SetQuotaForm user_quota={user.quota} />
-        <CustomButton
-          text="Sign Out"
-          onPress={onSignOutPressed}
-          bgColor="#FAE9EA"
-          fgColor="#DD4D44"
-        />
       </View>
       <CustomButton text="Server URL" type="tertiary" />
       <CustomButton
@@ -37,6 +31,12 @@ export default function HomeScreen() {
         bgColor="#e3e3e3"
         fgColor="#363636"
       />
+        <CustomButton
+          text="Sign Out"
+          onPress={onSignOutPressed}
+          bgColor="#FAE9EA"
+          fgColor="#DD4D44"
+        />
     </View>
   );
 }
