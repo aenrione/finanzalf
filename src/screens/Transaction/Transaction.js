@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ActivityIndicator, View, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import CustomButton from "../../components/CustomButton"
@@ -9,11 +9,13 @@ import { useQuery, useMutation } from "react-query";
 import axios from 'axios'
 import { showMessage } from "react-native-flash-message";
 import * as Progress from 'react-native-progress';
+import CustomIndicator from "../../components/CustomIndicator"
 
 
 export default function Transaction() {
   const currentTransaction = store.getState().object_reducer.selected_transaction
   const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const onRefresh = async function() {
     setRefreshing(true);
     await refetch()
@@ -21,8 +23,10 @@ export default function Transaction() {
   }
 
   const getInfo = async function() {
+    setLoading(true);
     const { data: response } = await axios
       .get(`/api/v1/transactions/${currentTransaction}`)
+    setLoading(false);
     return response.transaction
   }
   const { data: info, status, refetch } = useQuery("transaction-show", getInfo);
@@ -37,10 +41,10 @@ export default function Transaction() {
       }
 
     >
-      {status === "loading" ?
-        <ActivityIndicator size="large" color="#0000ff" /> :
+      {status !== "success" || loading ?
+        <CustomIndicator size={150}/> :
         <View>
-          <Text style={styles.title} text={'Transaction'}/>
+          <Text style={styles.title} text={'Transaction'} />
           <Divider />
           <Section text={"Amount"} value={info.amount} />
           <Divider />
@@ -67,8 +71,8 @@ export default function Transaction() {
 export function Section({ text, value }) {
   return (
     <View style={[styles.textSection, { flex: 1 }]}>
-      <Text style={styles.text} text={text}/>
-      <Text style={styles.value} text={value}/>
+      <Text style={styles.text} text={text} />
+      <Text style={styles.value} text={value} />
     </View>
   );
 };
@@ -76,9 +80,12 @@ export function Section({ text, value }) {
 export function CategorySection({ text, currentTransaction, refetch, info }) {
   return (
     <View>
-      <View style={[styles.textSection, { flex: 1 }]}>
-        <Text style={styles.text}text={text}/>
+      <View>
+        <Text style={[styles.subtitle, {textAlign: "center"}]} text={text} />
+        {/* <Text style={styles.text} text={info.category.name} /> */}
       </View>
+      {/* <Divider /> */}
+      {/* <Text style={styles.subtitle} text="Change Category" /> */}
       <CategoryForm1 transaction_id={currentTransaction} refetchTransaction={refetch} info={info} />
     </View>
   );
@@ -146,7 +153,7 @@ export function CategoryForm1({ transaction_id, refetchTransaction, info }) {
         <Picker
           style={styles.picker}
           selectedValue={selectedCategory}
-          onValueChange={(itemValue, itemIndex) =>setCategory(itemValue)}>
+          onValueChange={(itemValue, _itemIndex) => setCategory(itemValue)}>
           <Picker.Item label="No Category" value="-1" />
           {categories.map(r =>
             <Picker.Item label={r.name} value={r.id} key={r.id} />
@@ -189,15 +196,21 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 2
   },
-
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     margin: 10,
     textAlign: 'center'
   },
-  picker:{
+    subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    margin: 10,
+    marginTop: 20
+  },
+  picker: {
     color: "#fff",
-    backgroundColor: "#333"
+    backgroundColor: "#333",
   }
+
 });

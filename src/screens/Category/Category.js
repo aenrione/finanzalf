@@ -89,7 +89,7 @@ const Footer = function({ onLoadMore, loading }) {
     <View>
       {!loading ?
         <CustomButton text="Load More" onPress={onLoadMore} type="tertiary" />
-        : <ActivityIndicator size="large" color="#0000ff" />
+        : <CustomIndicator/>
       }
     </View>
   );

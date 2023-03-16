@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshControl, View, FlatList, StyleSheet } from 'react-native';
+import { RefreshControl,ActivityIndicator, View, FlatList, StyleSheet } from 'react-native';
 import { Card } from 'react-native-elements';
 import CustomAmountItem from '../../components/CustomAmountItem';
 import CustomButton from "../../components/CustomButton"
