@@ -7,7 +7,6 @@ export default function CustomAlert({
   title,
   description,
 }) {
-  console.log(title);
   Alert.alert(title, description, [
     {
       text: cancelText,

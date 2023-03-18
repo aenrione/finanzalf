@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Text from '@/Text';
 import CustomButton from '../../components/CustomButton';
-import { logoutUser } from 'src/actions/LoginAction';
 import SetQuotaForm from './SetQuotaForm';
 
 import store from 'src/store';
@@ -11,9 +10,6 @@ export default function HomeScreen() {
   const state = store.getState();
   const user = state.auth_reducer.user;
   const currentUrl = state.auth_reducer.baseUrl;
-  const onSignOutPressed = async () => {
-    store.dispatch(logoutUser());
-  };
 
   return (
     <View>
@@ -24,12 +20,6 @@ export default function HomeScreen() {
       </View>
       <CustomButton text="Server URL" type="tertiary" />
       <CustomButton text={currentUrl} bgColor="#e3e3e3" fgColor="#363636" />
-      <CustomButton
-        text="Sign Out"
-        onPress={onSignOutPressed}
-        bgColor="#FAE9EA"
-        fgColor="#DD4D44"
-      />
     </View>
   );
 }

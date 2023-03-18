@@ -9,6 +9,7 @@ export default function CustomButton({
   pressedColor = 'rgb(210, 230, 255)',
   fgColor,
   disabled = false,
+  style,
 }) {
   return (
     <Pressable
@@ -16,6 +17,7 @@ export default function CustomButton({
       disabled={disabled}
       style={({ pressed }) => [
         styles.container,
+        style,
         type === 'primary' && {
           backgroundColor: pressed ? pressedColor : '#3B71F3',
         },

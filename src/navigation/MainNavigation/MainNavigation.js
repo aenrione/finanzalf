@@ -3,6 +3,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CustomDrawer from '@/CustomDrawerContent';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,6 +19,7 @@ import CategoryScreen from 'src/screens/Category';
 import ProfileScreen from 'src/screens/Profile';
 import AboutScreen from 'src/screens/Profile/About';
 import LoadingScreen from 'src/screens/LoadingScreen';
+import Crypto from 'src/screens/Crypto';
 
 function HomeScreenNavigation() {
   return (
@@ -119,11 +121,59 @@ function HomeTabNavigation() {
 }
 export default function Navitagion() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeTabNavigation} />
-      <Drawer.Screen name="Categories" component={CategoryScreen} />
-      <Drawer.Screen name="About" component={AboutScreen} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerPosition="right"
+      drawerContent={(props) => <CustomDrawer {...props} />}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={HomeTabNavigation}
+        options={{
+          title: 'Dashboard',
+          headerTitle: '',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons name="md-home" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Categories"
+        component={CategoryScreen}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons name="copy-outline" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Crypto Market"
+        component={Crypto}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons name="logo-bitcoin" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="About"
+        component={AboutScreen}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons name="help-circle-outline" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons name="person-circle-outline" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 }
