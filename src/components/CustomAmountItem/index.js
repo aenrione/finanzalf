@@ -1,1 +1,1 @@
-export {default} from "./CustomAmount"
+export { default } from './CustomAmount';

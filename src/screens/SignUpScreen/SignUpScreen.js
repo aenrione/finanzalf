@@ -1,52 +1,43 @@
 import React, { useState } from 'react';
-import { View, Button, Image, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
-import CustomInput from "../../components/CustomInput/CustomInput"
-import CustomButton from "../../components/CustomButton/CustomButton"
-import { registerUser } from '../../actions/LoginAction';
-import store from '../../store'
-import Text from '../../components/Text';
-
-
+import { View, StyleSheet, ScrollView } from 'react-native';
+import CustomInput from '../../components/CustomInput/CustomInput';
+import CustomButton from '../../components/CustomButton/CustomButton';
+import { registerUser } from 'src/actions/LoginAction';
+import store from 'src/store';
+import Text from '@/Text';
 
 export default function SignUpScreen({ navigation }) {
-  const { height } = useWindowDimensions();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const onSignUpPressed = () => {
-    store.dispatch(registerUser({ name, email, password, confirmPassword }))
-  };
-
-  const onForgotPasswordPressed = () => {
-    console.warn("Forgot Password pressed")
-  };
-
-  const onSignInFacebook = () => {
-    console.warn("Facebook pressed")
-  };
-
-  const onSignInGoogle = () => {
-    console.warn("Google pressed")
-  };
-
-  const onSignInApple = () => {
-    console.warn("Apple pressed")
+    store.dispatch(registerUser({ name, email, password, confirmPassword }));
   };
 
   const onSignInPressed = () => {
-    navigation.navigate('SignIn')
+    navigation.navigate('SignIn');
   };
 
   return (
     <ScrollView>
       <View style={styles.root}>
-        <Text style={styles.title} text={"Create an account"}/>
+        <Text style={styles.title} text={'Create an account'} />
         <CustomInput placeholder="Name" value={name} setValue={setName} />
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-        <CustomInput placeholder="Password" secureTextEntry value={password} setValue={setPassword} />
-        <CustomInput placeholder="Confirm Password" secureTextEntry value={confirmPassword} setValue={setConfirmPassword} />
+        <CustomInput
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          setValue={setPassword}
+        />
+        <CustomInput
+          placeholder="Confirm Password"
+          secureTextEntry
+          value={confirmPassword}
+          setValue={setConfirmPassword}
+        />
         <CustomButton text="Register" onPress={onSignUpPressed} />
 
         {/* <CustomButton */}
@@ -70,7 +61,11 @@ export default function SignUpScreen({ navigation }) {
         {/*   fgColor="#363636" */}
         {/* /> */}
 
-        <CustomButton text="Already have an account? Sign in!" onPress={onSignInPressed} type="tertiary" />
+        <CustomButton
+          text="Already have an account? Sign in!"
+          onPress={onSignInPressed}
+          type="tertiary"
+        />
       </View>
     </ScrollView>
   );
@@ -86,6 +81,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });

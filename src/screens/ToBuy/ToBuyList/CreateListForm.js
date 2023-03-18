@@ -1,20 +1,16 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import CustomButton from "../../../components/CustomButton"
-import { useMutation } from "react-query";
-import axios from 'axios'
-import { showMessage } from "react-native-flash-message";
-
+import CustomButton from '../../../components/CustomButton';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { showMessage } from 'react-native-flash-message';
 
 export default function CreateForm({ refetch }) {
-
-  const createList = async function() {
-    const { data: response } = await axios
-      .post('/api/v1/to_buy_lists',
-        {
-          title: "To Buy List",
-        })
-    return response.data
+  const createList = async function () {
+    const { data: response } = await axios.post('/api/v1/to_buy_lists', {
+      title: 'To Buy List',
+    });
+    return response.data;
   };
   const mutation = useMutation(createList);
   const { isSuccess, isError } = mutation;
@@ -25,27 +21,22 @@ export default function CreateForm({ refetch }) {
 
   useEffect(() => {
     if (isSuccess) {
-      refetch()
+      refetch();
       showMessage({
-        message: "Exito!",
-        type: "success",
+        message: 'Exito!',
+        type: 'success',
       });
-      mutation.reset()
+      mutation.reset();
     }
     if (isError) {
-      mutation.reset()
+      mutation.reset();
     }
   });
 
   return (
     <ScrollView>
       <View style={styles.root}>
-
-        <CustomButton
-          text="Create To Buy List!"
-          bgColor="green"
-          onPress={onSubmit} />
-
+        <CustomButton text="Create To Buy List!" bgColor="green" onPress={onSubmit} />
       </View>
     </ScrollView>
   );
@@ -56,13 +47,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
-    marginTop: 30
+    marginTop: 30,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
-
-

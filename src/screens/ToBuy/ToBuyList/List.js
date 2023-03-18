@@ -1,36 +1,34 @@
 import React, { useEffect } from 'react';
-import { View, StatusBar, FlatList, RefreshControl } from "react-native";
-import styled from 'styled-components/native'
-import { useMutation } from "react-query";
-import axios from 'axios'
+import { View, StatusBar, FlatList, RefreshControl } from 'react-native';
+import styled from 'styled-components/native';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
-import Header from "./Header";
-import AddInput from "./AddInput";
-import TodoList from "./TodoList";
-import CreateForm from "./CreateListForm";
-import { showMessage } from "react-native-flash-message";
-
+import Header from './Header';
+import AddInput from './AddInput';
+import TodoList from './TodoList';
+import CreateForm from './CreateListForm';
+import { showMessage } from 'react-native-flash-message';
 
 export default function List({ list, refetch }) {
   const [refreshing, setRefreshing] = React.useState(false);
-  const onRefresh = async function() {
+  const onRefresh = async function () {
     setRefreshing(true);
-    await refetch()
-    setRefreshing(false)
-  }
-  const createItem = async function(item) {
-    const { data: response } = await axios
-      .post(`/api/v1/to_buy_lists/${list.id}/item`,
-        {
-          title: item.title,
-          price_amount: item.price_amount
-        })
-    return response.data
+    await refetch();
+    setRefreshing(false);
   };
-  const destroyItem = async function(item_id) {
-    const { data: response } = await axios
-      .delete(`/api/v1/to_buy_lists/${list.id}/item/${item_id}`)
-    return response.data
+  const createItem = async function (item) {
+    const { data: response } = await axios.post(`/api/v1/to_buy_lists/${list.id}/item`, {
+      title: item.title,
+      price_amount: item.price_amount,
+    });
+    return response.data;
+  };
+  const destroyItem = async function (item_id) {
+    const { data: response } = await axios.delete(
+      `/api/v1/to_buy_lists/${list.id}/item/${item_id}`,
+    );
+    return response.data;
   };
   const mutation = useMutation(createItem);
   const destroy_mutation = useMutation(destroyItem);
@@ -38,65 +36,55 @@ export default function List({ list, refetch }) {
   const { isSuccess, isError } = mutation;
   const { isSuccess: isSuccessDestroy, isError: isErrorDestroy } = destroy_mutation;
 
-
   const submitHandler = (item) => {
-    mutation.mutate(item)
+    mutation.mutate(item);
   };
   const deleteItem = (key) => {
-    destroy_mutation.mutate(key)
+    destroy_mutation.mutate(key);
   };
   useEffect(() => {
     if (isSuccess) {
-      refetch()
+      refetch();
       showMessage({
-        message: "Exito!",
-        type: "success",
+        message: 'Success!',
+        type: 'success',
       });
-      mutation.reset()
+      mutation.reset();
     }
     if (isError) {
-      mutation.reset()
+      mutation.reset();
     }
     if (isSuccessDestroy) {
-      refetch()
+      refetch();
       showMessage({
-        message: "Deleted!",
-        type: "success",
+        message: 'Deleted!',
+        type: 'success',
       });
-      destroy_mutation.reset()
+      destroy_mutation.reset();
     }
     if (isErrorDestroy) {
-      destroy_mutation.reset()
+      destroy_mutation.reset();
     }
   });
   return (
     <ComponentContainer>
       <View>
-        <StatusBar barStyle="light-content"
-          backgroundColor="midnightblue" />
+        <StatusBar barStyle="light-content" backgroundColor="midnightblue" />
       </View>
 
       <View>
-        {list ?
+        {list ? (
           <FlatList
             data={list.to_buy_items}
-            ListHeaderComponent={() => <Header list={list} />}
+            ListHeaderComponent={<Header list={list} />}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TodoList item={item} deleteItem={deleteItem} />
-            )}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
+            renderItem={({ item }) => <TodoList item={item} deleteItem={deleteItem} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             ListFooterComponent={<AddInput submitHandler={submitHandler} />}
           />
-          :
+        ) : (
           <CreateForm refetch={refetch} />
-        }
-
+        )}
       </View>
     </ComponentContainer>
   );
@@ -108,4 +96,3 @@ const ComponentContainer = styled.View`
   align-items: center;
   justify-content: center;
 `;
-

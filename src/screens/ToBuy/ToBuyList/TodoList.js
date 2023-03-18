@@ -1,9 +1,8 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styled from 'styled-components/native'
-
+import styled from 'styled-components/native';
 
 export default function TodoList({ item, deleteItem }) {
   return (

@@ -1,76 +1,70 @@
 /*global fetch:false*/
-import axios from 'axios'
+import axios from 'axios';
 import * as NavigationService from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { showMessage } from "react-native-flash-message";
+import { showMessage } from 'react-native-flash-message';
 
 const storeUser = async (user) => {
   try {
-    const jsonValue = JSON.stringify(user)
-    await AsyncStorage.setItem('userData', jsonValue)
+    const jsonValue = JSON.stringify(user);
+    await AsyncStorage.setItem('userData', jsonValue);
   } catch (e) {
-    console.warn(e)
+    console.warn(e);
   }
-}
+};
 const updateUrl = async (url) => {
   try {
-    await AsyncStorage.setItem('baseUrl', url)
+    await AsyncStorage.setItem('baseUrl', url);
   } catch (e) {
-    console.warn(e)
+    console.warn(e);
   }
-}
+};
 export const changeUrl = ({ url }) => {
   return (dispatch) => {
-
     dispatch({
       type: 'CHANGE_URL',
-      payload: url
+      payload: url,
     });
-    updateUrl(url)
+    updateUrl(url);
     showMessage({
       message: `Url Updated: ${url}`,
-      type: "success",
+      type: 'success',
     });
-  }
+  };
 };
 
 export const updateCapabilities = ({ data }) => {
   return (dispatch) => {
-
     dispatch({
       type: 'CHANGE_CAPABILITIES',
-      payload: data
+      payload: data,
     });
-  }
+  };
 };
 
 export const loginRememberedUser = ({ userData }) => {
   return (dispatch) => {
-
     dispatch({
       type: 'LOGIN_USER_SUCCESS',
-      payload: userData
+      payload: userData,
     });
 
-    axios
-      .get('/api/v1/user/capabilities')
-      .then((response) => {
-        if (response.status !== 401) {
-          dispatch({
-            type: 'CHANGE_CAPABILITIES',
-            payload: response.data
-          });
-        }
+    axios.get('/api/v1/user/capabilities').then((response) => {
+      if (response.status !== 401) {
+        dispatch({
+          type: 'CHANGE_CAPABILITIES',
+          payload: response.data,
+        });
       }
-      );
-    NavigationService.navigate("MainNavigation")
-  }
+    });
+    NavigationService.navigate('MainNavigation');
+  };
 };
 
 export const loginUser = ({ email, password }) => {
   return (dispatch) => {
     dispatch({
-      type: 'LOAD_SPINNER'
+      type: 'LOAD_SPINNER',
     });
 
     axios
@@ -78,56 +72,50 @@ export const loginUser = ({ email, password }) => {
       .then((response) => {
         if (response.status === 401) {
           dispatch({
-            type: 'LOGIN_FAILED'
+            type: 'LOGIN_FAILED',
           });
         } else {
-          let data = response.data
-          data.client = response.headers.client
-          data.uid = response.headers.uid
-          data['access-token'] = response.headers['access-token']
+          let data = response.data;
+          data.client = response.headers.client;
+          data.uid = response.headers.uid;
+          data['access-token'] = response.headers['access-token'];
           dispatch({
             type: 'LOGIN_USER_SUCCESS',
-            payload: data
+            payload: data,
           });
-          storeUser(data)
-          axios
-            .get('/api/v1/user/capabilities')
-            .then((response) => {
-              if (response.status !== 401) {
-                dispatch({
-                  type: 'CHANGE_CAPABILITIES',
-                  payload: response.data
-                });
-              }
+          storeUser(data);
+          axios.get('/api/v1/user/capabilities').then((response) => {
+            if (response.status !== 401) {
+              dispatch({
+                type: 'CHANGE_CAPABILITIES',
+                payload: response.data,
+              });
             }
-            );
-          NavigationService.navigate("MainNavigation")
-          console.log(data)
+          });
+          NavigationService.navigate('MainNavigation');
+          console.log(data);
           showMessage({
             message: `Hello: ${data.data.name}`,
-            type: "success",
+            type: 'success',
           });
           dispatch({
-            type: 'STOP_SPINNER'
+            type: 'STOP_SPINNER',
           });
         }
-      }
-      ).catch(function(_error) {
+      })
+      .catch(function (_error) {
         dispatch({
-          type: 'LOGIN_FAILED'
+          type: 'LOGIN_FAILED',
         });
-
       });
-
-  }
+  };
 };
 
 export const registerUser = ({ name, email, password, confirmPassword }) => {
   return (dispatch) => {
     dispatch({
-      type: 'LOAD_SPINNER'
+      type: 'LOAD_SPINNER',
     });
-
 
     axios
       .post('/api/v1/auth', {
@@ -139,94 +127,85 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
       .then((response) => {
         if (response.status === 401) {
         } else {
-          let data = response.data
-          data.client = response.headers.client
-          data.uid = response.headers.uid
-          data['access-token'] = response.headers['access-token']
+          let data = response.data;
+          data.client = response.headers.client;
+          data.uid = response.headers.uid;
+          data['access-token'] = response.headers['access-token'];
           dispatch({
             type: 'LOGIN_USER_SUCCESS',
-            payload: data
+            payload: data,
           });
-          NavigationService.navigate("MainNavigation")
+          NavigationService.navigate('MainNavigation');
         }
-      }
-      ).catch(function(_error) {
+      })
+      .catch(function (_error) {
         dispatch({
-          type: 'LOGIN_FAILED'
+          type: 'LOGIN_FAILED',
         });
-
       });
-  }
+  };
 };
 export const setLoading = ({ loading = true }) => {
   return (dispatch) => {
     if (loading) {
       dispatch({
-        type: 'LOAD_SPINNER'
+        type: 'LOAD_SPINNER',
       });
     } else {
       dispatch({
-        type: 'STOP_SPINNER'
+        type: 'STOP_SPINNER',
       });
-
     }
-  }
+  };
 };
 
 export const logoutUser = () => {
   return (dispatch) => {
     dispatch({
-      type: 'LOAD_SPINNER'
+      type: 'LOAD_SPINNER',
     });
 
-    storeUser(null)
-    axios
-      .delete('/api/v1/auth/sign_out')
-      .then((response) => {
-        if (response.status === 401) {
-          dispatch({
-            type: 'LOGOUT_FAILED'
-          });
-        } else {
-          let data = {}
-          data.uid = ''
-          data.client = ''
-          data['access-token'] = ''
-          dispatch({
-            type: 'LOGOUT_USER_SUCCESS',
-            payload: data
-          });
-          NavigationService.navigate("SignIn")
-        }
+    storeUser(null);
+    axios.delete('/api/v1/auth/sign_out').then((response) => {
+      if (response.status === 401) {
+        dispatch({
+          type: 'LOGOUT_FAILED',
+        });
+      } else {
+        let data = {};
+        data.uid = '';
+        data.client = '';
+        data['access-token'] = '';
+        dispatch({
+          type: 'LOGOUT_USER_SUCCESS',
+          payload: data,
+        });
+        NavigationService.navigate('SignIn');
       }
-      );
-    dispatch({
-      type: 'STOP_SPINNER'
     });
-  }
+    dispatch({
+      type: 'STOP_SPINNER',
+    });
+  };
 };
 
 export const getCapabilities = () => {
   return (dispatch) => {
-
-    axios
-      .get('/api/v1/user/capabilities')
-      .then((response) => {
-        dispatch({
-          type: 'CHANGE_CAPABILITIES',
-          payload: response.data
-        });
-      }
-      );
-  }
+    axios.get('/api/v1/user/capabilities').then((response) => {
+      dispatch({
+        type: 'CHANGE_CAPABILITIES',
+        payload: response.data,
+      });
+    });
+  };
 };
 
 export const removeSession = () => {
   return (dispatch) => {
-    storeUser(null)
+    storeUser(null);
     dispatch({
-      type: 'REMOVE_SESSION'
+      type: 'REMOVE_SESSION',
     });
-    NavigationService.navigate("SignIn")
-  }
+    NavigationService.navigate('SignIn');
+  };
 };

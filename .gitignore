@@ -3,7 +3,7 @@
 .nvmrc
 #
 .DS_Store
-
+.vscode/
 # Xcode
 #
 build/

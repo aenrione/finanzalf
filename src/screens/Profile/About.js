@@ -1,17 +1,12 @@
-import React, { } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Text from '../../components/Text';
-
-
+import Text from '@/Text';
 
 export default function HomeScreen() {
-
-
-
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <View>
-        <Text style={styles.title} text={"About this site"} />
+        <Text style={styles.title} text={'About this site'} />
       </View>
     </View>
   );
@@ -22,11 +17,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     margin: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   listSection: {
     fontSize: 14,
-    padding: 10
-  }
+    padding: 10,
+  },
 });
-

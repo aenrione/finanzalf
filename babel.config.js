@@ -1,16 +1,22 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
+    presets: ['babel-preset-expo', 'module:metro-react-native-babel-preset'],
     plugins: [
       [
-        "module-resolver",
+        'module-resolver',
         {
-          extensions: [".tsx", ".ts", ".js", ".json"],
+          root: ['.'],
+          extensions: ['.tsx', '.ts', '.js', '.json'],
+          alias: {
+            '@': './src/components',
+            src: './src',
+            assets: './assets',
+          },
         },
       ],
       '@babel/plugin-proposal-export-namespace-from',
-      "react-native-reanimated/plugin",
+      'react-native-reanimated/plugin',
     ],
   };
 };

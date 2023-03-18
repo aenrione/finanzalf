@@ -1,30 +1,32 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { Alert } from 'react-native';
-import axios from 'axios'
+import axios from 'axios';
 
 const deleteCategory = async (category, refetch) => {
-    const { data: _response } = await axios
-      .delete(`/api/v1/categories/${category.id}`)
-    await refetch()
-    showMessage({
-      message: "Category deleted",
-      type: "success",
-    });
-}
-
+  const { data: _response } = await axios.delete(`/api/v1/categories/${category.id}`);
+  await refetch();
+  showMessage({
+    message: 'Category deleted',
+    type: 'success',
+  });
+};
 
 const createAlert = (category, refetch) => {
-    Alert.alert(`Delete ${category.name}`, "Deleting a category will reset all of it's transactions.", [
+  Alert.alert(
+    `Delete ${category.name}`,
+    "Deleting a category will reset all of it's transactions.",
+    [
       {
-        text: "Cancel",
+        text: 'Cancel',
         style: 'cancel',
       },
-      {text: "Delete", onPress: () => deleteCategory(category, refetch)},
-    ]);
-}
+      { text: 'Delete', onPress: () => deleteCategory(category, refetch) },
+    ],
+  );
+};
 export default function TodoList({ category, refetch }) {
   return (
     <ComponentContainer>
@@ -84,4 +86,3 @@ const IconContainer = styled.TouchableOpacity`
   margin-right: 10px;
   border-radius: 10px;
 `;
-

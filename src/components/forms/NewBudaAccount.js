@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import CustomInput from "../../components/CustomInput/CustomInput"
-import CustomButton from "../../components/CustomButton"
-// import { getCapabilities, setLoading } from '../../actions/LoginAction';
-import { useMutation } from "react-query";
-// import store from '../../store'
-import axios from 'axios'
-import { showMessage } from "react-native-flash-message";
-
+import CustomInput from '@/CustomInput/CustomInput';
+import CustomButton from '@/CustomButton';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { showMessage } from 'react-native-flash-message';
 
 export default function NewBudaAccount({ refresh }) {
   const [api_secret, setSecret] = useState('');
   const [api_key, setKey] = useState('');
 
-  const postEntity = async function() {
-    const { data: response } = await axios
-      .post('/api/v1/buda_accounts',
-        {
-          api_key: api_key,
-          encrypted_password: api_secret,
-        })
-    return response.data
-
-  }
+  const postEntity = async function () {
+    const { data: response } = await axios.post('/api/v1/buda_accounts', {
+      api_key: api_key,
+      encrypted_password: api_secret,
+    });
+    return response.data;
+  };
   const mutation = useMutation(postEntity);
   const { isLoading, isSuccess } = mutation;
 
@@ -31,25 +25,30 @@ export default function NewBudaAccount({ refresh }) {
   };
   if (isSuccess) {
     showMessage({
-      message: "Exito!",
-      type: "success",
+      message: 'Exito!',
+      type: 'success',
     });
-    refresh()
+    refresh();
   }
 
   return (
     <ScrollView>
-      {isLoading ? <ActivityIndicator /> :
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
         <View style={styles.root}>
-
           <Text style={styles.title}>Create Buda Account</Text>
           <CustomInput placeholder="Api key" secureTextEntry value={api_key} setValue={setKey} />
-          <CustomInput placeholder="Api secret" secureTextEntry value={api_secret} setValue={setSecret} />
+          <CustomInput
+            placeholder="Api secret"
+            secureTextEntry
+            value={api_secret}
+            setValue={setSecret}
+          />
           <CustomButton text="Submit" onPress={onSubmit} />
           <CustomButton text="Help" type="tertiary" />
-
         </View>
-      }
+      )}
     </ScrollView>
   );
 }
@@ -63,7 +62,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
-

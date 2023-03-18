@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import CustomInput from "../../components/CustomInput/CustomInput"
-import CustomButton from "../../components/CustomButton"
-import { useMutation } from "react-query";
-import axios from 'axios'
-import { showMessage } from "react-native-flash-message";
-
+import CustomInput from '../../components/CustomInput/CustomInput';
+import CustomButton from '../../components/CustomButton';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { showMessage } from 'react-native-flash-message';
 
 export default function NewCategoryForm({ refetch }) {
   const [title, setTitle] = useState('');
   const [description, setDesc] = useState('');
 
-
-  const createCategory = async function() {
-    const { data: response } = await axios
-      .post('/api/v1/categories',
-        {
-          name: title,
-          description: description
-        })
-    return response.data
+  const createCategory = async function () {
+    const { data: response } = await axios.post('/api/v1/categories', {
+      name: title,
+      description: description,
+    });
+    return response.data;
   };
   const mutation = useMutation(createCategory);
   const { isSuccess, isError } = mutation;
@@ -30,38 +26,30 @@ export default function NewCategoryForm({ refetch }) {
 
   useEffect(() => {
     if (isSuccess) {
-      setTitle('')
-      setDesc('')
-      refetch()
+      setTitle('');
+      setDesc('');
+      refetch();
       showMessage({
-        message: "Exito!",
-        type: "success",
+        message: 'Exito!',
+        type: 'success',
       });
-      mutation.reset()
+      mutation.reset();
     }
     if (isError) {
-      setTitle('')
-      setDesc('')
-      mutation.reset()
+      setTitle('');
+      setDesc('');
+      mutation.reset();
     }
   });
 
   return (
     <ScrollView>
       <View style={styles.root}>
-
         <Text style={styles.title}>Create a category</Text>
-        <CustomInput placeholder="Title"
-          value={title} setValue={setTitle} />
-        <CustomInput
-          placeholder="Description"
-          value={description} setValue={setDesc} />
+        <CustomInput placeholder="Title" value={title} setValue={setTitle} />
+        <CustomInput placeholder="Description" value={description} setValue={setDesc} />
 
-        <CustomButton
-          text="Submit"
-          bgColor="green"
-          onPress={onSubmit} />
-
+        <CustomButton text="Submit" bgColor="green" onPress={onSubmit} />
       </View>
     </ScrollView>
   );
@@ -76,7 +64,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
-

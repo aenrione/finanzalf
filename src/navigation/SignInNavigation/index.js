@@ -1,1 +1,1 @@
-export {default} from "./SignInNavigation"
+export { default } from './SignInNavigation';

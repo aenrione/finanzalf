@@ -1,7 +1,6 @@
-import React from "react";
-import styled from 'styled-components/native'
-import Amount from '../../../components/CustomAmountItem'
-
+import React from 'react';
+import styled from 'styled-components/native';
+import Amount from '@/CustomAmountItem';
 
 export default function Header({ list }) {
   return (
@@ -30,4 +29,3 @@ const HeaderText = styled.Text`
   margin-bottom: 10px;
   font-size: 30px;
 `;
-

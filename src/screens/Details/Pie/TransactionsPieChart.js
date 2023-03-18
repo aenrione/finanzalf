@@ -1,39 +1,45 @@
 import React, { useState } from 'react';
-import { PieChart } from "react-native-chart-kit";
+import { PieChart } from 'react-native-chart-kit';
 import { Dimensions, View, StyleSheet } from 'react-native';
-import Legend from './PieChartLegend'
-import CustomIndicator from "../../../components/CustomIndicator"
-import Text from '../../../components/Text';
+import Legend from './PieChartLegend';
+import CustomIndicator from '../../../components/CustomIndicator';
+import Text from '@/Text';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 function random_rgba() {
-  var o = Math.round, r = Math.random, s = 255;
-  return 'rgba(' + o((r()) * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
+  var o = Math.round,
+    r = Math.random,
+    s = 255;
+  return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
 }
 
-export function TransactionsPieChart({ total, chartData, chartConfig, title = "Expenses by Categories", loading = false }) {
-  const getData = function() {
-    chartData.forEach(element => {
-      element.color = random_rgba()
-      element.legendFontSize = 15
-      element.legendFontColor = "black"
-    }
-    );
-    return chartData
+export function TransactionsPieChart({
+  total,
+  chartData,
+  chartConfig,
+  title = 'Expenses by Categories',
+  loading = false,
+}) {
+  const getData = function () {
+    chartData.forEach((element) => {
+      element.color = random_rgba();
+      element.legendFontSize = 15;
+      element.legendFontColor = 'black';
+    });
+    return chartData;
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title} text={title}/>
-        <Text style={styles.subtitle} text={total}/>
+        <Text style={styles.title} text={title} />
+        <Text style={styles.subtitle} text={total} />
       </View>
-      {loading ?
+      {loading ? (
         <View style={styles.loadingContainer}>
           <CustomIndicator size={165} center={false} />
         </View>
-        :
-
+      ) : (
         <View style={styles.bodyContainer}>
           <View style={styles.chartContainer}>
             <PieChart
@@ -41,13 +47,12 @@ export function TransactionsPieChart({ total, chartData, chartConfig, title = "E
               width={screenWidth}
               height={220}
               chartConfig={chartConfig}
-              accessor={"amount"}
-              paddingLeft={"15"}
+              accessor={'amount'}
+              paddingLeft={'15'}
               center={[0, 0]}
               backgroundColor="transparent"
               absolute
               hasLegend={false}
-
             />
           </View>
           <View style={styles.legendContainer}>
@@ -56,15 +61,15 @@ export function TransactionsPieChart({ total, chartData, chartConfig, title = "E
             })}
           </View>
         </View>
-      }
-    </View >
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    width: '100%'
+    width: '100%',
   },
   titleContainer: {
     flex: 1,
@@ -72,11 +77,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   bodyContainer: {
     flexDirection: 'row',
@@ -90,12 +95,10 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
     marginTop: 20,
-    marginLeft: 30
+    marginLeft: 30,
   },
 });
-
-
