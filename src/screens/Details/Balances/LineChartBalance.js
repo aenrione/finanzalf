@@ -23,6 +23,17 @@ export function LineChartBalance({ chartData, chartConfig, title = 'Balances' })
     value: 0,
   });
 
+  const formatLabel = function (label) {
+    if (label > 10 ** 6) {
+      let i = Math.trunc(label / 10 ** 6);
+      let f = Math.trunc((label % 10 ** 6) / 10 ** 4);
+      return `${i}.${f} M`;
+    } else if (label > 10 ** 5) {
+      return `${label.slice(0, 3)} m`;
+    }
+    return label;
+  };
+
   return (
     <LineChart
       data={getData()}
@@ -33,6 +44,9 @@ export function LineChartBalance({ chartData, chartConfig, title = 'Balances' })
       chartConfig={chartConfig}
       yAxisLabel="$"
       bezier
+      formatYLabel={(label) => {
+        return formatLabel(label);
+      }}
       onDataPointClick={(data) => {
         let formated = chartData.formated_data[data.index];
         let date = chartData.formatted_dates[data.index];
@@ -64,7 +78,7 @@ export function LineChartBalance({ chartData, chartConfig, title = 'Balances' })
                 y={tooltipPos.y + 10}
                 width="90"
                 height="60"
-                fill="rgba(26, 255, 146, 0.2)"
+                fill="rgba(0, 171, 227, 0.8)"
               />
               <Text
                 x={tooltipPos.x + 5}

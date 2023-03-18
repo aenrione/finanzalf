@@ -5,7 +5,7 @@
 </p>
 
 <h3 align="center">
-  Budget Tracker React
+  FinanzAlf
 </h3>
 <p align="center">
   A react frontend for: 

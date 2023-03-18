@@ -23,6 +23,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+*.android.bundle
+*.android.map
 
 # Android/IntelliJ
 #

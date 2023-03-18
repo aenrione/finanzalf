@@ -45,7 +45,7 @@ const createTwoButtonAlert = (refetch) =>
     ],
   );
 
-export function AccountsScreen({ capabilities }) {
+export function AccountsScreen({ navigation, capabilities }) {
   const [showFintocForm, setFintocForm] = React.useState(false);
   const [fintocLoading, setFintocLoading] = React.useState(false);
   const [showBudaForm, setBudaForm] = React.useState(false);
@@ -133,7 +133,11 @@ export function AccountsScreen({ capabilities }) {
             </Collapsible>
 
             <CustomCard title="eToro" description="eToro Account to be added" logo={EtoroLogo} />
-            <CustomButton text="What data do we collect?" type="tertiary" />
+            <CustomButton
+              text="What data do we collect?"
+              type="tertiary"
+              onPress={() => navigation.navigate('About')}
+            />
             <CustomButton
               text="Request Manual Update"
               // bgColor="#E7EAF4"
