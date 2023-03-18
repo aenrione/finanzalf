@@ -17,6 +17,7 @@ import ToBuyScreen from 'src/screens/ToBuy';
 import CategoryScreen from 'src/screens/Category';
 import ProfileScreen from 'src/screens/Profile';
 import AboutScreen from 'src/screens/Profile/About';
+import LoadingScreen from 'src/screens/LoadingScreen';
 
 function HomeScreenNavigation() {
   return (
@@ -31,6 +32,13 @@ function HomeScreenNavigation() {
       <Stack.Screen
         name="Transaction"
         component={TransactionScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Loading"
+        component={LoadingScreen}
         options={{
           headerShown: false,
         }}

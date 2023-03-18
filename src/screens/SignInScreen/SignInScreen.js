@@ -7,7 +7,7 @@ import CustomInput from '@/CustomInput/CustomInput';
 import CustomButton from '@/CustomButton';
 import { loginUser, loginRememberedUser, changeUrl } from 'src/actions/LoginAction';
 import store from 'src/store';
-import CustomIndicator from '@/CustomIndicator';
+// import CustomIndicator from '@/CustomIndicator';
 
 const getToken = async function () {
   try {
@@ -77,7 +77,7 @@ export function SignInScreen({ navigation, ...props }) {
       }
     });
     return unsubscribe;
-  }, [state.baseUrl]);
+  }, [navigation, props.url, state.baseUrl]);
 
   const onSignInPressed = async function () {
     await store.dispatch(loginUser({ email, password }));
@@ -98,34 +98,30 @@ export function SignInScreen({ navigation, ...props }) {
 
   return (
     <ScrollView>
-      {props.spinner ? (
-        <CustomIndicator size={150} />
-      ) : (
-        <View>
-          <View style={styles.root}>
-            <Image
-              source={Logo}
-              style={[styles.logo, { height: height * 0.3 }]}
-              resizeMode="contain"
-            />
-            <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-            <CustomInput
-              placeholder="Password"
-              secureTextEntry
-              value={password}
-              setValue={setPassword}
-            />
-            <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!buttonStatus} />
-            {!buttonStatus && (
-              <CustomButton text="Server URL can't be empty" fgColor={'#DD4D44'} type="tertiary" />
-            )}
+      <View>
+        <View style={styles.root}>
+          <Image
+            source={Logo}
+            style={[styles.logo, { height: height * 0.3 }]}
+            resizeMode="contain"
+          />
+          <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+          <CustomInput
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            setValue={setPassword}
+          />
+          <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!buttonStatus} />
+          {!buttonStatus && (
+            <CustomButton text="Server URL can't be empty" fgColor={'#DD4D44'} type="tertiary" />
+          )}
 
-            <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
-          </View>
-          <CustomButton text="Server URL" type="tertiary" />
-          <CustomButton text={currentUrl} bgColor="#e3e3e3" fgColor="#363636" onPress={updateUrl} />
+          <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
         </View>
-      )}
+        <CustomButton text="Server URL" type="tertiary" />
+        <CustomButton text={currentUrl} bgColor="#e3e3e3" fgColor="#363636" onPress={updateUrl} />
+      </View>
     </ScrollView>
   );
 }

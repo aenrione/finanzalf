@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import { showMessage } from 'react-native-flash-message';
+import { removeSession } from 'src/actions/LoginAction';
 
 const setAxiosDefaults = function () {
   axios.interceptors.request.use(async function (config) {
@@ -18,15 +19,16 @@ const setAxiosDefaults = function () {
   axios.interceptors.response.use(
     (res) => res,
     (err) => {
+      var msg;
       if (err.response === undefined) {
         return Promise.reject(err.response);
       }
       if (err.response.data) {
         if (err.response.data.errors) {
           if (err.response.status === 400) {
-            var msg = JSON.stringify(err.response.data.errors);
+            msg = JSON.stringify(err.response.data.errors);
           } else {
-            var msg = err.response.data.errors.full_messages || err.response.data.errors;
+            msg = err.response.data.errors.full_messages || err.response.data.errors;
           }
           showMessage({
             message: `Error: ${msg}`,
@@ -34,10 +36,10 @@ const setAxiosDefaults = function () {
           });
         } else {
           if (err.response.status === 502) {
-            var msg = 'Servidor parece estar caido';
+            msg = 'Server is down';
             store.dispatch(removeSession());
           } else {
-            var msg = err.response.data.errors.full_messages || err.response.data.errors;
+            msg = err.response.data.errors.full_messages || err.response.data.errors;
           }
           showMessage({
             message: msg,

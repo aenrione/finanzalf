@@ -2,7 +2,6 @@ import React from 'react';
 import { RefreshControl, View, FlatList, StyleSheet } from 'react-native';
 import { Card } from 'react-native-elements';
 import CustomAmountItem from '@/CustomAmountItem';
-import CustomButton from '@/CustomButton';
 import CustomIndicator from '@/CustomIndicator';
 import { useInfiniteQuery } from 'react-query';
 import axios from 'axios';
@@ -16,7 +15,7 @@ const changeTransactionId = (id) => {
 export default function Transactions({ header, refetch }) {
   const sort_by = 'transaction_date';
   const sort_desc = true;
-  const limit = 5;
+  const limit = 15;
   const email = store.getState().auth_reducer.user.email;
   const queryClient = store.getState().object_reducer.queryClient;
 
@@ -72,12 +71,11 @@ export default function Transactions({ header, refetch }) {
       {status === 'success' && (
         <FlatList
           data={mapTransactionPages()}
+          onEndReached={fetchNextPage}
           ListHeaderComponent={<Header header={header} status={status} />}
           keyExtractor={(item) => item.id}
           renderItem={({ item: transaction }) => <TransactionSection transaction={transaction} />}
-          ListFooterComponent={
-            hasNextPage && <Footer onLoadMore={fetchNextPage} loading={loading} />
-          }
+          ListFooterComponent={hasNextPage && <Footer loading={loading} />}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       )}
@@ -107,16 +105,8 @@ const Header = function ({ header }) {
   );
 };
 
-const Footer = function ({ onLoadMore, loading }) {
-  return (
-    <View>
-      {!loading ? (
-        <CustomButton text="Load More" onPress={() => onLoadMore()} type="tertiary" />
-      ) : (
-        <CustomIndicator size={20} marginTop={5} />
-      )}
-    </View>
-  );
+const Footer = function ({ loading }) {
+  return <View>{loading && <CustomIndicator size={20} marginTop={5} />}</View>;
 };
 
 const TransactionSection = function ({ transaction }) {

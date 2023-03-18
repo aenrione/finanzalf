@@ -30,7 +30,7 @@ export default function NewCategoryForm({ refetch }) {
       setDesc('');
       refetch();
       showMessage({
-        message: 'Exito!',
+        message: 'Success!',
         type: 'success',
       });
       mutation.reset();
@@ -40,7 +40,7 @@ export default function NewCategoryForm({ refetch }) {
       setDesc('');
       mutation.reset();
     }
-  });
+  }, [isSuccess, isError, refetch, mutation]);
 
   return (
     <ScrollView>

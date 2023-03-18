@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
   mainCardView: {
     height: 90,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
     borderRadius: 15,
     shadowColor: 'gray',

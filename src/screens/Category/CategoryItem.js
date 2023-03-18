@@ -4,9 +4,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import { Alert } from 'react-native';
 import axios from 'axios';
+import { showMessage } from 'react-native-flash-message';
 
 const deleteCategory = async (category, refetch) => {
-  const { data: _response } = await axios.delete(`/api/v1/categories/${category.id}`);
+  await axios.delete(`/api/v1/categories/${category.id}`);
   await refetch();
   showMessage({
     message: 'Category deleted',

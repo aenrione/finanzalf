@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions, View, StyleSheet } from 'react-native';
 import Legend from './PieChartLegend';

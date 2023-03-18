@@ -19,3 +19,18 @@ export const setQueryClient = (client) => {
     });
   };
 };
+
+export const startSpinner = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'LOAD_SPINNER',
+    });
+  };
+};
+export const stopSpinner = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'STOP_SPINNER',
+    });
+  };
+};

@@ -7,7 +7,7 @@ import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
 
 const deleteAccount = async (refetch) => {
-  const { data: _response } = await axios.delete('/api/v1/fintoc_account');
+  await axios.delete('/api/v1/fintoc_account');
   await refetch();
   showMessage({
     message: 'Account Deleted',

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
@@ -14,11 +15,20 @@ export default function Transaction() {
   const currentTransaction = store.getState().object_reducer.selected_transaction;
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  // const queryClient = store.getState().object_reducer.queryClient;
   const onRefresh = async function () {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     return () => {
+  //       queryClient.resetQueries({ queryKey: ['transactions'], exact: true });
+  //     };
+  //   }, [queryClient]),
+  // );
 
   const getInfo = async function () {
     setLoading(true);

@@ -85,7 +85,7 @@ export default function DetailsScreen() {
       />
       <Text style={{ textAlign: 'center' }} text={`${date.month() + 1}-${date.year()}`} />
       <CustomButton text={'Update Pie Charts'} onPress={updatePieCharts} />
-      <MonthSelectorCalendar selectedDate={date} onMonthTapped={(date) => setDate(date)} />
+      <MonthSelectorCalendar selectedDate={date} onMonthTapped={(newDate) => setDate(newDate)} />
     </ScrollView>
   );
 }

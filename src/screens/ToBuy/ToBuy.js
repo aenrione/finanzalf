@@ -6,7 +6,7 @@ import List from './ToBuyList/List';
 import { useQuery } from 'react-query';
 import CustomIndicator from '../../components/CustomIndicator';
 
-export function AccountsScreen({}) {
+export function AccountsScreen() {
   const getLists = async function () {
     const { data: response } = await axios.get('/api/v1/to_buy_lists');
     return response.to_buy_lists;

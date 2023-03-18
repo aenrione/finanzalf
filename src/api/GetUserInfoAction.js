@@ -1,6 +1,4 @@
-/*global fetch:false*/
 import axios from 'axios';
-import * as NavigationService from '../navigation/navigationService';
 
 export const getInfo = ({ email, setInfo }) => {
   return (dispatch) => {

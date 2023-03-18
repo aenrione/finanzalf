@@ -1,4 +1,3 @@
-/*global fetch:false*/
 import axios from 'axios';
 import * as NavigationService from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -66,6 +65,7 @@ export const loginUser = ({ email, password }) => {
     dispatch({
       type: 'LOAD_SPINNER',
     });
+    NavigationService.navigate('Loading');
 
     axios
       .post('/api/v1/auth/sign_in', { email, password })
@@ -84,11 +84,11 @@ export const loginUser = ({ email, password }) => {
             payload: data,
           });
           storeUser(data);
-          axios.get('/api/v1/user/capabilities').then((response) => {
-            if (response.status !== 401) {
+          axios.get('/api/v1/user/capabilities').then((capResponse) => {
+            if (capResponse.status !== 401) {
               dispatch({
                 type: 'CHANGE_CAPABILITIES',
-                payload: response.data,
+                payload: capResponse.data,
               });
             }
           });
@@ -107,6 +107,7 @@ export const loginUser = ({ email, password }) => {
         dispatch({
           type: 'LOGIN_FAILED',
         });
+        NavigationService.navigate('SignIn');
       });
   };
 };
@@ -116,6 +117,7 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
     dispatch({
       type: 'LOAD_SPINNER',
     });
+    NavigationService.navigate('Loading');
 
     axios
       .post('/api/v1/auth', {
@@ -126,6 +128,7 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
       })
       .then((response) => {
         if (response.status === 401) {
+          /* empty */
         } else {
           let data = response.data;
           data.client = response.headers.client;
@@ -142,6 +145,7 @@ export const registerUser = ({ name, email, password, confirmPassword }) => {
         dispatch({
           type: 'LOGIN_FAILED',
         });
+        NavigationService.navigate('SignInNavigation');
       });
   };
 };
@@ -151,10 +155,12 @@ export const setLoading = ({ loading = true }) => {
       dispatch({
         type: 'LOAD_SPINNER',
       });
+      NavigationService.navigate('Loading');
     } else {
       dispatch({
         type: 'STOP_SPINNER',
       });
+      NavigationService.navigate('Loading');
     }
   };
 };
@@ -164,6 +170,7 @@ export const logoutUser = () => {
     dispatch({
       type: 'LOAD_SPINNER',
     });
+    NavigationService.navigate('Loading');
 
     storeUser(null);
     axios.delete('/api/v1/auth/sign_out').then((response) => {
