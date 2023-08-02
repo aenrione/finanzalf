@@ -3,8 +3,8 @@ import store from '../store';
 import { showMessage } from 'react-native-flash-message';
 import { removeSession } from 'src/actions/LoginAction';
 
-const setAxiosDefaults = function () {
-  axios.interceptors.request.use(async function (config) {
+const setAxiosDefaults = function() {
+  axios.interceptors.request.use(async function(config) {
     const state = store.getState().auth_reducer;
     const accessToken = state['access-token'];
     const uid = state.uid;
@@ -25,6 +25,9 @@ const setAxiosDefaults = function () {
       }
       if (err.response.data) {
         if (err.response.data.errors) {
+          if (err.response.status === 401) {
+            store.dispatch(removeSession());
+          }
           if (err.response.status === 400) {
             msg = JSON.stringify(err.response.data.errors);
           } else {
