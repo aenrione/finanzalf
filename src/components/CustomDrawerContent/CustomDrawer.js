@@ -11,15 +11,16 @@ import store from 'src/store';
 
 export default function CustomDrawerContent(props) {
   const onSignOutPressed = async () => {
-    store.dispatch(logoutUser());
+    const state = store.getState().auth_reducer;
+    store.dispatch(logoutUser(state.user ? state.user.name : ''));
   };
   return (
     <DrawerContentScrollView style={styles.drawer} {...props}>
       <View style={styles.logoContainer}>
         <Image source={Logo} style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
         <CustomText text="FinanzAlf" style={{ width: '100%', textAlign: 'center', fontSize: 30 }} />
-      </View>
 
+      </View>
       <SafeAreaView style={styles.container}>
         <View>
           <DrawerItemList {...props} />
@@ -29,13 +30,13 @@ export default function CustomDrawerContent(props) {
             name="exit-outline"
             size={25}
             color="#DD4D44"
-            style={{ marginTop: '100%', marginLeft: 25 }}
+            style={{ marginTop: '300%', marginLeft: 25 }}
           />
           <CustomButton
             text="Log Out"
             type="tertiary"
             fgColor="#DD4D44"
-            style={{ marginTop: '87%' }}
+            style={{ marginTop: '287%' }}
             onPress={onSignOutPressed}
           />
         </View>

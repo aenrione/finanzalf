@@ -1,36 +1,44 @@
-import * as NavigationService from '../navigation/navigationService';
+import { getTransactions, getTotalIncomes, getTotalExpenses, getTotalIncomesAndExpensesByCurrency, getIncomes, getExpenses } from 'src/dbHelpers/transactionHelper';
+import { getChartInfo, getCategories } from 'src/dbHelpers/categoryHelper';
+import { getAccountChartInfo, getTotalAccountAmountsByCurrency, getAccounts } from 'src/dbHelpers/accountHelper';
 
-export const changeTransaction = ({ transaction_id }) => {
-  return (dispatch) => {
-    dispatch({
-      type: 'CHANGE_TRANSACTION',
-      payload: transaction_id,
-    });
+export const getAllInfo = (filter = "monthly") => {
+  return async (dispatch) => {
+    let payload = {
+      balances: [],
+      accountTotals: [],
+      accounts: [],
+      categories: [],
+      transactions: [],
+      incomes: [],
+      expenses: [],
+      categoryChartData: [],
+      accountChartData: [],
+      totalIncomes: 0,
+      totalExpenses: 0,
+      filter: filter,
+    };
 
-    NavigationService.navigate('Transaction');
-  };
-};
+    try {
+      payload.accounts = await getAccounts();
+      payload.transactions = await getTransactions();
+      payload.categories = await getCategories();
+      payload.categoryChartData = await getChartInfo();
+      payload.accountChartData = await getAccountChartInfo();
+      payload.accountTotals = await getTotalAccountAmountsByCurrency();
+      payload.balances = await getTotalIncomesAndExpensesByCurrency();
+      payload.totalIncomes = await getTotalIncomes();
+      payload.totalExpenses = await getTotalExpenses();
+      payload.incomes = await getIncomes();
+      payload.expenses = await getExpenses();
+      console.log("Updating ALL")
 
-export const setQueryClient = (client) => {
-  return (dispatch) => {
-    dispatch({
-      type: 'SET_QUERY_CLIENT',
-      payload: client,
-    });
-  };
-};
-
-export const startSpinner = () => {
-  return (dispatch) => {
-    dispatch({
-      type: 'LOAD_SPINNER',
-    });
-  };
-};
-export const stopSpinner = () => {
-  return (dispatch) => {
-    dispatch({
-      type: 'STOP_SPINNER',
-    });
+      dispatch({
+        type: 'UPDATE_ALL',
+        payload: payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };

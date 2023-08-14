@@ -10,7 +10,6 @@ import SignInScreen from 'src/screens/SignInScreen';
 import SignUpScreen from 'src/screens/SignUpScreen';
 import SettingScreen from 'src/screens/SignInScreen/SettingScreen';
 import ForgotPasswordScreen from 'src/screens/ForgotPasswordScreen';
-import LoadingScreen from 'src/screens/LoadingScreen';
 
 export default function SignInNavigation() {
   return (
@@ -47,13 +46,6 @@ export default function SignInNavigation() {
         <Stack.Screen
           name="MainNavigation"
           component={MainNavigation}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Loading"
-          component={LoadingScreen}
           options={{
             headerShown: false,
           }}

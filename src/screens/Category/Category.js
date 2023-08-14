@@ -1,104 +1,107 @@
-import React, { useState } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
-import CustomCard from '@/CustomCard';
-import NewCategoryForm from './NewCategoryForm';
-import Collapsible from 'react-native-collapsible';
-import CategoryItem from './CategoryItem';
-import axios from 'axios';
-import CustomIndicator from '@/CustomIndicator';
-import { useInfiniteQuery } from 'react-query';
-import store from 'src/store';
+import React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import SwipeableFlatList from 'react-native-swipeable-list';
+import QuickActions from 'src/utils/quickActions';
+import CategoryCard from 'src/components/Cards/CategoryCard';
+import { connect } from 'react-redux';
 
-export default function HomeScreen() {
-  const sort_by = 'created_at';
-  const sort_desc = true;
-  const limit = 10;
-  const queryClient = store.getState().object_reducer.queryClient;
+import routes from 'src/config/routes';
+import { Colors, Typography } from 'src/styles';
 
-  const getCategories = async function ({ pageParam = 1 }) {
-    const response = await axios.get('/api/v1/categories', {
-      params: {
-        sort_by: sort_by,
-        sort_desc: sort_desc,
-        limit: limit,
-        page: pageParam,
-      },
-    });
-    return response.data;
+const mapStateToProps = function(state) {
+  return {
+    categories: state.auth_reducer.categories
   };
+};
 
-  const mapCategoryPages = function () {
-    let all = categories.pages.map((elem) => elem.transaction_categories);
-    let arr = [].concat
-      .apply([], all)
-      .filter((v, i, a) => a.findIndex((v2) => v2.id === v.id) === i);
-    return arr;
-  };
+const Categories = ({ navigation, ...props }) => {
+  const { categories } = props
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  // Delete Item
+  const __delete = (id) => {
+    deleteCategory(id);
+  }
 
-  const {
-    data: categories,
-    status,
-    fetchNextPage,
-    isFetchingNextPage: loading,
-    hasNextPage,
-  } = useInfiniteQuery('categories', getCategories, {
-    getNextPageParam: (lastPage) => {
-      const { current_page: page, total_pages: totalPages } = lastPage.meta;
-
-      return page < totalPages ? page + 1 : false;
-    },
-  });
-
-  const onRefresh = async function () {
-    setRefreshing(true);
-    await queryClient.resetQueries({ queryKey: ['categories'], exact: true });
-    setRefreshing(false);
-  };
+  // Update Item
+  const __update = (item) => {
+    navigation.navigate(routes.AddCategory.name, { item: item });
+  }
   return (
-    <View>
-      {status === 'success' ? (
-        <FlatList
-          data={mapCategoryPages()}
-          onEndReached={fetchNextPage}
-          ListHeaderComponent={<Header refetch={fetchNextPage} />}
-          ListFooterComponent={hasNextPage && <Footer loading={loading} />}
-          renderItem={({ item: category }) => (
-            <CategoryItem category={category} refetch={onRefresh} />
-          )}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          keyExtractor={(item) => item.id}
-        />
-      ) : (
-        <CustomIndicator size={150} />
-      )}
-    </View>
-  );
-}
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.headerContainer}>
+        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>Categories</Text>
 
-const Header = function ({ refetch }) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const onRefetch = function () {
-    refetch();
-    setModalVisible(!modalVisible);
-  };
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.iconContainer}
+          onPress={() => navigation.navigate(routes.AddCategory.name)}>
+          <Icon name="plus" color={Colors.WHITE} size={15} />
+        </TouchableOpacity>
+      </View>
 
-  return (
-    <View>
-      <CustomCard
-        title="Add a category"
-        description="Create a category for your transactions"
-        pressed={modalVisible}
-        onPress={() => setModalVisible(!modalVisible)}
-      />
-      <Collapsible collapsed={!modalVisible}>
-        <NewCategoryForm refetch={onRefetch} />
-      </Collapsible>
+      {/* Body */}
+      <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+          {categories.length == 0 ?
+            <View style={styles.emptyContainer}>
+              <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You don't have any categories!</Text>
+            </View>
+            :
+            <SwipeableFlatList
+              data={categories}
+              maxSwipeDistance={140}
+              shouldBounceOnMount={true}
+              keyExtractor={(item) => item.id.toString()}
+              renderQuickActions={({ item }) => QuickActions(item, __update, __delete)}
+              renderItem={({ item, index }) => {
+                return <CategoryCard currency={item.currency_symbol} key={index} category={item} />
+              }}
+            />
+          }
+        </View>
+      </View>
     </View>
   );
 };
 
-const Footer = function ({ loading }) {
-  return <View>{loading && <CustomIndicator size={20} marginTop={5} />}</View>;
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.BLACK
+  },
+  // Header
+  headerContainer: {
+    padding: 20,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.LIGHT_BLACK
+  },
+  container: {
+    flex: 1,
+    paddingRight: 20,
+    backgroundColor: Colors.BLACK
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+});
+
+export default connect(mapStateToProps)(Categories);

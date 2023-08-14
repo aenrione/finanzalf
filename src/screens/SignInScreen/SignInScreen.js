@@ -5,13 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from 'assets/images/wallet.png';
 import CustomInput from '@/CustomInput/CustomInput';
 import CustomButton from '@/CustomButton';
-import { loginUser, loginRememberedUser, changeUrl } from 'src/actions/LoginAction';
+import { loginUser, setLoading } from 'src/actions/LoginAction';
+import { getAllInfo } from 'src/actions/ObjectActions';
 import store from 'src/store';
-// import CustomIndicator from '@/CustomIndicator';
-
-const getToken = async function () {
+import { useDispatch } from 'react-redux';
+import { updateAccounts } from 'src/utils/fintoc';
+const getUser = async function() {
   try {
-    let userData = await AsyncStorage.getItem('userData');
+    let userData = await AsyncStorage.getItem('user');
     let data = JSON.parse(userData);
     return data;
   } catch (error) {
@@ -19,23 +20,7 @@ const getToken = async function () {
   }
 };
 
-const getUrl = async function () {
-  try {
-    let data = await AsyncStorage.getItem('baseUrl');
-    return data;
-  } catch (error) {
-    console.log('Something went wrong', error);
-  }
-};
-
-const getValue = function () {
-  const state = store.getState().auth_reducer;
-  if (state.baseUrl !== '' && state.baseUrl !== 'https://') {
-    return state.baseUrl;
-  }
-  return 'https://';
-};
-const mapStateToProps = function (state) {
+const mapStateToProps = function(state) {
   return {
     spinner: state.auth_reducer.spinner,
     url: state.auth_reducer.baseUrl,
@@ -43,58 +28,27 @@ const mapStateToProps = function (state) {
 };
 
 export function SignInScreen({ navigation, ...props }) {
-  const state = store.getState().auth_reducer;
   const { height } = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [currentUrl, setUrl] = useState(getValue());
-  const [buttonStatus, setButtonStatus] = useState(false);
+  const [name, setName] = useState('');
+  const dispatch = useDispatch();
+
+  const onSignInPressed = async function() {
+    await store.dispatch(loginUser({ name }));
+  };
 
   useEffect(() => {
-    getToken().then((response) => {
+    dispatch(setLoading(true));
+    getUser().then(async (response) => {
       let userData = response;
       if (userData !== null) {
-        store.dispatch(loginRememberedUser({ userData }));
+        let name = userData.name;
+        store.dispatch(loginUser({ name }));
+        await updateAccounts();
+        store.dispatch(getAllInfo())
       }
+      dispatch(setLoading(false));
     });
-    getUrl().then((response) => {
-      let url = response;
-      if (url !== null && url !== '') {
-        setUrl(response);
-        setButtonStatus(true);
-        if (props.url !== url) {
-          store.dispatch(changeUrl({ url }));
-        }
-      }
-    });
-    const unsubscribe = navigation.addListener('focus', () => {
-      let temp_url = getValue();
-      setUrl(temp_url);
-      if (temp_url === 'https://') {
-        setButtonStatus(false);
-      } else {
-        setButtonStatus(true);
-      }
-    });
-    return unsubscribe;
-  }, [navigation, props.url, state.baseUrl]);
-
-  const onSignInPressed = async function () {
-    await store.dispatch(loginUser({ email, password }));
-  };
-
-  const updateUrl = async () => {
-    // store.dispatch(changeUrl({ url: currentUrl }))
-    navigation.navigate('SignSettings');
-  };
-
-  // const onForgotPasswordPressed = () => {
-  //   navigation.navigate('ForgotPassword')
-  // };
-
-  const onSignUpPressed = () => {
-    navigation.navigate('SignUp');
-  };
+  }, [navigation, props.url]);
 
   return (
     <ScrollView>
@@ -105,22 +59,9 @@ export function SignInScreen({ navigation, ...props }) {
             style={[styles.logo, { height: height * 0.3 }]}
             resizeMode="contain"
           />
-          <CustomInput placeholder="Email" value={email} setValue={setEmail} />
-          <CustomInput
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            setValue={setPassword}
-          />
-          <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!buttonStatus} />
-          {!buttonStatus && (
-            <CustomButton text="Server URL can't be empty" fgColor={'#DD4D44'} type="tertiary" />
-          )}
-
-          <CustomButton text="Don't have an account?" onPress={onSignUpPressed} type="tertiary" />
+          <CustomInput placeholder="Name" value={name} setValue={setName} />
+          <CustomButton text="Sign In" onPress={onSignInPressed} disabled={!name} />
         </View>
-        <CustomButton text="Server URL" type="tertiary" />
-        <CustomButton text={currentUrl} bgColor="#e3e3e3" fgColor="#363636" onPress={updateUrl} />
       </View>
     </ScrollView>
   );
