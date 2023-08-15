@@ -8,10 +8,11 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Colors, Typography } from 'src/styles';
 import { formatCurrency } from 'src/utils/currency';
+import { useTranslation } from 'react-i18next';
 
 const AccountCard = (props) => {
   const account = props.account;
-  const currency = props.currency;
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -23,10 +24,10 @@ const AccountCard = (props) => {
         <Text style={[Typography.BODY, { color: Colors.WHITE }]}>{account.name}</Text>
         {account.holder_name && (
 
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{account.holder_name}</Text>
+          <Text style={[Typography.TAGLINE, { color: Colors.PRIMARY_LIGHT }]}>{account.holder_name}</Text>
         )}
-        <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{account.type}</Text>
-        <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{account.refreshed_at}</Text>
+        <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t(`account_view.types.${account.subtype}`)}</Text>
+        {/* <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{account.refreshed_at}</Text> */}
       </View>
 
       <Text style={[Typography.H4, account.amount >= 0 ? { color: Colors.SUCCESS } : { color: Colors.ALERT }]}>

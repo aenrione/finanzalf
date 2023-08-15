@@ -3,8 +3,10 @@ import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import Pie from 'react-native-pie';
 import { Colors, Typography } from 'src/styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency, curStyle } from 'src/utils/currency';
 
-const PieChart = ({ data, currency, width }) => {
+const PieChart = ({ data, currency, width, amount }) => {
   const radius = 65;
   const selWidth = width || Dimensions.get('window').width
 
@@ -12,12 +14,18 @@ const PieChart = ({ data, currency, width }) => {
   if (!data) {
     return
   }
+  const { t } = useTranslation();
 
   return (
     <View>
       {currency && (
-        <Text style={[Typography.H3, styles.currencyCode, { textAlign: 'center' }]}>{currency}
+        <Text style={[Typography.H3, styles.currencyCode, {
+          color: Colors.WHITE,
+        }]}>{currency}
         </Text>)}
+      {amount && (
+        <Text style={[Typography.H3, curStyle(amount), styles.currencyCode]}>{formatCurrency(amount, currency)}</Text>
+      )}
       <View style={[styles.container, { width: selWidth }]}>
         <View style={styles.pieContainer}>
           <View style={styles.chartContainer}>
@@ -40,7 +48,7 @@ const PieChart = ({ data, currency, width }) => {
               <View key={index} style={styles.rowContainer}>
                 <Icon name={obj.icon ? obj.icon : "circle-notch"} size={15} color={obj.color} />
                 <Text style={[Typography.BODY, { marginLeft: 5, color: Colors.GRAY_THIN }]}>
-                  {obj.label_name} ({obj.percentage.toFixed(2)}%)
+                  {obj.label_name == 'uncategorized' ? t(obj.label_name) : obj.label_name} ({obj.percentage.toFixed(2)}%)
                 </Text>
               </View>
             )
@@ -55,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     borderRadius: 16,
-    flexDirection: 'row',
+    // flexDirection: 'row',
     backgroundColor: Colors.GRAY_DARKER,
     alignItems: 'center',
   },
@@ -66,7 +74,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingLeft: 0,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
   rowContainer: {
     marginTop: 5,
@@ -81,8 +90,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   currencyCode: {
-    color: Colors.WHITE,
     marginTop: 10,
+    textAlign: 'center'
   },
 });
 

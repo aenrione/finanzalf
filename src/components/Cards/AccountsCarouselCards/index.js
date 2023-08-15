@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Colors, Typography } from 'src/styles';
 import { formatCurrency, curStyle } from 'src/utils/currency';
+import { useTranslation } from 'react-i18next';
 
 const BalanceCard = (props) => {
   const accountTotals = props.accounts || [];
@@ -15,6 +16,7 @@ const BalanceCard = (props) => {
   const [showInfo, setShowInfo] = useState(true);
   const CARD_WIDTH = Dimensions.get('window').width - offset; // width of each card in the carousel
   const scrollViewRef = useRef();
+  const { t } = useTranslation();
 
   const showAmount = (amount, item) => {
     let calcAmount = amount ? amount : 0
@@ -39,17 +41,17 @@ const BalanceCard = (props) => {
               <Icon name={showInfo ? "eye-slash" : "eye"} color={Colors.GRAY_MEDIUM} size={20} style={{ marginLeft: 20 }} />
             </TouchableOpacity>
           </View>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>Account:
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>{t('account_card.account')}:
             <Text style={[Typography.TAGLINE, { color: Colors.PRIMARY_LIGHT }]}> {item.name}</Text>
           </Text>
           {item.holder_name && (
-            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>Holder:
+            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>{t('account_card.holder')}:
               <Text style={[Typography.TAGLINE, { color: Colors.GRAY_LIGHT }]}> {item.holder_name}</Text>
             </Text>
 
           )}
           {item.refreshed_at && (
-            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>Updated: {item.refreshed_at}</Text>
+            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM }]}>{t('account_card.refreshed')}: {item.refreshed_at}</Text>
           )}
           <View
             style={{
@@ -60,18 +62,18 @@ const BalanceCard = (props) => {
           />
           <View style={styles.cardContent}>
             <View style={styles.itemContainer}>
-              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Incomes</Text>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('transaction_view.incomes')}</Text>
               <Text style={[Typography.BODY, curStyle(item.income)]}>{showAmount(item.income, item)}</Text>
             </View>
             <View>
               <View style={styles.itemContainer}>
-                <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Expenses</Text>
+                <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('transaction_view.expenses')}</Text>
                 <Text style={[Typography.BODY, curStyle(item.expense)]}>{showAmount(item.expense, item)}</Text>
               </View>
             </View>
             <View>
               <View style={styles.itemContainer}>
-                <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Investments</Text>
+                <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('account_card.returns')}</Text>
                 <Text style={[Typography.BODY, curStyle(item.investmentReturn)]}>{showAmount(item.investmentReturn, item)}</Text>
               </View>
             </View>

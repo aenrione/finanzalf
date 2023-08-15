@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,6 +13,7 @@ import { deleteTransaction } from 'src/dbHelpers/transactionHelper';
 
 import QuickActions from 'src/utils/quickActions';
 import TransactionCard from 'src/components/Cards/TransactionCard';
+import { useTranslation } from 'react-i18next';
 
 const mapStateToProps = function(state) {
   return {
@@ -21,9 +22,9 @@ const mapStateToProps = function(state) {
 };
 
 const Income = ({ navigation, ...props }) => {
+  const { t } = useTranslation();
   const { incomes } = props;
-
-
+  const TransactionCardMemo = React.memo(TransactionCard);
 
   // Delete Item
   const __delete = (id) => {
@@ -34,23 +35,28 @@ const Income = ({ navigation, ...props }) => {
   const __update = (item) => {
     navigation.navigate(routes.AddTransaction.name, { item: item });
   }
+  const renderItem = useCallback(({ item }) => {
+    return <TransactionCardMemo transaction={item} />
+  }, []);
+
+  const renderQuickActions = useCallback(({ item }) => {
+    return QuickActions(item, __update, __delete, item.editable ? true : false);
+  }, [__update, __delete]);
 
   return (
     <View style={styles.container}>
       {incomes.length == 0 ?
         <View style={styles.emptyContainer}>
-          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You don't have any income!</Text>
+          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_income')}</Text>
         </View>
         :
         <SwipeableFlatList
           data={incomes}
           maxSwipeDistance={140}
           shouldBounceOnMount={true}
-          keyExtractor={(_item, index) => index.toString()}
-          renderQuickActions={({ item }) => QuickActions(item, __update, __delete, item.editable ? true : false)}
-          renderItem={({ item, index }) => {
-            return <TransactionCard key={index} transaction={item} />
-          }}
+          keyExtractor={(item) => item.id.toString()}
+          renderQuickActions={renderQuickActions}
+          renderItem={renderItem}
         />
       }
     </View>

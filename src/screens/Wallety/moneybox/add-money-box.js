@@ -12,11 +12,13 @@ import { insertMoneyBox, updateMoneyBox } from 'src/dbHelpers/moneyboxHelper';
 
 import Button from 'src/components/Button';
 import BackHeader from 'src/components/Headers/BackHeader';
+import { useTranslation } from 'react-i18next';
 
 const AddMoneyBox = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [total, setTotal] = useState('');
   const [collected, setCollected] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (route.params?.item) {

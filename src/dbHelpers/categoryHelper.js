@@ -1,7 +1,6 @@
-import { Alert } from 'react-native';
 import db from './openDB';
 import { createTable, getTableData, deleteData, deleteTable, insertObject, updateObject } from 'src/dbHelpers/generalHelper';
-import { Colors } from 'src/styles';
+import { generateColor } from 'src/utils/tools';
 
 // Table Name
 const tableName = 'categories';
@@ -49,7 +48,7 @@ export const getChartInfo = (setData) => {
       tx.executeSql(
         `SELECT 
           a.code AS currency,
-          COALESCE(c.name, "No Category") AS label_name,
+          COALESCE(c.name, "uncategorized") AS label_name,
           SUM(t.amount) * 100.0 / (
             SELECT SUM(t2.amount) FROM transactions t2
             JOIN accounts a2 ON t2.account_id = a2.id
@@ -71,11 +70,7 @@ export const getChartInfo = (setData) => {
               if (!data[item.currency]) {
                 data[item.currency] = [];
               }
-              if (i % 2 == 0) {
-                item.color = Colors.GRAY_MEDIUM;
-              } else {
-                item.color = Colors.PRIMARY;
-              }
+              item.color = generateColor(len, i)
               data[item.currency].push(item);
             }
           }

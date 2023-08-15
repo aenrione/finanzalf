@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomDrawer from '@/CustomDrawerContent';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -25,6 +26,7 @@ import AddMoneyBoxScreen from 'src/screens/Wallety/moneybox/add-money-box';
 import routes from 'src/config/routes';
 
 function HomeScreenNavigation() {
+  const { t } = useTranslation();
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
@@ -63,7 +65,7 @@ function HomeScreenNavigation() {
         }}
       />
       <Stack.Screen
-        name={routes.AddMoneyBox}
+        name={routes.AddMoneyBox.name}
         component={AddMoneyBoxScreen}
         options={{
           headerShown: false,
@@ -81,6 +83,7 @@ function HomeScreenNavigation() {
 }
 
 function HomeTabNavigation() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"
@@ -98,6 +101,7 @@ function HomeTabNavigation() {
         component={CategoryScreen}
         options={{
           headerShown: false,
+          title: t(`navigation.${routes.Categories.name}`)
         }}
       />
       <Tab.Screen
@@ -105,6 +109,7 @@ function HomeTabNavigation() {
         component={Transactions}
         options={{
           headerShown: false,
+          title: t(`navigation.${routes.Transactions.name}`)
         }}
       />
       <Tab.Screen
@@ -112,6 +117,7 @@ function HomeTabNavigation() {
         component={HomeScreenNavigation}
         options={{
           headerShown: false,
+          title: t(`navigation.${routes.Dashboard.name}`)
         }}
       />
       <Tab.Screen
@@ -119,6 +125,7 @@ function HomeTabNavigation() {
         component={AccountScreen}
         options={{
           headerShown: false,
+          title: t(`navigation.${routes.Accounts.name}`)
         }}
       />
       <Tab.Screen
@@ -126,12 +133,14 @@ function HomeTabNavigation() {
         component={MoneyBoxScreen}
         options={{
           headerShown: false,
+          title: t(`navigation.${routes.Planning.name}`)
         }}
       />
     </Tab.Navigator>
   );
 }
 export default function Navitagion() {
+  const { t } = useTranslation();
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -142,7 +151,7 @@ export default function Navitagion() {
         name="Home"
         component={HomeTabNavigation}
         options={{
-          title: 'Dashboard',
+          title: t(`navigation.${routes.Dashboard.name}`),
           headerTitle: '',
           swipeEnabled: false,
           drawerIcon: ({ focused, size }) => (
@@ -151,22 +160,24 @@ export default function Navitagion() {
         }}
       />
       <Drawer.Screen
-        name="Crypto Market"
+        name={routes.Crypto.name}
         component={Crypto}
         options={{
+          title: t(`navigation.${routes.Crypto.name}`),
           swipeEnabled: false,
           drawerIcon: ({ focused, size }) => (
-            <Ionicons name="logo-bitcoin" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+            <Ionicons name={routes.Crypto.icon} size={size} color={focused ? '#3B71F3' : '#ccc'} />
           ),
         }}
       />
       <Drawer.Screen
-        name="About"
+        name={routes.About.name}
         component={AboutScreen}
         options={{
+          title: t(`navigation.${routes.About.name}`),
           swipeEnabled: false,
           drawerIcon: ({ focused, size }) => (
-            <Ionicons name="help-circle-outline" size={size} color={focused ? '#3B71F3' : '#ccc'} />
+            <Ionicons name={routes.About.icon} size={size} color={focused ? '#3B71F3' : '#ccc'} />
           ),
         }}
       />

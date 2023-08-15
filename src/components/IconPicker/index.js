@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Modal from 'react-native-modal';
 import { iconData } from 'src/utils/icons';
+import { useTranslation } from 'react-i18next';
 
 const IconPicker = ({ onSelectIcon, isVisible, onClose }) => {
   const handleIconPress = (iconName) => {
@@ -13,6 +14,7 @@ const IconPicker = ({ onSelectIcon, isVisible, onClose }) => {
   const handleCloseModal = () => {
     onClose();
   };
+  const { t } = useTranslation();
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onClose}>
@@ -30,7 +32,7 @@ const IconPicker = ({ onSelectIcon, isVisible, onClose }) => {
           ))}
         </ScrollView>
         <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-          <Text style={styles.closeButtonText}>Cancel</Text>
+          <Text style={styles.closeButtonText}>{t('cancel')}</Text>
         </TouchableOpacity>
       </View>
     </Modal>

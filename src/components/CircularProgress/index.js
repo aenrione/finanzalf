@@ -17,14 +17,14 @@ const CircularProgress = ({ percent }) => {
         <Path
           d={`M50,50 m0,-${radius} a${radius},${radius} 0 1,0 0,${2 * radius} a${radius},${radius} 0 1,0 0,-${2 * radius}`}
           fill="none"
-          stroke={Colors.GRAY_MEDIUM}
+          stroke={Colors.PRIMARY}
           strokeWidth={strokeWidth}
         />
         {/* Black progress */}
         <Path
           d={`M50,50 m0,-${radius} a${radius},${radius} 0 1,1 0,${2 * radius} a${radius},${radius} 0 1,1 0,-${2 * radius}`}
           fill="none"
-          stroke={Colors.PRIMARY}
+          stroke={Colors.GRAY_MEDIUM}
           strokeWidth={strokeWidth}
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={offset}

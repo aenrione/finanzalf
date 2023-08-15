@@ -24,10 +24,6 @@ export const loginUser = ({ name }) => {
         payload: user,
       });
       NavigationService.navigate('MainNavigation');
-      showMessage({
-        message: `Hello: ${name}`,
-        type: 'success',
-      });
       // dispatch({
       //   type: 'STOP_SPINNER',
       // });

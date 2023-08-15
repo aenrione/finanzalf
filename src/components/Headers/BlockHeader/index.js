@@ -6,10 +6,12 @@ import {
   Pressable
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useTranslation } from 'react-i18next';
 
 import { Colors, Typography } from 'src/styles';
 
 const BlockHeader = (props) => {
+  const { t } = useTranslation();
   return (
     <View style={[styles.container, props.noMargin ? {} : { marginTop: 20 }]}>
       <Text style={[Typography.H1, { color: Colors.WHITE }]}>{props.title}</Text>
@@ -18,7 +20,7 @@ const BlockHeader = (props) => {
         <Pressable
           style={styles.rowContainer}
           onPress={props.onPress}>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginRight: 5 }]}>All</Text>
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginRight: 5 }]}>{t('all')}</Text>
           <Icon name="chevron-right" color={Colors.GRAY_MEDIUM} size={10} />
         </Pressable>
         : null}

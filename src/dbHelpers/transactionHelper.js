@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import db from './openDB';
 import { createTable, getTableData, deleteData, deleteTable, insertObject, updateObject } from 'src/dbHelpers/generalHelper';
 
@@ -11,7 +10,7 @@ const tableString = 'CREATE TABLE IF NOT EXISTS ' + tableName +
   description VARCHAR(30) NOT NULL,\
   account_id INTEGER NOT NULL,\
   category_id INTEGER,\
-  transaction_date TEXT NOT NULL,\
+  transaction_date DATETIME NOT NULL,\
   amount FLOAT NOT NULL,\
   comment VARCHAR(20),\
   fintoc_mov_id VARCHAR(20),\
@@ -50,72 +49,15 @@ export const deleteTransactionsTable = () => {
 
 // Get Incomes
 export const getIncomes = (setData) => {
-  return getTransactions(setData, 'WHERE t.type = "income"')
+  return getTransactions(setData, 'WHERE t.type = "income" ORDER BY t.transaction_date DESC')
 
 };
 
 // Get Expenses
 export const getExpenses = (setData) => {
-  return getTransactions(setData, 'WHERE t.type = "expense"')
+  return getTransactions(setData, 'WHERE t.type = "expense" ORDER BY t.transaction_date DESC')
 };
 
-// GetTotal Incomes
-export const getTotalIncomes = (setTotalIncomes) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM ' + tableName + ' WHERE type = ?',
-        ['income'],
-        (_tx, results) => {
-          var len = results.rows.length;
-          let total = 0;
-
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let row = results.rows.item(i);
-              total += row.amount;
-            }
-          }
-          if (setTotalIncomes) setTotalIncomes(total)
-          resolve(total)
-        },
-        error => {
-          console.log(error);
-          reject(error)
-        }
-      );
-    });
-  });
-}
-
-// GetTotal Expenses
-export const getTotalExpenses = (setTotalExpenses) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM ' + tableName + ' WHERE type = ?',
-        ['expense'],
-        (_tx, results) => {
-          var len = results.rows.length;
-          let total = 0;
-
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let row = results.rows.item(i);
-              total += row.amount;
-            }
-          }
-          if (setTotalExpenses) setTotalExpenses(total)
-          resolve(total)
-        },
-        error => {
-          console.log(error);
-          reject(error)
-        }
-      );
-    });
-  });
-}
 
 // GetTotal Incomes and Expenses by Currency Code
 export const getTotalIncomesAndExpensesByCurrency = (setTotals) => {

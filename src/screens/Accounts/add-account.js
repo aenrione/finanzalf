@@ -20,6 +20,7 @@ import { accounts } from 'src/utils/accounts';
 import { currencies } from 'src/utils/currency';
 import BackHeader from 'src/components/Headers/BackHeader';
 import Button from 'src/components/Button';
+import { useTranslation } from 'react-i18next';
 
 const findCurrencyByName = (name) => {
   return currencies.find((currency) => currency.name === name);
@@ -38,6 +39,7 @@ const AddAccount = ({ navigation, route }) => {
   const [currency, setCurrency] = useState(currencies[0]);
   const [editable, setEdit] = useState(true);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const isValid = () => {
     if (accName == '') return false
@@ -144,13 +146,13 @@ const AddAccount = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <BackHeader title={route.params?.item ? 'Edit Account' : 'New Account'} />
+      <BackHeader title={route.params?.item ? t('new_account.edit_account') : t('new_account.new_account')} />
 
       {/* Body */}
       <ScrollView style={styles.bodyContainer} showsVerticalScrollIndicator={false}>
         {/* Account Type */}
         <View style={styles.inputContainer}>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Account Type
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.account_type')}
           </Text>
           <Picker
             selectedValue={type}
@@ -160,22 +162,22 @@ const AddAccount = ({ navigation, route }) => {
             dropdownIconColor={Colors.GRAY_DARK}
             itemStyle={[Typography.BODY, { color: Colors.GRAY_DARK }]}>
             {accounts.map((type, index) => (
-              <Picker.Item key={index} label={type.name} value={type} />
+              <Picker.Item key={index} label={t(`new_account.types.${type.subtype}`)} value={type} />
             ))}
           </Picker>
         </View>
         {/* Account Name */}
         {(editable || route.params?.item) && (
           <View style={styles.inputContainer}>
-            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Account Name
+            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.account_name')}
               {route.params?.item && (
-                <Text style={[Typography.TAGLINE, { color: Colors.SUCCESS }]}> (editable)
+                <Text style={[Typography.TAGLINE, { color: Colors.SUCCESS }]}>{t('new_account.editable')}
                 </Text>
               )}
             </Text>
             <TextInput
               value={accName}
-              placeholder='Exp: Credit account'
+              placeholder={t('new_account.name_placeholder')}//'Exp: Credit account'
               onChangeText={(text) => setName(text)}
               placeholderTextColor={Colors.GRAY_MEDIUM}
               style={[styles.input, Typography.BODY]} />
@@ -183,25 +185,25 @@ const AddAccount = ({ navigation, route }) => {
 
 
         {/* Amount */}
-        {type.editable && (
-          <View style={styles.inputContainer}>
-            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Amount</Text>
-            <TextInput
-              value={amount}
-              placeholder='Exp: 20'
-              keyboardType='numeric'
-              onChangeText={(text) => setAmount(text)}
-              placeholderTextColor={Colors.GRAY_MEDIUM}
-              style={[styles.input, Typography.BODY]} />
-          </View>)}
+        {/* {type.editable && ( */}
+        {/*   <View style={styles.inputContainer}> */}
+        {/*     <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Amount</Text> */}
+        {/*     <TextInput */}
+        {/*       value={amount} */}
+        {/*       placeholder='Exp: 20' */}
+        {/*       keyboardType='numeric' */}
+        {/*       onChangeText={(text) => setAmount(text)} */}
+        {/*       placeholderTextColor={Colors.GRAY_MEDIUM} */}
+        {/*       style={[styles.input, Typography.BODY]} /> */}
+        {/*   </View>)} */}
 
         {/* Currency */}
         {type.editable && (
           <View style={styles.inputContainer}>
-            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Currency</Text>
+            <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.currency')}</Text>
             <Picker
               selectedValue={currency}
-              onValueChange={(itemValue, itemIndex) => setCurrency(itemValue)}
+              onValueChange={(itemValue) => setCurrency(itemValue)}
               style={styles.input}
               dropdownIconColor={Colors.GRAY_DARK}
               itemStyle={[Typography.BODY, { color: Colors.GRAY_DARK }]}>
@@ -229,7 +231,7 @@ const AddAccount = ({ navigation, route }) => {
 
       <View style={styles.footerContainer}>
         <Button
-          title='Save'
+          title={t('save')}
           disabled={!isValid()}
           onPress={() => __save()} />
       </View>

@@ -95,7 +95,7 @@ const insertMovementsToAccount = async (db_acc_id, movs) => {
       id: mov.id,
       fintoc_mov_id: mov.id,
       account_id: db_acc_id,
-      transaction_date: new Date(mov.post_date).toLocaleString(),
+      transaction_date: mov.transaction_date ? mov.transaction_date : mov.post_date,
       description: mov.description,
       comment: mov.comment,
       subtype: mov.type,

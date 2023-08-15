@@ -14,12 +14,14 @@ import AccountCard from 'src/components/Cards/AccountCard';
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
 import { getAccounts, deleteAccount } from 'src/dbHelpers/accountHelper';
+import { useTranslation } from 'react-i18next';
 
 
 const Accounts = ({ navigation }) => {
   const focused = useIsFocused();
 
   const [accounts, setAccounts] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     getAccounts(setAccounts);
@@ -33,13 +35,13 @@ const Accounts = ({ navigation }) => {
 
   // Update Item
   const __update = (item) => {
-    navigation.navigate(routes.AddAccount.name, { item: item, a: "aa" }, params = "a");
+    navigation.navigate(routes.AddAccount.name, { item: item });
   }
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>Accounts</Text>
+        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>{t('navigation.Accounts')}</Text>
 
         <TouchableOpacity
           activeOpacity={0.7}
@@ -54,8 +56,8 @@ const Accounts = ({ navigation }) => {
         <View style={styles.container}>
           {accounts.length == 0 ?
             <View style={styles.emptyContainer}>
-              <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You don't have any accounts!</Text>
-              <Text style={[Typography.H4, { color: Colors.GRAY_THIN, textAlign: 'center' }]}>Please add an account to get started (+)</Text>
+              <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('account_view.empty_one')}</Text>
+              <Text style={[Typography.H4, { color: Colors.GRAY_THIN, textAlign: 'center' }]}>{t('account_view.empty_two')}</Text>
             </View>
             :
             <SwipeableFlatList

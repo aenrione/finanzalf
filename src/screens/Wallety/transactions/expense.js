@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 
 import QuickActions from 'src/utils/quickActions';
 import TransactionCard from 'src/components/Cards/TransactionCard';
+import { useTranslation } from 'react-i18next';
 const mapStateToProps = function(state) {
   return {
     expenses: state.auth_reducer.expenses,
@@ -20,8 +21,9 @@ const mapStateToProps = function(state) {
 };
 
 const Expense = ({ navigation, ...props }) => {
+  const { t } = useTranslation();
   const { expenses } = props;
-
+  const TransactionCardMemo = React.memo(TransactionCard);
 
   // Delete Item
   const __delete = (id) => {
@@ -33,22 +35,28 @@ const Expense = ({ navigation, ...props }) => {
     navigation.navigate(routes.AddTransaction.name, { item: item });
   }
 
+  const renderItem = useCallback(({ item }) => {
+    return <TransactionCardMemo transaction={item} />
+  }, []);
+
+  const renderQuickActions = useCallback(({ item }) => {
+    return QuickActions(item, __update, __delete, item.editable ? true : false);
+  }, [__update, __delete]);
+
   return (
     <View style={styles.container}>
       {expenses.length == 0 ?
         <View style={styles.emptyContainer}>
-          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You don't have any expense !</Text>
+          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_expense')}</Text>
         </View>
         :
         <SwipeableFlatList
           data={expenses}
           maxSwipeDistance={140}
           shouldBounceOnMount={true}
-          keyExtractor={(_item, index) => index.toString()}
-          renderQuickActions={({ item }) => QuickActions(item, __update, __delete, item.editable ? true : false)}
-          renderItem={({ item, index }) => {
-            return <TransactionCard key={index} transaction={item} />
-          }}
+          keyExtractor={(item) => item.id.toString()}
+          renderQuickActions={renderQuickActions}
+          renderItem={renderItem}
         />
       }
     </View>

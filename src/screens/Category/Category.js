@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
+import { useTranslation } from 'react-i18next';
 
 const mapStateToProps = function(state) {
   return {
@@ -22,6 +23,7 @@ const mapStateToProps = function(state) {
 
 const Categories = ({ navigation, ...props }) => {
   const { categories } = props
+  const { t } = useTranslation();
 
   // Delete Item
   const __delete = (id) => {
@@ -36,7 +38,7 @@ const Categories = ({ navigation, ...props }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>Categories</Text>
+        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>{t('navigation.Categories')}</Text>
 
         <TouchableOpacity
           activeOpacity={0.7}
@@ -51,7 +53,7 @@ const Categories = ({ navigation, ...props }) => {
         <View style={styles.container}>
           {categories.length == 0 ?
             <View style={styles.emptyContainer}>
-              <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You don't have any categories!</Text>
+              <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('categories_view.empty_one')}</Text>
             </View>
             :
             <SwipeableFlatList

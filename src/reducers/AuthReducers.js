@@ -14,9 +14,7 @@ const INITIAL_STATE = {
   expenses: [],
   categoryChartData: [],
   accountChartData: [],
-  totalIncomes: 0,
-  totalExpenses: 0,
-  filter: "monthly",
+  filter: { name: "month", value: "monthly" },
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -31,10 +29,10 @@ export default (state = INITIAL_STATE, action) => {
         user: action.payload,
       };
     case 'REMOVE_SESSION':
-      deleteMoneyBoxTable();
-      deleteTransactionsTable();
-      deleteAccountsTable();
-      deleteCategoriesTable();
+      // deleteMoneyBoxTable();
+      // deleteTransactionsTable();
+      // deleteAccountsTable();
+      // deleteCategoriesTable();
       return {
         ...state,
         user: null,

@@ -6,6 +6,8 @@ const routes = {
   Login: 'Login',
   // Home
   HomeScreen: { name: "HomeScreen", icon: '' },
+  About: { name: "About", icon: 'help-circle-outline' },
+  Crypto: { name: "Crypto", icon: 'logo-bitcoin' },
   Loading: { name: "Loading", icon: '' },
   Dashboard: { name: "Dashboard", icon: 'home' },
   Planning: { name: "Planning", icon: 'cart-outline' },
@@ -22,7 +24,7 @@ const routes = {
   // MoneyBox
   Goals: { name: 'Goals' },
   Budgets: { name: 'Budget' },
-  AddMoneyBox: 'AddMoneyBox',
+  AddMoneyBox: { name: 'AddMoneyBox' },
   // Accounts
   Accounts: { name: "Accounts", icon: 'ios-people' },
   AddAccount: { name: 'AddAccount' },

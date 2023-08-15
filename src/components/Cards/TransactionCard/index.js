@@ -29,11 +29,11 @@ const TransactionCard = (props) => {
         <Text style={[Typography.BODY, { color: Colors.WHITE }]}>{transaction.description}</Text>
         {/* <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{transaction.category_name}</Text> */}
         <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{transaction.account_name}</Text>
-        <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{transaction.transaction_date}</Text>
+        <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{new Date(transaction.transaction_date).toLocaleString()}</Text>
       </View>
 
       <Text style={[Typography.H4, transaction.type == 'income' ? { color: Colors.SUCCESS } : { color: Colors.ALERT }]}>
-        {transaction.type == 'income' ? '+' : '-'}{formatCurrency(transaction.amount, transaction.code)}
+        {formatCurrency(transaction.amount, transaction.code)}
       </Text>
     </View>
   );

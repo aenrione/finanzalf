@@ -8,12 +8,14 @@ import CustomText from '@/Text';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { logoutUser } from 'src/actions/LoginAction';
 import store from 'src/store';
+import { useTranslation } from 'react-i18next';
 
 export default function CustomDrawerContent(props) {
   const onSignOutPressed = async () => {
     const state = store.getState().auth_reducer;
     store.dispatch(logoutUser(state.user ? state.user.name : ''));
   };
+  const { t } = useTranslation();
   return (
     <DrawerContentScrollView style={styles.drawer} {...props}>
       <View style={styles.logoContainer}>
@@ -33,7 +35,7 @@ export default function CustomDrawerContent(props) {
             style={{ marginTop: '300%', marginLeft: 25 }}
           />
           <CustomButton
-            text="Log Out"
+            text={t("logout")}
             type="tertiary"
             fgColor="#DD4D44"
             style={{ marginTop: '287%' }}

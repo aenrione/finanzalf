@@ -14,11 +14,13 @@ import { Colors, Typography } from 'src/styles';
 import Income from './income';
 import Expense from './expense';
 import All from './all';
+import { useTranslation } from 'react-i18next';
 
 // Top Tabs
 const Tab = createMaterialTopTabNavigator();
 
 function TopTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -34,19 +36,20 @@ function TopTabs() {
         swipeEnabled: false,
         animationEnabled: true,
       }}>
-      <Tab.Screen name={routes.All.name} options={{ tabBarLabel: 'All' }} component={All} />
-      <Tab.Screen name={routes.Income.name} options={{ tabBarLabel: 'Income' }} component={Income} />
-      <Tab.Screen name={routes.Expense.name} options={{ tabBarLabel: 'Expence' }} component={Expense} />
+      <Tab.Screen name={routes.All.name} options={{ tabBarLabel: t('transaction_view.all') }} component={All} />
+      <Tab.Screen name={routes.Income.name} options={{ tabBarLabel: t('transaction_view.incomes') }} component={Income} />
+      <Tab.Screen name={routes.Expense.name} options={{ tabBarLabel: t('transaction_view.expenses') }} component={Expense} />
     </Tab.Navigator>
   );
 }
 
 const Transactions = ({ navigation }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>Transactions</Text>
+        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>{t('navigation.Transactions')}</Text>
 
         <TouchableOpacity
           activeOpacity={0.7}

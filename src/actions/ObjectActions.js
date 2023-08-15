@@ -1,9 +1,12 @@
-import { getTransactions, getTotalIncomes, getTotalExpenses, getTotalIncomesAndExpensesByCurrency, getIncomes, getExpenses } from 'src/dbHelpers/transactionHelper';
+import { getTransactions, getTotalIncomesAndExpensesByCurrency, getIncomes, getExpenses } from 'src/dbHelpers/transactionHelper';
 import { getChartInfo, getCategories } from 'src/dbHelpers/categoryHelper';
 import { getAccountChartInfo, getTotalAccountAmountsByCurrency, getAccounts } from 'src/dbHelpers/accountHelper';
 
-export const getAllInfo = (filter = "monthly") => {
+export const getAllInfo = (filter = { name: "month", value: "monthly" }) => {
   return async (dispatch) => {
+    dispatch({
+      type: 'LOAD_SPINNER'
+    });
     let payload = {
       balances: [],
       accountTotals: [],
@@ -14,8 +17,6 @@ export const getAllInfo = (filter = "monthly") => {
       expenses: [],
       categoryChartData: [],
       accountChartData: [],
-      totalIncomes: 0,
-      totalExpenses: 0,
       filter: filter,
     };
 
@@ -27,8 +28,6 @@ export const getAllInfo = (filter = "monthly") => {
       payload.accountChartData = await getAccountChartInfo();
       payload.accountTotals = await getTotalAccountAmountsByCurrency();
       payload.balances = await getTotalIncomesAndExpensesByCurrency();
-      payload.totalIncomes = await getTotalIncomes();
-      payload.totalExpenses = await getTotalExpenses();
       payload.incomes = await getIncomes();
       payload.expenses = await getExpenses();
       console.log("Updating ALL")
@@ -40,5 +39,8 @@ export const getAllInfo = (filter = "monthly") => {
     } catch (error) {
       console.log(error);
     }
+    dispatch({
+      type: 'STOP_SPINNER'
+    });
   };
 };

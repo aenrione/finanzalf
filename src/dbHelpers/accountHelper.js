@@ -1,6 +1,6 @@
 import db from './openDB';
 import { createTable, getTableData, deleteData, deleteTable, insertObject, updateObject } from 'src/dbHelpers/generalHelper';
-import { Colors } from 'src/styles';
+import { generateColor } from 'src/utils/tools';
 
 // Table Name
 const tableName = 'accounts';
@@ -97,11 +97,7 @@ export const getAccountChartInfo = (setData) => {
               if (!data[item.code]) {
                 data[item.code] = [];
               }
-              if (i % 2 == 0) {
-                item.color = Colors.GRAY_MEDIUM;
-              } else {
-                item.color = Colors.PRIMARY;
-              }
+              item.color = generateColor(len, i)
               data[item.code].push(item);
             }
           }

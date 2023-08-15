@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Colors, Typography } from 'src/styles';
 import { formatCurrency, curStyle } from 'src/utils/currency';
+import { useTranslation } from 'react-i18next';
 
 const BalanceCard = (props) => {
   const accountTotals = props.accountTotals || [];
@@ -28,21 +29,31 @@ const BalanceCard = (props) => {
 
   const renderCard = (item, index) => {
     const transactionTotal = transactionTotals[index] || {};
+    const { t } = useTranslation();
 
     return (
       <View key={item.code} style={{ width: CARD_WIDTH, paddingHorizontal: 20 }}>
         {accountTotals.length > 1 && (
           <Text style={[Typography.H3, styles.currencyCode, { textAlign: 'center' }]}>{item.code}
             <TouchableOpacity onPress={() => setShowInfo(!showInfo)}>
-              <Icon name={showInfo ? "eye-slash" : "eye"} color={Colors.GRAY_MEDIUM} size={20} style={{ marginLeft: 20 }} />
+              <Icon
+                name={showInfo ? "eye-slash" : "eye"}
+                color={Colors.GRAY_MEDIUM}
+                size={20} style={{ marginLeft: 20 }} />
             </TouchableOpacity>
 
           </Text>)}
         <View style={styles.cardContent}>
           <View style={styles.blockContainer}>
             <View style={styles.itemContainer}>
-              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>My Balance</Text>
-              <Text style={[Typography.BODY, curStyle(item.totalAmount)]}>{showAmount(item.totalAmount, item.code)}</Text>
+              <Text
+                style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>
+                {t('balance_card.my_balance')}
+              </Text>
+              <Text
+                style={[Typography.BODY, curStyle(item.totalAmount)]}>
+                {showAmount(item.totalAmount, item.code)}
+              </Text>
             </View>
             <View
               style={{
@@ -51,7 +62,7 @@ const BalanceCard = (props) => {
               }}
             />
             <View style={styles.itemContainer}>
-              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Investments</Text>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('balance_card.returns')}</Text>
               <Text style={[Typography.BODY, curStyle(item.investmentReturn)]}>{showAmount(item.investmentReturn, item.code)}</Text>
             </View>
           </View>
@@ -60,7 +71,7 @@ const BalanceCard = (props) => {
 
           <View style={styles.blockContainer}>
             <View style={styles.itemContainer}>
-              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Total Income</Text>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('balance_card.incomes')}</Text>
               <Text style={[Typography.BODY, curStyle(transactionTotal.totalIncome)]}>{showAmount(transactionTotal.totalIncome, item.code)}</Text>
             </View>
             <View
@@ -70,7 +81,7 @@ const BalanceCard = (props) => {
               }}
             />
             <View style={styles.itemContainer}>
-              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>Total Expenses</Text>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('balance_card.expenses')}</Text>
               <Text style={[Typography.BODY, curStyle(transactionTotal.totalExpense)]}>{showAmount(transactionTotal.totalExpense, item.code)}</Text>
             </View>
           </View>

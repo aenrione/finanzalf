@@ -5,13 +5,12 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useTranslation } from 'react-i18next';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
-import { getPlanning, deleteTransaction } from 'src/dbHelpers/transactionHelper';
 
 import Goals from './goals';
 import Budgets from './budget';
@@ -19,7 +18,8 @@ import Budgets from './budget';
 // Top Tabs
 const Tab = createMaterialTopTabNavigator();
 
-function TopTabs(props) {
+function TopTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -35,23 +35,24 @@ function TopTabs(props) {
         swipeEnabled: false,
         animationEnabled: true,
       }}>
-      <Tab.Screen name={routes.Goals.name} options={{ tabBarLabel: routes.Goals.name }} component={Goals} />
-      <Tab.Screen name={routes.Budgets.name} options={{ tabBarLabel: routes.Budgets.name }} component={Budgets} />
+      <Tab.Screen name={routes.Goals.name} options={{ tabBarLabel: t('planning_view.goals') }} component={Goals} />
+      <Tab.Screen name={routes.Budgets.name} options={{ tabBarLabel: t('planning_view.budget') }} component={Budgets} />
     </Tab.Navigator>
   );
 }
 
 const Planning = ({ navigation }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>Planning</Text>
+        <Text style={[Typography.H1, { color: Colors.WHITE, marginBottom: 10 }]}>{t('navigation.Planning')}</Text>
 
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.iconContainer}
-          onPress={() => navigation.navigate(routes.AddTransaction.name)}>
+          onPress={() => navigation.navigate(routes.AddMoneyBox.name)}>
           <Icon name="plus" color={Colors.WHITE} size={15} />
         </TouchableOpacity>
       </View>
