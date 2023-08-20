@@ -17,8 +17,9 @@ import { getAllInfo } from 'src/actions/ObjectActions';
 import { useTranslation } from 'react-i18next';
 
 const timeOptions = [
-  { name: "month", value: { name: "month", value: "monthly" }, label: "Monthly" },
-  { name: "week", value: { name: "week", value: "weekly" }, label: "Weekly" }
+  { name: "month", value: "monthly" },
+  { name: "week", value: "weekly" },
+  { name: "all", value: "all" },
 ]
 
 const mapStateToProps = function(state) {

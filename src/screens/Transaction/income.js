@@ -9,26 +9,30 @@ import { connect } from 'react-redux';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
-import { deleteTransaction } from 'src/dbHelpers/transactionHelper';
 
 import QuickActions from 'src/utils/quickActions';
 import TransactionCard from 'src/components/Cards/TransactionCard';
 import { useTranslation } from 'react-i18next';
+import { deleteTransaction } from 'src/dbHelpers/transactionHelper';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
 const mapStateToProps = function(state) {
   return {
-    transactions: state.auth_reducer.transactions,
+    incomes: state.auth_reducer.incomes,
   };
 };
 
-const All = ({ navigation, ...props }) => {
+const Income = ({ navigation, ...props }) => {
   const { t } = useTranslation();
-  const { transactions } = props;
+  const { incomes } = props;
   const TransactionCardMemo = React.memo(TransactionCard);
+  const dispatch = useDispatch();
 
   // Delete Item
   const __delete = (id) => {
     deleteTransaction(id);
+    dispatch(getAllInfo())
   }
 
   // Update Item
@@ -45,13 +49,13 @@ const All = ({ navigation, ...props }) => {
 
   return (
     <View style={styles.container}>
-      {transactions.length == 0 ?
+      {incomes.length == 0 ?
         <View style={styles.emptyContainer}>
-          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_all')}</Text>
+          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_income')}</Text>
         </View>
         :
         <SwipeableFlatList
-          data={transactions}
+          data={incomes}
           maxSwipeDistance={140}
           shouldBounceOnMount={true}
           keyExtractor={(item) => item.id.toString()}
@@ -76,6 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(All);
-
-
+export default connect(mapStateToProps)(Income);

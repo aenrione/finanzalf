@@ -8,17 +8,20 @@ import {
 } from 'react-native';
 
 import { Colors, Typography } from 'src/styles';
-import { insertMoneyBox, updateMoneyBox } from 'src/dbHelpers/moneyboxHelper';
+import { insertGoal, updateGoal } from 'src/dbHelpers/goalHelper';
 
 import Button from 'src/components/Button';
 import BackHeader from 'src/components/Headers/BackHeader';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
-const AddMoneyBox = ({ navigation, route }) => {
+const AddGoal = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [total, setTotal] = useState('');
   const [collected, setCollected] = useState('');
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (route.params?.item) {
@@ -28,18 +31,18 @@ const AddMoneyBox = ({ navigation, route }) => {
     }
   }, []);
 
-  // Insert MoneyBox
+  // Insert Goal
   const __insert = () => {
-    insertMoneyBox({
+    insertGoal({
       name: name,
       total: parseFloat(total),
       collected: parseFloat(collected)
     });
   }
 
-  // Update MoneyBox
+  // Update Goal
   const __update = () => {
-    updateMoneyBox({
+    updateGoal({
       id: route.params.item.id,
       name: name,
       total: parseFloat(total),
@@ -47,7 +50,7 @@ const AddMoneyBox = ({ navigation, route }) => {
     });
   }
 
-  // Save MoneyBox
+  // Save Goal
   const __save = () => {
     if (route.params?.item) {
       __update();
@@ -55,13 +58,14 @@ const AddMoneyBox = ({ navigation, route }) => {
     else {
       __insert();
     }
+    dispatch(getAllInfo())
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
       {/* Header */}
-      <BackHeader title={route.params?.item ? 'Edit MoneyBox' : 'New MoneyBox'} />
+      <BackHeader title={route.params?.item ? t('new_goal.edit') : t('new_goal.new')} />
 
       {/* Body */}
       <ScrollView style={styles.bodyContainer} showsVerticalScrollIndicator={false}>
@@ -136,5 +140,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMoneyBox;
+export default AddGoal;
 

@@ -15,6 +15,7 @@ import { getAllInfo } from 'src/actions/ObjectActions';
 import { Colors, Typography } from 'src/styles';
 import { insertAccount, updateAccount } from 'src/dbHelpers/accountHelper';
 import { getLink, getOptions, generateFintocUrl, linkInfo, createAccounts } from 'src/utils/fintoc';
+import { getToken, getGoals, createFintualAccounts } from 'src/utils/fintual';
 
 import { accounts } from 'src/utils/accounts';
 import { currencies } from 'src/utils/currency';
@@ -38,11 +39,13 @@ const AddAccount = ({ navigation, route }) => {
   const [fintocOptions, setFintocOptions] = useState();
   const [currency, setCurrency] = useState(currencies[0]);
   const [editable, setEdit] = useState(true);
+  const [email, setEmail] = useState('');
+  const [secret, setSecret] = useState('');
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const isValid = () => {
-    if (accName == '') return false
+    if (type.editable && accName == '') return false
     return true
   };
 
@@ -52,6 +55,17 @@ const AddAccount = ({ navigation, route }) => {
   const closeModal = () => {
     setShowModal(false);
   };
+  const createFintual = async () => {
+    try {
+
+      const token = await getToken(email, secret)
+      const goals = await getGoals(email, token)
+      await createFintualAccounts(goals, email, secret, type)
+    } catch {
+      console.error("ERROR")
+    }
+
+  }
   const onSuccess = async (uri) => {
 
     // Extract the query string from the URI
@@ -133,11 +147,17 @@ const AddAccount = ({ navigation, route }) => {
 
   // Save Account
   const __save = () => {
-    if (route.params?.item) {
-      __update();
+    if (type.subtype == "fintual") {
+      createFintual()
     }
     else {
-      __insert();
+
+      if (route.params?.item) {
+        __update();
+      }
+      else {
+        __insert();
+      }
     }
     dispatch(getAllInfo())
     navigation.goBack();
@@ -167,7 +187,7 @@ const AddAccount = ({ navigation, route }) => {
           </Picker>
         </View>
         {/* Account Name */}
-        {(editable || route.params?.item) && (
+        {type.subtype != 'fintual' && (editable || route.params?.item) && (
           <View style={styles.inputContainer}>
             <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.account_name')}
               {route.params?.item && (
@@ -177,7 +197,7 @@ const AddAccount = ({ navigation, route }) => {
             </Text>
             <TextInput
               value={accName}
-              placeholder={t('new_account.name_placeholder')}//'Exp: Credit account'
+              placeholder={t('new_account.name_placeholder')}
               onChangeText={(text) => setName(text)}
               placeholderTextColor={Colors.GRAY_MEDIUM}
               style={[styles.input, Typography.BODY]} />
@@ -211,6 +231,32 @@ const AddAccount = ({ navigation, route }) => {
                 <Picker.Item key={index} label={`${curr.name} (${curr.symbol})`} value={curr} />
               ))}
             </Picker>
+          </View>)}
+        {/* FINTUAL CRENDTIALS */}
+        {(type.subtype == "fintual" && !route.params?.item) && (
+          <View >
+            <View style={styles.inputContainer}>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.email')}
+              </Text>
+              <TextInput
+                inputMode='email'
+                value={email}
+                placeholder={t('new_account.email_placeholder')}
+                onChangeText={(text) => setEmail(text)}
+                placeholderTextColor={Colors.GRAY_MEDIUM}
+                style={[styles.input, Typography.BODY]} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_account.secret')}
+              </Text>
+              <TextInput
+                value={secret}
+                placeholder={t('new_account.secret_placeholder')}
+                secureTextEntry
+                onChangeText={(text) => setSecret(text)}
+                placeholderTextColor={Colors.GRAY_MEDIUM}
+                style={[styles.input, Typography.BODY]} />
+            </View>
           </View>)}
         <Modal visible={showModal} animationType="slide" onRequestClose={onExit}>
           <View style={styles.modalContainer}>

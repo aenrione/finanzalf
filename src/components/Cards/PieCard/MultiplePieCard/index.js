@@ -23,7 +23,7 @@ const PieChart = ({ data, currency, width, amount }) => {
           color: Colors.WHITE,
         }]}>{currency}
         </Text>)}
-      {amount && (
+      {formatCurrency(amount, currency) && (
         <Text style={[Typography.H3, curStyle(amount), styles.currencyCode]}>{formatCurrency(amount, currency)}</Text>
       )}
       <View style={[styles.container, { width: selWidth }]}>

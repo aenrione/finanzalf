@@ -61,7 +61,12 @@
     "types": {
       "local": "Local account",
       "fintoc": "Bank account",
-    }
+      "fintual": "Fintual account",
+    },
+    "email": "Email",
+    "email_placeholder": "example@account.com",
+    "secret": "Secret",
+    "secret_placeholder": "* * * *",
   },
   "new_category": {
     "new": "New Category",
@@ -92,5 +97,8 @@
     "holder": "Holder",
     "refreshed": "Updated",
     "returns": "Investments",
+  },
+  "goal_view": {
+    "empty": "You don't have any goals!",
   }
 }

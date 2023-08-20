@@ -14,6 +14,9 @@ import { connect } from 'react-redux';
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
 import { useTranslation } from 'react-i18next';
+import { deleteCategory } from 'src/dbHelpers/categoryHelper';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
 const mapStateToProps = function(state) {
   return {
@@ -24,10 +27,12 @@ const mapStateToProps = function(state) {
 const Categories = ({ navigation, ...props }) => {
   const { categories } = props
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   // Delete Item
   const __delete = (id) => {
     deleteCategory(id);
+    dispatch(getAllInfo())
   }
 
   // Update Item

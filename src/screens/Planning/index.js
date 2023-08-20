@@ -52,7 +52,7 @@ const Planning = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.iconContainer}
-          onPress={() => navigation.navigate(routes.AddMoneyBox.name)}>
+          onPress={() => navigation.navigate(routes.AddGoal.name)}>
           <Icon name="plus" color={Colors.WHITE} size={15} />
         </TouchableOpacity>
       </View>

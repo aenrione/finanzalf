@@ -49,6 +49,7 @@
     "types": {
       "local": "Cuenta local",
       "fintoc": "Cuenta bancaria",
+      "fintual": "Objetivo Fintual",
     }
   },
   "planning_view": {
@@ -65,7 +66,12 @@
     "types": {
       "local": "Cuenta local",
       "fintoc": "Cuenta bancaria (Chile, Mexico)",
-    }
+      "fintual": "Fintual account",
+    },
+    "email": "Email",
+    "email_placeholder": "example@account.com",
+    "secret": "Secret",
+    "secret_placeholder": "* * * *",
   },
   "new_category": {
     "new": "Nueva Categoría",
@@ -96,5 +102,8 @@
     "holder": "Dueño",
     "refreshed": "Actualizado",
     "returns": "Inversiones",
+  },
+  "goal_view": {
+    "empty": "No tienes objetivos",
   }
 }

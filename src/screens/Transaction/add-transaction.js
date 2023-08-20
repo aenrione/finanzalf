@@ -32,7 +32,7 @@ const AddTransaction = ({ navigation, route, ...props }) => {
   const [desc, setDesc] = useState('');
   const [category, setCategory] = useState();
   const [account, setAccount] = useState();
-  const [income, setIncome] = useState(false);
+  const [income, setIncome] = useState(true);
   const [showDate, setShowDate] = useState(false);
   const [date, setDate] = useState(new Date());
   const [amount, setAmount] = useState('');
@@ -58,7 +58,7 @@ const AddTransaction = ({ navigation, route, ...props }) => {
     if (calc_amount > 0 && !income) {
       calc_amount = -1 * calc_amount
     } else if (calc_amount < 0 && income) {
-      calc_amount = Math.abs(calc_amount)
+      calc_amount = -1 * calc_amount
     }
     return calc_amount
   }
@@ -74,7 +74,7 @@ const AddTransaction = ({ navigation, route, ...props }) => {
       const parsedDate = new Date(trans.transaction_date); // Attempt to parse the date
       setDate(isNaN(parsedDate) ? new Date() : parsedDate); // If parsing fails, set the default date
       setAmount((trans.amount).toString());
-      setIncome(trans.type == 'income' ? false : true);
+      setIncome(trans.type == 'income');
     }
     else {
       setCategory(categories[0]); // Set the first category as a default category
@@ -92,40 +92,41 @@ const AddTransaction = ({ navigation, route, ...props }) => {
     setDate(currentDate);
   }
   const isValid = () => {
-    if (category && account && desc != '' && amount != '') {
+    if (account && desc != '' && amount != '') {
       return true
     }
     return false
   }
 
   // Insert Transaction
-  const __insert = () => {
-    insertTransaction({
-      category_id: category.id,
+  const __insert = async () => {
+    await insertTransaction({
+      category_id: category?.id,
       account_id: account.id,
       transaction_date: date.toISOString(),
       description: desc,
       amount: parseAmount(amount),
-      type: income ? 'expense' : 'income'
+      type: income ? 'income' : 'expense'
     });
   }
 
   // Update Transaction
-  const __update = () => {
+  const __update = async () => {
     if (editable) {
-      updateTransaction({
+      await updateTransaction({
         id: route.params?.item.id,
-        category_id: category.id,
+        category_id: category?.id,
         account_id: account.id,
         transaction_date: date.toISOString(),
         amount: parseAmount(amount),
         description: desc,
-        type: income ? 'expense' : 'income',
+        type: income ? 'income' : 'expense'
       });
     } else {
-      updateTransaction({
+      await updateTransaction({
         id: route.params?.item.id,
         category_id: category.id,
+        amount: parseAmount(amount),
       });
     }
   };
@@ -133,10 +134,10 @@ const AddTransaction = ({ navigation, route, ...props }) => {
   // Save Transaction
   const __save = async () => {
     if (route.params?.item) {
-      __update();
+      await __update();
     }
     else {
-      __insert();
+      await __insert();
     }
     await dispatch(getAllInfo())
     navigation.goBack();
@@ -149,6 +150,46 @@ const AddTransaction = ({ navigation, route, ...props }) => {
 
       {/* Body */}
       <ScrollView style={styles.bodyContainer} showsVerticalScrollIndicator={false}>
+        {/* Amount */}
+        <View style={styles.inputContainer}>
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.amount')}</Text>
+          <TextInput
+            value={amount}
+            placeholder={t('new_transaction.amount_placeholder')}
+            keyboardType='numeric'
+            editable={editable}
+            onChangeText={(text) => setAmount(text)}
+            placeholderTextColor={Colors.GRAY_MEDIUM}
+            style={[styles.input, Typography.BODY]} />
+        </View>
+
+        {/* Description */}
+        <View style={styles.inputContainer}>
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.desc')}</Text>
+          <TextInput
+            value={desc}
+            placeholder={t('new_transaction.desc_placeholder')}
+            editable={editable}
+            onChangeText={(text) => setDesc(text)}
+            placeholderTextColor={Colors.GRAY_MEDIUM}
+            style={[styles.input, Typography.BODY]} />
+        </View>
+        {/* Account */}
+        <View style={styles.inputContainer}>
+          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.account')}</Text>
+          <Picker
+            selectedValue={account}
+            onValueChange={(itemValue, _itemIndex) => setAccount(itemValue)}
+            style={styles.input}
+            enabled={editable}
+            dropdownIconColor={Colors.GRAY_DARK}
+            itemStyle={[Typography.BODY, { color: Colors.GRAY_DARK }]}>
+            {getPickerAccounts().map((acc, index) => (
+              <Picker.Item key={index} label={acc.name} value={acc} />
+            ))}
+          </Picker>
+        </View>
+
         {/* Category */}
         <View style={styles.inputContainer}>
           <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.category')}
@@ -167,48 +208,20 @@ const AddTransaction = ({ navigation, route, ...props }) => {
             ))}
           </Picker>
         </View>
-        {/* Account */}
-        <View style={styles.inputContainer}>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.account')}</Text>
-          <Picker
-            selectedValue={account}
-            onValueChange={(itemValue, _itemIndex) => setAccount(itemValue)}
-            style={styles.input}
-            enabled={editable}
-            dropdownIconColor={Colors.GRAY_DARK}
-            itemStyle={[Typography.BODY, { color: Colors.GRAY_DARK }]}>
-            {getPickerAccounts().map((acc, index) => (
-              <Picker.Item key={index} label={acc.name} value={acc} />
-            ))}
-          </Picker>
-        </View>
-
-        {/* Description */}
-        <View style={styles.inputContainer}>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.desc')}</Text>
-          <TextInput
-            value={desc}
-            placeholder={t('new_transaction.desc_placeholder')}
-            editable={editable}
-            onChangeText={(text) => setDesc(text)}
-            placeholderTextColor={Colors.GRAY_MEDIUM}
-            style={[styles.input, Typography.BODY]} />
-        </View>
-
         {/* Transaction type */}
         <View style={styles.inputContainer}>
           <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.type')}</Text>
           <View style={styles.rowContainer}>
-            <Text style={[Typography.BODY, !income ? { color: Colors.PRIMARY } : { color: Colors.GRAY_DARK }]}>{t('new_transaction.income')}</Text>
+            <Text style={[Typography.BODY, income ? { color: Colors.PRIMARY } : { color: Colors.GRAY_DARK }]}>{t('new_transaction.income')}</Text>
             <Switch
               disabled={!editable}
               trackColor={{ false: Colors.WHITE, true: Colors.WHITE }}
               thumbColor={income ? Colors.PRIMARY : Colors.PRIMARY}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleIncomeSwitch}
-              value={income}
+              value={!income}
             />
-            <Text style={[Typography.BODY, income ? { color: Colors.PRIMARY } : { color: Colors.GRAY_DARK }]}>{t('new_transaction.expense')}</Text>
+            <Text style={[Typography.BODY, !income ? { color: Colors.PRIMARY } : { color: Colors.GRAY_DARK }]}>{t('new_transaction.expense')}</Text>
           </View>
         </View>
 
@@ -233,18 +246,6 @@ const AddTransaction = ({ navigation, route, ...props }) => {
           />
         )}
 
-        {/* Amount */}
-        <View style={styles.inputContainer}>
-          <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{t('new_transaction.amount')}</Text>
-          <TextInput
-            value={amount}
-            placeholder={t('new_transaction.amount_placeholder')}
-            keyboardType='numeric'
-            editable={editable}
-            onChangeText={(text) => setAmount(text)}
-            placeholderTextColor={Colors.GRAY_MEDIUM}
-            style={[styles.input, Typography.BODY]} />
-        </View>
       </ScrollView>
 
       {/* Footer */}

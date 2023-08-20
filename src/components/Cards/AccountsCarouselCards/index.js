@@ -8,7 +8,7 @@ import { Colors, Typography } from 'src/styles';
 import { formatCurrency, curStyle } from 'src/utils/currency';
 import { useTranslation } from 'react-i18next';
 
-const BalanceCard = (props) => {
+const AccountCarousel = (props) => {
   const accountTotals = props.accounts || [];
   const offset = 2 * (props.offset || 0)
 
@@ -74,7 +74,7 @@ const BalanceCard = (props) => {
             <View>
               <View style={styles.itemContainer}>
                 <Text style={[Typography.TAGLINE, { color: Colors.GRAY_MEDIUM, marginBottom: 10 }]}>{t('account_card.returns')}</Text>
-                <Text style={[Typography.BODY, curStyle(item.investmentReturn)]}>{showAmount(item.investmentReturn, item)}</Text>
+                <Text style={[Typography.BODY, curStyle(item.investment_return)]}>{showAmount(item.investment_return, item)}</Text>
               </View>
             </View>
           </View>
@@ -103,17 +103,18 @@ const BalanceCard = (props) => {
         {accountTotals.map((item, index) => renderCard(item, index))}
       </ScrollView>
 
-      <View style={styles.dotIndicator}>
-        {accountTotals.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              { backgroundColor: activeCardIndex === index ? Colors.WHITE : Colors.GRAY_LIGHT }
-            ]}
-          />
-        ))}
-      </View>
+      {accountTotals.length > 1 && (
+        <View style={styles.dotIndicator}>
+          {accountTotals.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.dot,
+                { backgroundColor: activeCardIndex === index ? Colors.WHITE : Colors.GRAY_LIGHT }
+              ]}
+            />
+          ))}
+        </View>)}
     </View>
   );
 };
@@ -164,5 +165,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BalanceCard;
+export default AccountCarousel;
 

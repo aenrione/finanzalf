@@ -110,11 +110,17 @@ const insertMovementsToAccount = async (db_acc_id, movs) => {
 
 export const createAccounts = async (accounts, type) => {
   accounts.forEach((acc) => {
+    const currency = findCurrencyByCode(acc.currency)
     insertAccount({
-      type: type,
+      type: type.name,
+      subtype: type.subtype,
+      icon: type.icon,
+      editable: type.editable,
+      code: currency.code,
+      currency_name: currency.name,
+      currency_symbol: currency.symbol,
       name: `${acc.name}`,
       amount: parseFloat(acc.balance.current),
-      currency: findCurrencyByCode(acc.currency),
       fintoc_link: link,
       fintoc_account_id: acc.id,
       holder_name: acc.holder_name,

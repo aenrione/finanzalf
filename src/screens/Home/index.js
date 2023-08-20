@@ -21,6 +21,9 @@ import AccountCarousel from 'src/components/Cards/AccountsCarouselCards';
 import Carousel from 'src/components/Button/Carousel';
 import Button from 'src/components/Button';
 import { useTranslation } from 'react-i18next';
+import { deleteTransaction } from 'src/dbHelpers/transactionHelper';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
 const mapStateToProps = function(state) {
   return {
@@ -51,11 +54,12 @@ const Home = (props) => {
     accountTotals
   } = props;
   const { t } = useTranslation();
-  console.log(accountChartData)
+  const dispatch = useDispatch();
 
   // Delete Item
   const __delete = (id) => {
     deleteTransaction(id);
+    dispatch(getAllInfo())
   }
 
   // Update Item
@@ -96,7 +100,7 @@ const Home = (props) => {
                   {accounts.length == 0 && (
                     <Button title={t('get_started')}
                       style={{ marginBottom: 20, backgroundColor: Colors.PRIMARY_LIGHT }}
-                      onPress={() => navigation.navigate(routes.Accounts.name)}
+                      onPress={() => navigation.navigate(routes.AddAccount.name)}
                     />)}
                   <View style={{ marginBottom: 20 }}>
                     <BlockHeader
@@ -108,7 +112,7 @@ const Home = (props) => {
                   {accounts.length > 0 ?
                     <AccountCarousel accounts={accounts} offset={20} />
                     :
-                    <View>
+                    <View style={styles.emptyContainer}>
                       <Text style={[Typography.TAGLINE, { color: Colors.WHITE, textAlign: 'center' }]}>{t('account_view.empty_one')}</Text>
                     </View>
                   }
@@ -135,13 +139,17 @@ const Home = (props) => {
             return (
               // Statistics
               <View style={{ paddingLeft: 20, marginBottom: 20 }}>
-                <BlockHeader title={t('saved')} />
-                <Carousel data={balances}
-                  style={{ marginTop: 10 }}
-                  renderCard={(item, index) => {
-                    return (<PieCard key={index} incomes={item.totalIncome} expenses={item.totalExpense} currency={item.code} width={350} />)
-                  }}
-                />
+                {balances.length > 0 && (
+                  <View>
+                    <BlockHeader title={t('saved')} />
+                    <Carousel data={balances}
+                      style={{ marginTop: 10 }}
+                      renderCard={(item, index) => {
+                        return (<PieCard key={index} incomes={item.totalIncome} expenses={item.totalExpense} currency={item.code} width={350} />)
+                      }}
+                    />
+                  </View>
+                )}
 
                 {Object.keys(categoryChartData).length > 0 && (
                   <View>

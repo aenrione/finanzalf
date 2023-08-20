@@ -13,8 +13,9 @@ const tableString = 'CREATE TABLE IF NOT EXISTS ' + tableName +
   fintoc_account_id VARCHAR(100), \
   buda_public VARCHAR(100), \
   buda_secret VARCHAR(100), \
-  fintual_public VARCHAR(100), \
+  fintual_email VARCHAR(100), \
   fintual_secret VARCHAR(100), \
+  fintual_goal_id VARCHAR(100), \
   type VARCHAR(20) NOT NULL, \
   name VARCHAR(20) NOT NULL,\
   amount FLOAT DEFAULT 0,\
@@ -32,26 +33,47 @@ export const createAccountsTable = () => {
   createTable(tableName, tableString)
 };
 
+const getFilter = (filter, t) => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const currentDay = currentDate.getDate() + 1;
+  let filterCondition = '';
+
+  if (filter === 'monthly') {
+    filterCondition = `CAST(strftime('%Y', ${t}.transaction_date) AS INTEGER) = ${currentYear} AND \
+                       CAST(strftime('%m', ${t}.transaction_date) AS INTEGER) = ${currentMonth}`;
+  } else if (filter === 'weekly') {
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDay - 7);
+    const startDate = `${startOfWeek.getFullYear()}-${String(startOfWeek.getMonth() + 1).padStart(2, '0')}-${String(startOfWeek.getDate()).padStart(2, '0')}`;
+    filterCondition = `${t}.transaction_date BETWEEN '${startDate}' AND '${currentYear}-${currentMonth}-${currentDay.toString().padStart(2, '0')}'`;
+  }
+  return filterCondition;
+}
 
 // Get Accounts
-export const getAccounts = async (setData, query = '', complete = true) => {
-  const alias = 'a'
-  let selected = '*'
-  if (complete) {
-    const incomeQuery = '( \
-            SELECT SUM(t2.amount) FROM transactions t2 \
-            JOIN accounts ON t2.account_id = a.id \
-            WHERE t2.type = "income" \
-          ) AS income'
-    const expenseQuery = '( \
-            SELECT SUM(t3.amount) FROM transactions t3 \
-            JOIN accounts ON t3.account_id = a.id \
-            WHERE t3.type = "expense" \
-          ) AS expense'
-    selected += `, ${incomeQuery}, ${expenseQuery}`
-  }
-  return getTableData(tableName, setData, selected, query, alias)//.then((result) => { console.log(result) })
-}
+export const getAccounts = async ({ query = '', filter = '' }) => {
+  const alias = 'a';
+  let selected = '*';
+
+  const t2_filter = getFilter(filter, 't2');
+  const t3_filter = getFilter(filter, 't3');
+
+  const incomeQuery = `( \
+    SELECT SUM(t2.amount) FROM transactions t2 \
+    JOIN accounts ON t2.account_id = a.id \
+    WHERE t2.type = "income" ${t2_filter ? `AND ${t2_filter}` : ''} ) AS income`;
+
+  const expenseQuery = `( \
+    SELECT SUM(t3.amount) FROM transactions t3 \
+    JOIN accounts ON t3.account_id = a.id \
+    WHERE t3.type = "expense" ${t3_filter ? `AND ${t3_filter}` : ''} ) AS expense`;
+
+  selected += `, ${incomeQuery}, ${expenseQuery}`;
+
+  return getTableData(tableName, null, selected, query, alias);
+};
 
 // Delete Account
 export const deleteAccount = (id) => {
@@ -64,13 +86,13 @@ export const deleteAccountsTable = () => {
 }
 
 // Insert Account
-export const insertAccount = (item) => {
-  insertObject(tableName, item)
+export const insertAccount = async (item) => {
+  return insertObject(tableName, item)
 }
 
 // Update Account
-export const updateAccount = (item) => {
-  updateObject(tableName, item)
+export const updateAccount = async (item) => {
+  return updateObject(tableName, item)
 }
 
 
@@ -146,6 +168,30 @@ export const getTotalAccountAmountsByCurrency = (setTotals) => {
         error => {
           console.log(error);
           reject(error)
+        }
+      );
+    });
+  });
+};
+
+export const updateAccountAmount = async (accountId) => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE accounts
+         SET amount = (SELECT SUM(amount) FROM transactions WHERE account_id = ?)
+         WHERE id = ?`,
+        [accountId, accountId],
+        (_tx, result) => {
+          if (result.rowsAffected > 0) {
+            resolve(true);
+          } else {
+            reject(new Error(`Account with id ${accountId} not found.`));
+          }
+        },
+        (error) => {
+          console.log(error);
+          reject(error);
         }
       );
     });

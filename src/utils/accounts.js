@@ -17,10 +17,12 @@ export const accounts = [
   //   icon: 'bitcoin',
   //   editable: false
   // },
-  // {
-  //   name: 'Fintual',
-  //   icon: 'chart-line',
-  //   editable: false
-  // }
+  {
+    name: 'Fintual',
+    icon: 'chart-line',
+    editable: false,
+    subtype: 'fintual'
+
+  }
 ]
 

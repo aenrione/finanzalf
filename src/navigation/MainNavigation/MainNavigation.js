@@ -11,18 +11,18 @@ const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 import HomeScreen from 'src/screens/Home';
-import TransactionScreen from 'src/screens/Transaction';
+// import TransactionScreen from 'src/screens/Transaction';
 import AccountScreen from 'src/screens/Accounts';
 import CategoryScreen from 'src/screens/Category';
 import AboutScreen from 'src/screens/Profile/About';
 import Crypto from 'src/screens/Crypto';
-import Transactions from 'src/screens/Wallety/transactions'
-import AddTransaction from 'src/screens/Wallety/transactions/add-transaction';
+import Transactions from 'src/screens/Transaction'
+import AddTransaction from 'src/screens/Transaction/add-transaction';
 import AddAccount from 'src/screens/Accounts/add-account';
 import AddCategory from 'src/screens/Category/add-category';
-import Notifications from 'src/screens/Wallety/home/notifications';
-import MoneyBoxScreen from 'src/screens/Planning';
-import AddMoneyBoxScreen from 'src/screens/Wallety/moneybox/add-money-box';
+import Notifications from 'src/screens/Home/notifications';
+import GoalScreen from 'src/screens/Planning';
+import AddGoalScreen from 'src/screens/Goal/add-goal';
 import routes from 'src/config/routes';
 
 function HomeScreenNavigation() {
@@ -36,13 +36,13 @@ function HomeScreenNavigation() {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="Transaction"
-        component={TransactionScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {/* <Stack.Screen */}
+      {/*   name="Transaction" */}
+      {/*   component={TransactionScreen} */}
+      {/*   options={{ */}
+      {/*     headerShown: false, */}
+      {/*   }} */}
+      {/* /> */}
       <Stack.Screen
         name="AddTransaction"
         component={AddTransaction}
@@ -65,8 +65,8 @@ function HomeScreenNavigation() {
         }}
       />
       <Stack.Screen
-        name={routes.AddMoneyBox.name}
-        component={AddMoneyBoxScreen}
+        name={routes.AddGoal.name}
+        component={AddGoalScreen}
         options={{
           headerShown: false,
         }}
@@ -130,7 +130,7 @@ function HomeTabNavigation() {
       />
       <Tab.Screen
         name={routes.Planning.name}
-        component={MoneyBoxScreen}
+        component={GoalScreen}
         options={{
           headerShown: false,
           title: t(`navigation.${routes.Planning.name}`)

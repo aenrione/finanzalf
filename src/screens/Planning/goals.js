@@ -1,56 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { } from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import SwipeableFlatList from 'react-native-swipeable-list';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
-import { getMoneyBox, deleteMoneyBox } from 'src/dbHelpers/moneyboxHelper';
 
 import QuickActions from 'src/utils/quickActions';
 import MoneyBoxCard from 'src/components/Cards/MoneyBoxCard';
+import { deleteGoal } from 'src/dbHelpers/goalHelper';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
-const MoneyBox = ({ navigation }) => {
-  const focused = useIsFocused();
+const mapStateToProps = function(state) {
+  return {
+    goals: state.auth_reducer.goals,
+  };
+};
 
-  const [moneybox, setMoneyBox] = useState([]);
+const Goals = ({ navigation, ...props }) => {
+  const { goals } = props
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    getMoneyBox(setMoneyBox);
-  }, [focused]);
 
   // Delete Item
   const __delete = (id) => {
-    deleteMoneyBox(id);
-    getMoneyBox(setMoneyBox);
+    deleteGoal(id);
+    dispatch(getAllInfo())
   }
 
   // Update Item
   const __update = (item) => {
-    navigation.navigate(routes.AddMoneyBox, { item: item })
+    navigation.navigate(routes.AddGoal.name, { item: item })
   }
 
   return (
     <View style={styles.container}>
       {/* Body */}
       <View style={styles.bodyContainer}>
-        {moneybox.length == 0 ?
+        {goals.length == 0 ?
           <View style={styles.emptyContainer}>
-            <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>You haven't any moneybox !</Text>
+            <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('goal_view.empty')}</Text>
           </View>
           :
           <SwipeableFlatList
-            data={moneybox}
+            data={goals}
             maxSwipeDistance={140}
             shouldBounceOnMount={true}
-            keyExtractor={(item, index) => index.toString()}
-            renderQuickActions={({ index, item }) => QuickActions(item, __update, __delete)}
+            keyExtractor={(_item, index) => index.toString()}
+            renderQuickActions={({ item }) => QuickActions(item, __update, __delete)}
             renderItem={({ item, index }) => {
               return <MoneyBoxCard key={index} item={item} currency={"$"} />
             }}
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.BLACK,
-    paddingTop: 10
+    paddingTop: 10,
   },
   // Header
   headerContainer: {
@@ -95,6 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoneyBox;
-
-
+export default connect(mapStateToProps)(Goals);

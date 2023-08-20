@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,31 +6,34 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useIsFocused } from '@react-navigation/native';
 import SwipeableFlatList from 'react-native-swipeable-list';
 import QuickActions from 'src/utils/quickActions';
 import AccountCard from 'src/components/Cards/AccountCard';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
-import { getAccounts, deleteAccount } from 'src/dbHelpers/accountHelper';
+import { deleteAccount } from 'src/dbHelpers/accountHelper';
+import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
+const mapStateToProps = function(state) {
+  return {
+    accounts: state.auth_reducer.accounts,
+  };
+};
 
-const Accounts = ({ navigation }) => {
-  const focused = useIsFocused();
+const Accounts = ({ navigation, ...props }) => {
+  const { accounts } = props;
 
-  const [accounts, setAccounts] = useState([]);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    getAccounts(setAccounts);
-  }, [focused]);
+  const dispatch = useDispatch();
 
   // Delete Item
   const __delete = (id) => {
     deleteAccount(id);
-    getAccounts(setAccounts);
+    dispatch(getAllInfo())
   }
 
   // Update Item
@@ -78,10 +81,6 @@ const Accounts = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.BLACK
-  },
   // Header
   headerContainer: {
     padding: 20,
@@ -101,15 +100,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingRight: 20,
-    backgroundColor: Colors.BLACK
+    backgroundColor: Colors.BLACK,
   },
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: 20
   },
 });
 
-export default Accounts;
-
-
+export default connect(mapStateToProps)(Accounts);

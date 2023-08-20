@@ -1,4 +1,4 @@
-import { createMoneyBoxTable, deleteMoneyBoxTable } from 'src/dbHelpers/moneyboxHelper';
+import { createGoalTable, deleteGoalsTable } from 'src/dbHelpers/goalHelper';
 import { createTransactionsTable, deleteTransactionsTable } from 'src/dbHelpers/transactionHelper';
 import { createAccountsTable, deleteAccountsTable } from 'src/dbHelpers/accountHelper';
 import { createCategoriesTable, deleteCategoriesTable } from 'src/dbHelpers/categoryHelper';
@@ -14,13 +14,15 @@ const INITIAL_STATE = {
   expenses: [],
   categoryChartData: [],
   accountChartData: [],
+  goals: [],
+  quotas: [],
   filter: { name: "month", value: "monthly" },
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'LOGIN_USER_SUCCESS':
-      createMoneyBoxTable();
+      createGoalTable();
       createTransactionsTable();
       createAccountsTable();
       createCategoriesTable();
@@ -29,13 +31,12 @@ export default (state = INITIAL_STATE, action) => {
         user: action.payload,
       };
     case 'REMOVE_SESSION':
-      // deleteMoneyBoxTable();
-      // deleteTransactionsTable();
-      // deleteAccountsTable();
-      // deleteCategoriesTable();
+      deleteGoalsTable();
+      deleteTransactionsTable();
+      deleteAccountsTable();
+      deleteCategoriesTable();
       return {
-        ...state,
-        user: null,
+        ...INITIAL_STATE
       };
     case 'LOAD_SPINNER':
       return { ...state, spinner: true };

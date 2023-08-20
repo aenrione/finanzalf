@@ -5,36 +5,40 @@ import {
   Text
 } from 'react-native';
 import SwipeableFlatList from 'react-native-swipeable-list';
+import { connect } from 'react-redux';
 
 import routes from 'src/config/routes';
 import { Colors, Typography } from 'src/styles';
 import { deleteTransaction } from 'src/dbHelpers/transactionHelper';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { getAllInfo } from 'src/actions/ObjectActions';
 
 import QuickActions from 'src/utils/quickActions';
 import TransactionCard from 'src/components/Cards/TransactionCard';
 import { useTranslation } from 'react-i18next';
+
 const mapStateToProps = function(state) {
   return {
-    expenses: state.auth_reducer.expenses,
+    transactions: state.auth_reducer.transactions,
   };
 };
 
-const Expense = ({ navigation, ...props }) => {
+const All = ({ navigation, ...props }) => {
   const { t } = useTranslation();
-  const { expenses } = props;
+  const { transactions } = props;
+  const dispatch = useDispatch();
   const TransactionCardMemo = React.memo(TransactionCard);
 
   // Delete Item
   const __delete = (id) => {
     deleteTransaction(id);
+    dispatch(getAllInfo())
   }
 
   // Update Item
   const __update = (item) => {
     navigation.navigate(routes.AddTransaction.name, { item: item });
   }
-
   const renderItem = useCallback(({ item }) => {
     return <TransactionCardMemo transaction={item} />
   }, []);
@@ -45,13 +49,13 @@ const Expense = ({ navigation, ...props }) => {
 
   return (
     <View style={styles.container}>
-      {expenses.length == 0 ?
+      {transactions.length == 0 ?
         <View style={styles.emptyContainer}>
-          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_expense')}</Text>
+          <Text style={[Typography.H3, { color: Colors.WHITE, textAlign: 'center' }]}>{t('transaction_view.empty_all')}</Text>
         </View>
         :
         <SwipeableFlatList
-          data={expenses}
+          data={transactions}
           maxSwipeDistance={140}
           shouldBounceOnMount={true}
           keyExtractor={(item) => item.id.toString()}
@@ -76,4 +80,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(Expense);
+export default connect(mapStateToProps)(All);
+
+

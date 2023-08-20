@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useIsFocused } from '@react-navigation/native';
-import { formatCurrency } from 'src/utils/currency';
+import { formatCurrency, curStyle } from 'src/utils/currency';
 
 import { Colors, Typography } from 'src/styles';
 
@@ -32,7 +32,7 @@ const TransactionCard = (props) => {
         <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>{new Date(transaction.transaction_date).toLocaleString()}</Text>
       </View>
 
-      <Text style={[Typography.H4, transaction.type == 'income' ? { color: Colors.SUCCESS } : { color: Colors.ALERT }]}>
+      <Text style={[Typography.H4, curStyle(transaction.amount)]}>
         {formatCurrency(transaction.amount, transaction.code)}
       </Text>
     </View>

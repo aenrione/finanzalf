@@ -21,10 +21,10 @@ const routes = {
   Income: { name: 'Income' },
   Expense: { name: 'Expense' },
   AddTransaction: { name: 'AddTransaction' },
-  // MoneyBox
+  // Goal
   Goals: { name: 'Goals' },
   Budgets: { name: 'Budget' },
-  AddMoneyBox: { name: 'AddMoneyBox' },
+  AddGoal: { name: 'AddGoal' },
   // Accounts
   Accounts: { name: "Accounts", icon: 'ios-people' },
   AddAccount: { name: 'AddAccount' },

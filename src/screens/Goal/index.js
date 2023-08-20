@@ -33,7 +33,7 @@ const MoneyBox = ({ navigation }) => {
 
   // Update Item
   const __update = (item) => {
-    navigation.navigate(routes.AddMoneyBox, { item: item })
+    navigation.navigate(routes.AddGoal.name, { item: item })
   }
 
   return (

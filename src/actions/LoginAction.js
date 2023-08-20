@@ -70,10 +70,10 @@ export const logoutUser = (name) => {
       payload: {},
     });
     NavigationService.navigate('SignIn');
-    showMessage({
-      message: `Bye: ${name}`,
-      type: 'success',
-    });
+    // showMessage({
+    //   message: `Bye: ${name}`,
+    //   type: 'success',
+    // });
     dispatch({
       type: 'STOP_SPINNER',
     });
